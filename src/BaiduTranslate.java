@@ -1,6 +1,6 @@
 
 /*
- * ²Î¿¼£ºhttp://www.jb51.net/article/68635.htm  //md5±àÂë
+ * ï¿½Î¿ï¿½ï¿½ï¿½http://www.jb51.net/article/68635.htm  //md5ï¿½ï¿½ï¿½ï¿½
  * http://blog.csdn.net/yueqinglkong/article/details/37739771   //JsonToString
  */
 import java.io.*;
@@ -21,9 +21,9 @@ public class BaiduTranslate {
 	String salt=Long.toString(new Date().getTime());
 	
 	public String sendGet(String str) {
-		String sign=id+str+salt+key;//appid=2015063000000001+q=apple+salt=1435660288+ÃÜÔ¿=12345678
+		String sign=id+str+salt+key;//appid=2015063000000001+q=apple+salt=1435660288+ï¿½ï¿½Ô¿=12345678
 		String sign_md5=toMD5(sign);
-		// ±àÂë³ÉUTF-8
+		// ï¿½ï¿½ï¿½ï¿½ï¿½UTF-8
 		try {
 			str = URLEncoder.encode(str, "utf-8");
 		} 
@@ -36,11 +36,11 @@ public class BaiduTranslate {
 		try {
 		  String urlName = url + "?" + param;
 		  URL realUrl = new URL(urlName);
-	   // ´ò¿ªºÍURLÖ®¼äµÄÁ¬½Ó
+	   // ï¿½ò¿ªºï¿½URLÖ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		  URLConnection conn = realUrl.openConnection();
-		  conn.setConnectTimeout(10000);//ÉèÖÃ³¬Ê±
+		  conn.setConnectTimeout(10000);//ï¿½ï¿½ï¿½Ã³ï¿½Ê±
 		  
-		  reply = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));//Ô¼¶¨ÊäÈëÁ÷µÄ±àÂë  
+		  reply = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));//Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½  
 		  
           StringBuilder builder = new StringBuilder();
           String line = null;
@@ -81,13 +81,13 @@ public class BaiduTranslate {
 	public static String toMD5(String plainText) {
 		StringBuffer buf = new StringBuffer("");
 	    try {
-	        //Éú³ÉÊµÏÖÖ¸¶¨ÕªÒªËã·¨µÄ MessageDigest ¶ÔÏó¡£
+	        //ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½Ö¸ï¿½ï¿½ÕªÒªï¿½ã·¨ï¿½ï¿½ MessageDigest ï¿½ï¿½ï¿½ï¿½
 	        MessageDigest md = MessageDigest.getInstance("MD5");  
-	        //Ê¹ÓÃÖ¸¶¨µÄ×Ö½ÚÊý×é¸üÐÂÕªÒª¡£
+	        //Ê¹ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½Ö½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÕªÒªï¿½ï¿½
 	        md.update(plainText.getBytes());
-	        //Í¨¹ýÖ´ÐÐÖîÈçÌî³äÖ®ÀàµÄ×îÖÕ²Ù×÷Íê³É¹þÏ£¼ÆËã¡£
+	        //Í¨ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ²ï¿½ï¿½ï¿½ï¿½ï¿½É¹ï¿½Ï£ï¿½ï¿½ï¿½ã¡£
 	        byte b[] = md.digest();
-	        //Éú³É¾ßÌåµÄmd5ÃÜÂëµ½bufÊý×é
+	        //ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½md5ï¿½ï¿½ï¿½ëµ½bufï¿½ï¿½ï¿½ï¿½
 	        int i;
 	  
 	        for (int offset = 0; offset < b.length; offset++) {
@@ -98,8 +98,8 @@ public class BaiduTranslate {
 	            buf.append("0");
 	          buf.append(Integer.toHexString(i));
 	        }
-	      //  System.out.println("32Î»: " + buf.toString());// 32Î»µÄ¼ÓÃÜ
-	      //  System.out.println("16Î»: " + buf.toString().substring(8, 24));// 16Î»µÄ¼ÓÃÜ£¬ÆäÊµ¾ÍÊÇ32Î»¼ÓÃÜºóµÄ½ØÈ¡
+	      //  System.out.println("32Î»: " + buf.toString());// 32Î»ï¿½Ä¼ï¿½ï¿½ï¿½
+	      //  System.out.println("16Î»: " + buf.toString().substring(8, 24));// 16Î»ï¿½Ä¼ï¿½ï¿½Ü£ï¿½ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½32Î»ï¿½ï¿½ï¿½Üºï¿½Ä½ï¿½È¡
 	     } 
 	     catch (Exception e) {
 	       e.printStackTrace();
@@ -108,14 +108,14 @@ public class BaiduTranslate {
 	}
 
 	public String Translation(String query){
-		String message="Ô­ÎÄ£º"+query+'\n'+"·­Òë£º";
+		String message="Ô­ï¿½Ä£ï¿½"+query+'\n'+"ï¿½ï¿½ï¿½ë£º";
 		message+=sendGet(query);
 		return message;
 	}
 	
-	public static void main(String[] args){
+/*	public static void main(String[] args){
 		BaiduTranslate B = new BaiduTranslate();
 		String m = B.Translation("water");
 		System.out.println(m);
-	}
+	}*/
 }

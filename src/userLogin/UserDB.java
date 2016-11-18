@@ -3,7 +3,7 @@ package userLogin;
 import java.sql.*;
 
 public class UserDB {	
-	Connection connection;
+	Connection connection=null;
 	
 	//contributer
 	UserDB(){

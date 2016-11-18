@@ -1,3 +1,4 @@
+package userLogin;
 
 public class User {
 	private int id;

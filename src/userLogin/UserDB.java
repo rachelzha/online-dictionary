@@ -2,8 +2,8 @@ package userLogin;
 
 import java.sql.*;
 
-public class UserDB {
-	private Statement stmt;
+public class UserDB {	
+	Connection connection;
 	
 	//contributer
 	UserDB(){
@@ -17,11 +17,8 @@ public class UserDB {
 			System.out.println("Driver loaded");
 			
 			//establish a connection
-			Connection connection=DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/userInfo","testuser","testtoday");
+			connection=DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/userInfo","testuser","testtoday");
 			System.out.println("Database connected");
-			
-			//create a statement
-			stmt=connection.createStatement();
 			
 		} catch (Exception e) {
 		// TODO Auto-generated catch block
@@ -31,7 +28,21 @@ public class UserDB {
 	}
 	
 	public void addUser(User user){
-		
+	  //  int i = 0;
+	    String sql = "insert into users (name,password,email) values(?,?,?)";
+	    PreparedStatement pstmt;
+	    try {
+	        pstmt = (PreparedStatement) connection.prepareStatement(sql);
+	        pstmt.setString(1, user.getUsername());
+	        pstmt.setString(2, user.getPassword());
+	        pstmt.setString(3, user.getEmail());
+	        //i=
+	        pstmt.executeUpdate();
+	        pstmt.close();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	  //  return i;
 	}
 	
 	public boolean findUser(String username, String password){
@@ -40,5 +51,13 @@ public class UserDB {
 	
 	public static void main(String[] args){
 		UserDB userdb=new UserDB();
+		
+		User user1=new User();
+		user1.setId(0);
+		user1.setUsername("Rachel");
+		user1.setPassword("rr");
+		user1.setEmail("aa");
+		
+		userdb.addUser(user1);
 	}
 }

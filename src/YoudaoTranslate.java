@@ -1,9 +1,9 @@
 
 
 /*
-²Î¿¼
+ï¿½Î¿ï¿½
 http://blog.csdn.net/daixinmei/article/details/10210731
-http://wangbaiyuan.cn/android-java-parsing-api-youdao-translation-json-data.html  //ÓÐµÀapi json½âÎö
+http://wangbaiyuan.cn/android-java-parsing-api-youdao-translation-json-data.html  //ï¿½Ðµï¿½api jsonï¿½ï¿½ï¿½ï¿½
 */ 
 
 import java.io.*;
@@ -17,7 +17,7 @@ public class YoudaoTranslate {
 	private String url = "http://fanyi.youdao.com/openapi.do";
 	 
 	private String sendGet(String str) {
-	  // ±àÂë³ÉUTF-8
+	  // ï¿½ï¿½ï¿½ï¿½ï¿½UTF-8
 		try {
 			str = URLEncoder.encode(str, "utf-8");
 		} 
@@ -28,14 +28,14 @@ public class YoudaoTranslate {
 		String param ="keyfrom=ZrqandZfy&key=1740122831&type=data&doctype=json&version=1.1&q="+str ;
 		BufferedReader reply = null;
 		try {
-		//http://fanyi.youdao.com/openapi.do?keyfrom=ZrqandZfy&key=1740122831&type=data&doctype=<doctype>&version=1.1&q=Òª·­ÒëµÄÎÄ±¾
+		//http://fanyi.youdao.com/openapi.do?keyfrom=ZrqandZfy&key=1740122831&type=data&doctype=<doctype>&version=1.1&q=Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½
 		  String urlName = url + "?" + param;
 		  URL realUrl = new URL(urlName);
-	   // ´ò¿ªºÍURLÖ®¼äµÄÁ¬½Ó
+	   // ï¿½ò¿ªºï¿½URLÖ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		  URLConnection conn = realUrl.openConnection();
 		  conn.setConnectTimeout(3000);
           conn.connect();
-		  reply = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));//Ô¼¶¨ÊäÈëÁ÷µÄ±àÂë
+		  reply = new BufferedReader(new InputStreamReader(conn.getInputStream(), "utf-8"));//Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½
 		  
 		  String result = reply.readLine();
 		  reply.close();
@@ -57,19 +57,19 @@ public class YoudaoTranslate {
             //System.out.println(errorcode);
             
             if(errorcode.equals("20")){
-            	message = "Òª·­ÒëµÄÎÄ±¾¹ý³¤";
+            	message = "Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½";
             }
             else if(errorcode.equals("30")){
-            	message = "ÎÞ·¨½øÐÐÓÐÐ§µÄ·­Òë";
+            	message = "ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½Ä·ï¿½ï¿½ï¿½";
             }
             else if(errorcode.equals("40")){
-            	message = "²»Ö§³ÖµÄÓïÑÔÀàÐÍ";
+            	message = "ï¿½ï¿½Ö§ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½";
             }
             else if(errorcode.equals("50")){
-            	message = "ÎÞÐ§µÄkey";
+            	message = "ï¿½ï¿½Ð§ï¿½ï¿½key";
             }
             else if(errorcode.equals("60")){
-            	message = "ÎÞ´Êµä½á¹û£¬½öÔÚ»ñÈ¡´Êµä½á¹ûÉúÐ§";
+            	message = "ï¿½Þ´Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú»ï¿½È¡ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½Ð§";
             }
             else if(errorcode.equals("0")){
             	String query = obj.getString("query");
@@ -89,28 +89,28 @@ public class YoudaoTranslate {
                 }
                 String translationStr="";
                 if(translation!=null){
-                    translationStr="\n·­Òë£º\n";
+                    translationStr="\nï¿½ï¿½ï¿½ë£º\n";
                     for(int i=0;i<translation.length();i++){
                         translationStr+="\t<"+(i+1)+">"+translation.getString(i)+"\n";
                     }
                 }
-                String phoneticStr=(phonetic!=null? "\n·¢Òô£º"+phonetic:"")
-                        +(uk_phonetic!=null? "\nÓ¢Ê½·¢Òô£º"+uk_phonetic:"")
-                        +(us_phonetic!=null? "\nÃÀÊ½·¢Òô£º"+us_phonetic:"");
+                String phoneticStr=(phonetic!=null? "\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"+phonetic:"")
+                        +(uk_phonetic!=null? "\nÓ¢Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"+uk_phonetic:"")
+                        +(us_phonetic!=null? "\nï¿½ï¿½Ê½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"+us_phonetic:"");
                 String explainStr="";
                 if(explains!=null){
-                    explainStr="\n\nÊÍÒå£º\n";
+                    explainStr="\n\nï¿½ï¿½ï¿½å£º\n";
                     for(int i=0;i<explains.length();i++){
                         explainStr+="\t<"+(i+1)+">"+explains.getString(i)+"\n";
                     }
                 }
 
-                message="Ô­ÎÄ£º"+query+"\n"+translationStr+phoneticStr+explainStr;
+                message="Ô­ï¿½Ä£ï¿½"+query+"\n"+translationStr+phoneticStr+explainStr;
                 
                 if (web!=null) {  
                     JSONArray webString = new JSONArray("[" + web  
                             + "]");  
-                    message += "\nÍøÂçÊÍÒå£º";  
+                    message += "\nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½å£º";  
                     JSONArray webArray = webString.getJSONArray(0);  
                     int count = 0;  
                     while (!webArray.isNull(count)) {  
@@ -146,10 +146,10 @@ public class YoudaoTranslate {
 		String message = JsonToString(sendGet(query));
 		return message;
 	}
-	/*
+	
 	public static void main(String[] args){
 		YoudaoTranslate Y = new YoudaoTranslate();
 		String m = Y.Translation("water");
 		System.out.println(m);
-	}*/
+	}
 }

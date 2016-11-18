@@ -17,7 +17,7 @@ public class UserDB {
 			System.out.println("Driver loaded");
 			
 			//establish a connection
-			Connection connection=DriverManager.getConnection("jdbc:mysql://@localhost/userInfo","testuser","testtoday");
+			Connection connection=DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/userInfo","testuser","testtoday");
 			System.out.println("Database connected");
 			
 			//create a statement

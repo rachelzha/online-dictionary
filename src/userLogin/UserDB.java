@@ -9,7 +9,7 @@ public class UserDB {
 	UserDB(){
 		initDB();
 	}
-	
+	 
 	private void initDB(){
 		try {
 			//load the JDBC driver

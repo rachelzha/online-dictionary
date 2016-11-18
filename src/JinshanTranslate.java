@@ -1,4 +1,8 @@
- 
+
+/*
+ * <script type="text/javascript" src="http://open.iciba.com/ds_open.php?id=53617&name=ZrqandZfy&auth=CA291F937780CC9AB550DC7626F14A3E" charset="utf-8"></script>
+ *²Î¿¼£ºhttp://nddjava.iteye.com/blog/1849983
+*/ 
 
 import java.io.*;
 import java.net.*;

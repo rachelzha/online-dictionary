@@ -6,13 +6,7 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/Users/zhangruiqi/Documents/大三上/java/实习项目二/jar/org.json.jar"/>
-	<classpathentry kind="lib" path="/Users/zhangruiqi/Documents/大三上/java/实习项目二/jar/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="/Users/zhangruiqi/Documents/大三上/java/实习项目二/jar/json/json-lib-2.4-jdk15.jar"/>
-	<classpathentry kind="lib" path="/Users/zhangruiqi/Documents/大三上/java/实习项目二/jar/json/commons-beanutils-1.7.0.jar"/>
-	<classpathentry kind="lib" path="/Users/zhangruiqi/Documents/大三上/java/实习项目二/jar/json/commons-collections-3.1.jar"/>
-	<classpathentry kind="lib" path="/Users/zhangruiqi/Documents/大三上/java/实习项目二/jar/json/commons-lang-2.5.jar"/>
-	<classpathentry kind="lib" path="/Users/zhangruiqi/Documents/大三上/java/实习项目二/jar/json/commons-logging.jar"/>
-	<classpathentry kind="lib" path="/Users/zhangruiqi/Documents/大三上/java/实习项目二/jar/json/ezmorph-1.0.3.jar"/>
+	<classpathentry kind="lib" path="E:/java/eclipse/workplace/online-dict/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="E:/java/eclipse/workplace/online-dict/org.json.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

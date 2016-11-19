@@ -51,8 +51,8 @@ public class LikeDB {
 			pstmt2.setString(2, word);
 			pstmt2.setString(3, word);
 			
-			System.out.println(pstmt1);
-			System.out.println(pstmt2);
+			//System.out.println(pstmt1);
+			//System.out.println(pstmt2);
 			pstmt1.executeUpdate();
 			pstmt2.executeUpdate();
 

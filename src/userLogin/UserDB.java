@@ -29,7 +29,7 @@ public class UserDB{
 	}
 	
 	public void addUser(String username, String password, String email) throws SQLException{
-	    String sql = "insert into users (name,password,email) values(?,?,?)";
+	    String sql = "insert into users (username,password,email) values(?,?,?)";
 	 
 	       pstmt = (PreparedStatement) connection.prepareStatement(sql);
 	        
@@ -42,8 +42,8 @@ public class UserDB{
 	}
 	
 	public boolean findUser(String username, String password){
-		String queryString="select name,password from users "+
-		"where users.name= ? and users.password= ?";
+		String queryString="select * from users "+
+		"where users.username= ? and users.password= ?";
 		
 		try{
 			pstmt=(PreparedStatement)connection.prepareStatement(queryString);
@@ -53,9 +53,7 @@ public class UserDB{
 			
 			ResultSet rset=pstmt.executeQuery();
 			
-			if(rset.next()){
-				String username_real=rset.getString(1);
-				
+			if(rset.next()){				
 				return true;
 			}
 			else{

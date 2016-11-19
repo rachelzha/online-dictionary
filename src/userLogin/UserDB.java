@@ -2,7 +2,7 @@ package userLogin;
 
 import java.sql.*;
 
-public class UserDB {	
+public class UserDB{	
 	private Connection connection=null;
     private PreparedStatement pstmt;
 	
@@ -28,23 +28,20 @@ public class UserDB {
 		}
 	}
 	
-	public void addUser(User user){
+	public void addUser(String username, String password, String email) throws SQLException{
 	    String sql = "insert into users (name,password,email) values(?,?,?)";
-	    try {
-	        pstmt = (PreparedStatement) connection.prepareStatement(sql);
+	 
+	       pstmt = (PreparedStatement) connection.prepareStatement(sql);
 	        
-	        pstmt.setString(1, user.getUsername());
-	        pstmt.setString(2, user.getPassword());
-	        pstmt.setString(3, user.getEmail());
+	       pstmt.setString(1, username);
+	       pstmt.setString(2, password);
+	       pstmt.setString(3, email);
 	        
-	        pstmt.executeUpdate();
-	        pstmt.close();
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	    }
+	       pstmt.executeUpdate();
+	       pstmt.close();
 	}
 	
-	public void findUser(String username, String password){
+	public boolean findUser(String username, String password){
 		String queryString="select name,password from users "+
 		"where users.name= ? and users.password= ?";
 		
@@ -59,28 +56,15 @@ public class UserDB {
 			if(rset.next()){
 				String username_real=rset.getString(1);
 				
-				//display
-				System.out.println("hello "+ username_real);
+				return true;
 			}
 			else{
-				System.out.println("not found");
+				return false;			
 			}
 		}
 		catch(SQLException ex){
 			ex.printStackTrace();
 		}
-	}
-	
-	public static void main(String[] args){
-		UserDB userdb=new UserDB();
-		
-		User user1=new User();
-		user1.setId(0);
-		user1.setUsername("Rachel");
-		user1.setPassword("rr");
-		user1.setEmail("aa");
-		
-		//userdb.addUser(user1);
-		userdb.findUser("Rachel", "rr");
+		return false;
 	}
 }

@@ -3,7 +3,8 @@ package userLogin;
 import java.sql.*;
 
 public class UserDB {	
-	Connection connection=null;
+	private Connection connection=null;
+    private PreparedStatement pstmt;
 	
 	//contributer
 	UserDB(){
@@ -28,25 +29,46 @@ public class UserDB {
 	}
 	
 	public void addUser(User user){
-	  //  int i = 0;
 	    String sql = "insert into users (name,password,email) values(?,?,?)";
-	    PreparedStatement pstmt;
 	    try {
 	        pstmt = (PreparedStatement) connection.prepareStatement(sql);
+	        
 	        pstmt.setString(1, user.getUsername());
 	        pstmt.setString(2, user.getPassword());
 	        pstmt.setString(3, user.getEmail());
-	        //i=
+	        
 	        pstmt.executeUpdate();
 	        pstmt.close();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
-	  //  return i;
 	}
 	
-	public boolean findUser(String username, String password){
-		return true;
+	public void findUser(String username, String password){
+		String queryString="select name,password from users "+
+		"where users.name= ? and users.password= ?";
+		
+		try{
+			pstmt=(PreparedStatement)connection.prepareStatement(queryString);
+			
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
+			
+			ResultSet rset=pstmt.executeQuery();
+			
+			if(rset.next()){
+				String username_real=rset.getString(1);
+				
+				//display
+				System.out.println("hello "+ username_real);
+			}
+			else{
+				System.out.println("not found");
+			}
+		}
+		catch(SQLException ex){
+			ex.printStackTrace();
+		}
 	}
 	
 	public static void main(String[] args){
@@ -58,6 +80,7 @@ public class UserDB {
 		user1.setPassword("rr");
 		user1.setEmail("aa");
 		
-		userdb.addUser(user1);
+		//userdb.addUser(user1);
+		userdb.findUser("Rachel", "rr");
 	}
 }

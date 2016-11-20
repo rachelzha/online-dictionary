@@ -2,8 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="E:/java/eclipse/workplace/online-dict/jdom-1.0.jar"/>
-	<classpathentry kind="lib" path="E:/java/eclipse/workplace/online-dict/mysql-connector-java-5.1.7-bin.jar"/>
-	<classpathentry kind="lib" path="E:/java/eclipse/workplace/online-dict/org.json.jar"/>
+	<classpathentry kind="lib" path="/Users/zhangruiqi/Documents/workspace/online-dict/mysql-connector-java-5.1.7-bin.jar"/>
+	<classpathentry kind="lib" path="/Users/zhangruiqi/Documents/workspace/online-dict/org.json.jar"/>
+	<classpathentry kind="lib" path="/Users/zhangruiqi/Documents/workspace/online-dict/jdom-1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

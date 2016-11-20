@@ -1,4 +1,4 @@
-package Translate;
+package src.Translate;
 
 /*
  * ²Î¿¼£ºhttp://www.jb51.net/article/68635.htm  //md5±àÂë

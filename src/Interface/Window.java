@@ -1,6 +1,6 @@
-package Interface;
+package src.Interface;
 
-import Translate.*;
+import src.Translate.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,7 +11,7 @@ import javax.swing.*;
 
 
 
-public class Window extends JFrame {
+public class Window extends JApplet {
 	/**
 	 * 
 	 */
@@ -56,7 +56,12 @@ public class Window extends JFrame {
 	
 	
 	
-	public Window(){
+	public void init(){
+	//	setTitle("Dictionary");
+		setLocation(200,100);
+	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(700, 500);
+		setVisible(true);
         
         FlowLayout flowLayout1 = new FlowLayout(FlowLayout.RIGHT , 30 , 5);  
         panel1.setLayout(flowLayout1);  
@@ -194,14 +199,5 @@ public class Window extends JFrame {
 		
 	}
 	
-
-	public static void main(String[] args){
-		Window frame = new Window();
-		frame.setTitle("Dictionary");
-		frame.setLocation(200,100);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(700, 500);
-		frame.setVisible(true);
-	} 
 	
 }

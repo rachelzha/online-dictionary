@@ -22,7 +22,7 @@ public class LikeDB {
 			System.out.println("Driver loaded");
 			
 			//establish a connection
-			connection=DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/userInfo","testuser","testtoday");
+			connection=DriverManager.getConnection("jdbc:mysql://172.26.74.203:3306/userInfo","testuser","testtoday");
 			System.out.println("Database connected");
 			
 		} catch (Exception e) {

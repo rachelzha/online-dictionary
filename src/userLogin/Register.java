@@ -6,6 +6,10 @@ import java.awt.event.*;
 import java.sql.*;
 
 public class Register extends JApplet{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JTextField jtfUsername=new JTextField(9);
 	private JTextField jtfPassword=new JTextField(9);
 	private JTextField jtfEmail=new JTextField(9);
@@ -36,7 +40,7 @@ public class Register extends JApplet{
 		jPanel3.add(new JLabel("Email"));
 		jPanel3.add(jtfEmail);
 		
-		setSize(300,300);//瀹斤紝楂�
+		setSize(300,300);//宽，高
 		setLayout(new FlowLayout(FlowLayout.CENTER,80,20));
 		add(jPanel1);
 		add(jPanel2);
@@ -50,17 +54,17 @@ public class Register extends JApplet{
 		String email=jtfEmail.getText();
 		
 		if(username.length()==0||password.length()==0){
-			JOptionPane.showMessageDialog(null, "鐢ㄦ埛鍚嶆垨瀵嗙爜涓嶈兘涓虹┖锛�");
+			JOptionPane.showMessageDialog(null, "用户名或密码不能为空！");
 			return;
 		}
 		
 		try{
 			userdb.addUser(username,password,email);
 			
-			JOptionPane.showMessageDialog(null, "娉ㄥ唽鎴愬姛锛�");
+			JOptionPane.showMessageDialog(null, "注册成功！");
 		}
 		catch(SQLException ex){
-			JOptionPane.showMessageDialog(null,"鐢ㄦ埛鍚嶅凡琚崰鐢紒");
+			JOptionPane.showMessageDialog(null,"用户名已被占用！");
 		}
 	}
 }

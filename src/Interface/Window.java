@@ -1,11 +1,14 @@
 package src.Interface;
 
 import src.Translate.*;
+import src.userLogin.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.*;
 
@@ -54,9 +57,12 @@ public class Window extends JApplet {
 	
 	JPanel Pan2 = new JPanel();
 	
-	
+	LikeDB likeDB = new LikeDB();
+	String user = "Rachel";
 	
 	public void init(){
+		
+		
 	//	setTitle("Dictionary");
 		setLocation(200,100);
 	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -130,6 +136,75 @@ public class Window extends JApplet {
 	}
 	
 	public void addaction(){
+		
+		Label1.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				Login login = new Login();
+				login.init();
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		Label2.addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				Register reg = new Register();
+				reg.init();
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		box1.addItemListener(new ItemListener(){
 		    @Override 
 		    public void itemStateChanged(ItemEvent e){
@@ -157,21 +232,24 @@ public class Window extends JApplet {
 		like1.addItemListener(new ItemListener(){
 		    @Override 
 		    public void itemStateChanged(ItemEvent e){
-		         
+		    	String key = input.getText();
+		    	likeDB.changeLikes(user, key, "baidu");
 		    }
 		});
 		
 		like2.addItemListener(new ItemListener(){
 		    @Override 
 		    public void itemStateChanged(ItemEvent e){
-		         
+		    	String key = input.getText();
+		    	likeDB.changeLikes(user, key, "youdao");
 		    }
 		});
 		
 		like3.addItemListener(new ItemListener(){
 		    @Override 
 		    public void itemStateChanged(ItemEvent e){
-		         
+		    	String key = input.getText();
+		    	likeDB.changeLikes(user, key, "jinshan");
 		    }
 		});
 		

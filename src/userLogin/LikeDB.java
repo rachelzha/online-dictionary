@@ -9,7 +9,7 @@ public class LikeDB {
 
     	
 	//contributer
-	LikeDB(){
+	public LikeDB(){
 		initDB();
 	}
 	 

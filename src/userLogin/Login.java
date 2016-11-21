@@ -56,7 +56,7 @@ public class Login extends JFrame{
 		
 		try{
 			//create a socket to connect to the server
-			Socket socket = new Socket("172.26.74.203",8000);
+			Socket socket = new Socket("172.28.130.138",8000);
 			
 			//Create an input stream to receive data from the server
 			fromServer = new DataInputStream(socket.getInputStream());

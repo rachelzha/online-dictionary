@@ -42,19 +42,19 @@ public class Window extends JFrame {
 	
 	JPanel panel4 = new JPanel();
 	JLabel Label4 = new JLabel("百度");
-	JTextArea Out1 = new JTextArea("",5,30);
+	JTextArea Out1 = new JTextArea("",7,35);
 	JScrollPane text1=new JScrollPane(Out1);
 	JCheckBox like1 = new JCheckBox("点赞",false);
 	
 	JPanel panel5 = new JPanel();
 	JLabel Label5 = new JLabel("有道");
-	JTextArea Out2 = new JTextArea("",5,30);
+	JTextArea Out2 = new JTextArea("",7,35);
 	JScrollPane text2=new JScrollPane(Out2);
 	JCheckBox like2 = new JCheckBox("点赞",false);
 	
 	JPanel panel6 = new JPanel();
 	JLabel Label6 = new JLabel("金山");
-	JTextArea Out3 = new JTextArea("",5,30);
+	JTextArea Out3 = new JTextArea("",7,35);
 	JScrollPane text3=new JScrollPane(Out3);
 	JCheckBox like3 = new JCheckBox("点赞",false);
 	
@@ -115,7 +115,7 @@ public class Window extends JFrame {
 		Out1.setFont(new Font("Courier",Font.BOLD,15));
         panel4.add(Label4);  
         panel4.add(text1);
-        panel4.add(like1);
+      //  panel4.add(like1);
         
         FlowLayout flowLayout5 = new FlowLayout(FlowLayout.CENTER , 30 , 5);  
         panel5.setLayout(flowLayout5);  
@@ -125,7 +125,7 @@ public class Window extends JFrame {
 		Out2.setFont(new Font("Courier",Font.BOLD,15));
         panel5.add(Label5);  
         panel5.add(text2);
-        panel5.add(like2);
+     //   panel5.add(like2);
         
         FlowLayout flowLayout6 = new FlowLayout(FlowLayout.CENTER , 30 , 5);  
         panel6.setLayout(flowLayout6);  
@@ -135,7 +135,7 @@ public class Window extends JFrame {
 		Out3.setFont(new Font("Courier",Font.BOLD,15));
         panel6.add(Label6);  
         panel6.add(text3);
-        panel6.add(like3);
+     //   panel6.add(like3);
         
         GridLayout gridLayout2 = new GridLayout(3,1,10,5);  
         Pan2.setLayout(gridLayout2);
@@ -151,8 +151,8 @@ public class Window extends JFrame {
 		
 		try{
 			//create a socket to connect to the server
-			socket = new Socket("172.28.130.138",8000);
-			
+			//socket = new Socket("172.28.130.138",8000);
+			socket = new Socket("172.26.213.40",8000);
 			//Create an input stream to receive data from the server
 			fromServer = new DataInputStream(socket.getInputStream());
 			
@@ -172,9 +172,20 @@ public class Window extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				Login login = new Login(socket);
-				login.setLocation(200,100);
-				login.setVisible(true);
+				if(!user.Logged()){
+					Login login = new Login(socket);
+					login.setLocation(200,100);
+					login.setVisible(true);
+					user=login.getUser();
+					Label1.setText(user.getUsername());
+					panel4.add(like1);
+					panel5.add(like2);
+					panel6.add(like3);
+				}
+				else{
+					
+				}
+				
 			}
 
 			@Override
@@ -332,14 +343,15 @@ public class Window extends JFrame {
 					
 					//receive
 					baiduLikes=fromServer.readInt();
-					System.out.println(baiduLikes);
+				//	System.out.println(baiduLikes);
 
 					youdaoLikes=fromServer.readInt();
-					System.out.println(youdaoLikes);
+				//	System.out.println(youdaoLikes);
 
 					jinshanLikes=fromServer.readInt();
 					
-					System.out.println(jinshanLikes);
+				//	System.out.println(jinshanLikes);
+					resetPan2();
 				}
 				catch(IOException ex){
 					System.err.println(ex);
@@ -367,19 +379,57 @@ public class Window extends JFrame {
 	}
 	
 	public void resetPan2(){
-		if(!box1.isSelected())
+		Pan2.removeAll();
+		int a = baiduLikes;
+		int b = youdaoLikes;
+		int c = jinshanLikes;
+		if(a>=b&&b>=c){
+			Pan2.add(panel4);  
+	        Pan2.add(panel5);  
+	        Pan2.add(panel6);
+		}
+		else if(a>=c&&c>=b){
+			Pan2.add(panel4);  
+	        Pan2.add(panel6);  
+	        Pan2.add(panel5);
+		}
+		else if(b>=a&&a>=c){
+			Pan2.add(panel5);  
+	        Pan2.add(panel4);  
+	        Pan2.add(panel6);
+		}
+		else if(b>=c&&c>=a){
+			Pan2.add(panel5);  
+	        Pan2.add(panel6);  
+	        Pan2.add(panel4);
+		}
+		else if(c>=a&&a>=b){
+			Pan2.add(panel6);  
+	        Pan2.add(panel4);  
+	        Pan2.add(panel5);
+		}
+		else{//c>=b>=a
+			Pan2.add(panel6);  
+	        Pan2.add(panel5);  
+	        Pan2.add(panel4);
+		}
+		
+		int count = 3;
+		if(!box1.isSelected()){
 			Pan2.remove(panel4);
-		if(!box2.isSelected())
+			count--;
+		}
+		if(!box2.isSelected()){
 			Pan2.remove(panel5);
-		if(!box3.isSelected())
+			count--;
+		}
+		if(!box3.isSelected()){
 			Pan2.remove(panel6);
-		if(box1.isSelected())
-			Pan2.add(panel4);
-		if(box2.isSelected())
-			Pan2.add(panel5);
-		if(box3.isSelected())
-			Pan2.add(panel6);
-    	Pan2.revalidate();
+			count--;
+		}
+		
+		Pan2.setLayout(new GridLayout(count,1,10,5));
+		Pan2.revalidate();
     	Pan2.repaint();
 	}
 }
@@ -395,5 +445,4 @@ class mypanel extends JPanel {
         //这一句很重要!!! 不加这句不会清除以前的图像  
         super.paint(g);  
     }  
-    
 }  

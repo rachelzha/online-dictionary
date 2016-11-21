@@ -20,6 +20,8 @@ public class Login extends JFrame{
 	private DataOutputStream toServer;
 	private DataInputStream fromServer;
 	
+	UserState user=new UserState();
+	
 	public Login(Socket socket){
 		JPanel jPanel1=new JPanel();
 		JPanel jPanel2=new JPanel();
@@ -71,6 +73,7 @@ public class Login extends JFrame{
 			
 			if(found==true){
 				JOptionPane.showMessageDialog(null, "Hello! "+ username);
+				user.setUsername("username");
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Username or Password WRONG!");
@@ -79,6 +82,10 @@ public class Login extends JFrame{
 		catch(IOException ex){
 			System.err.println(ex);
 		}
+	}
+	
+	public UserState getUser(){
+		return user;
 	}
 
 }

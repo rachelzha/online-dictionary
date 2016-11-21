@@ -24,8 +24,8 @@ public class Window extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	JPanel panel1 = new JPanel();
-	JLabel Label1 = new JLabel("登陆");
-	JLabel Label2 = new JLabel("注册");
+	JLabel Label1 = new JLabel("Sign Up");
+	JLabel Label2 = new JLabel("Register");
 	
 	JPanel panel2 = new JPanel();
 	JLabel Label3 = new JLabel("Input");
@@ -33,34 +33,33 @@ public class Window extends JFrame {
 	JButton Search = new JButton("Search");
 
 	JPanel panel3 = new JPanel();
-	JCheckBox box1 = new JCheckBox("百度",true);
-	JCheckBox box2 = new JCheckBox("有道",true);
-	JCheckBox box3 = new JCheckBox("金山",true);
+	JCheckBox box1 = new JCheckBox("Baidu",true);
+	JCheckBox box2 = new JCheckBox("Youdao",true);
+	JCheckBox box3 = new JCheckBox("Jinshan",true);
 	
 	JPanel Pan1 = new JPanel();
 	
 	
 	mypanel panel4 = new mypanel();
-	JLabel Label4 = new JLabel("百度");
+	JLabel Label4 = new JLabel("Baidu");
 	JTextArea Out1 = new JTextArea("",5,35);
 	JScrollPane text1=new JScrollPane(Out1);
-	JCheckBox like1 = new JCheckBox("点赞",false);
+	JCheckBox like1 = new JCheckBox("likes",false);
 	
 	mypanel panel5 = new mypanel();
-	JLabel Label5 = new JLabel("有道");
+	JLabel Label5 = new JLabel("Youdao");
 	JTextArea Out2 = new JTextArea("",5,35);
 	JScrollPane text2=new JScrollPane(Out2);
-	JCheckBox like2 = new JCheckBox("点赞",false);
+	JCheckBox like2 = new JCheckBox("likes",false);
 	
 	mypanel panel6 = new mypanel();
-	JLabel Label6 = new JLabel("金山");
+	JLabel Label6 = new JLabel("Jinshan");
 	JTextArea Out3 = new JTextArea("",5,35);
 	JScrollPane text3=new JScrollPane(Out3);
-	JCheckBox like3 = new JCheckBox("点赞",false);
+	JCheckBox like3 = new JCheckBox("likes",false);
 	
 	mypanel Pan2 = new mypanel();
 	
-	//用户状态
 	UserState user=new UserState();
 	
 	Socket socket;
@@ -277,7 +276,7 @@ public class Window extends JFrame {
 		    }
 		});
 		
-		//点赞
+		//锟斤拷锟斤拷
 		like1.addItemListener(new ItemListener(){
 		    @Override 
 		    public void itemStateChanged(ItemEvent e){
@@ -332,7 +331,7 @@ public class Window extends JFrame {
 		    }
 		});
 		
-		//查询
+		//锟斤拷询
 		Search.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				String key = input.getText();
@@ -450,7 +449,6 @@ class mypanel extends JPanel {
         super();  
     }  
     public void paint(Graphics g) {  
-        //这一句很重要!!! 不加这句不会清除以前的图像  
         super.paint(g);  
     }  
 }  

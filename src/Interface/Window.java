@@ -9,20 +9,26 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
 
 import javax.swing.*;
 
+import Server.LikeDB;
 
 
-public class Window extends JApplet {
+
+public class Window extends JFrame {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	
 	JPanel panel1 = new JPanel();
-	JLabel Label1 = new JLabel("µÇÂ½");
-	JLabel Label2 = new JLabel("×¢²á");
+	JLabel Label1 = new JLabel("ï¿½ï¿½Â½");
+	JLabel Label2 = new JLabel("×¢ï¿½ï¿½");
 	
 	JPanel panel2 = new JPanel();
 	JLabel Label3 = new JLabel("Input");
@@ -30,42 +36,53 @@ public class Window extends JApplet {
 	JButton Search = new JButton("Search");
 
 	JPanel panel3 = new JPanel();
-	JCheckBox box1 = new JCheckBox("°Ù¶È",true);
-	JCheckBox box2 = new JCheckBox("ÓÐµÀ",true);
-	JCheckBox box3 = new JCheckBox("½ðÉ½",true);
+	JCheckBox box1 = new JCheckBox("ï¿½Ù¶ï¿½",true);
+	JCheckBox box2 = new JCheckBox("ï¿½Ðµï¿½",true);
+	JCheckBox box3 = new JCheckBox("ï¿½ï¿½É½",true);
 	
 	JPanel Pan1 = new JPanel();
 	
 	
 	JPanel panel4 = new JPanel();
-	JLabel Label4 = new JLabel("°Ù¶È");
+	JLabel Label4 = new JLabel("ï¿½Ù¶ï¿½");
 	JTextArea Out1 = new JTextArea("",5,30);
 	JScrollPane text1=new JScrollPane(Out1);
-	JCheckBox like1 = new JCheckBox("µãÔÞ",false);
+	JCheckBox like1 = new JCheckBox("ï¿½ï¿½ï¿½ï¿½",false);
 	
 	JPanel panel5 = new JPanel();
-	JLabel Label5 = new JLabel("ÓÐµÀ");
+	JLabel Label5 = new JLabel("ï¿½Ðµï¿½");
 	JTextArea Out2 = new JTextArea("",5,30);
 	JScrollPane text2=new JScrollPane(Out2);
-	JCheckBox like2 = new JCheckBox("µãÔÞ",false);
+	JCheckBox like2 = new JCheckBox("ï¿½ï¿½ï¿½ï¿½",false);
 	
 	JPanel panel6 = new JPanel();
-	JLabel Label6 = new JLabel("½ðÉ½");
+	JLabel Label6 = new JLabel("ï¿½ï¿½É½");
 	JTextArea Out3 = new JTextArea("",5,30);
 	JScrollPane text3=new JScrollPane(Out3);
-	JCheckBox like3 = new JCheckBox("µãÔÞ",false);
+	JCheckBox like3 = new JCheckBox("ï¿½ï¿½ï¿½ï¿½",false);
 	
 	JPanel Pan2 = new JPanel();
 	
-	LikeDB likeDB = new LikeDB();
 	String user = "Rachel";
 	
-	public void init(){
-		
-		
-	//	setTitle("Dictionary");
+	//io streams
+	private DataOutputStream toServer;
+	private DataInputStream fromServer;
+	
+	//likes
+	int baiduLikes;
+	int youdaoLikes;
+	int jinshanLikes;
+	
+	
+	public static void main(String[] args){
+		Window window=new Window();
+	}
+	
+	public Window(){
+		setTitle("Dictionary");
 		setLocation(200,100);
-	//	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(700, 500);
 		setVisible(true);
         
@@ -95,9 +112,9 @@ public class Window extends JApplet {
         FlowLayout flowLayout4 = new FlowLayout(FlowLayout.CENTER , 30 , 5);  
         panel4.setLayout(flowLayout4);  
         //Out1.setMargin(new Insets(5, 5, 5, 5));
-        Out1.setEditable(false);   //Ö»¶Á
-		Out1.setLineWrap(true);  //×Ô¶¯»»ÐÐ
-		Out1.setFont(new Font("Courier",Font.BOLD,15));//×ÖÌåÏÔÊ¾Ð§¹û
+        Out1.setEditable(false);   //Ö»ï¿½ï¿½
+		Out1.setLineWrap(true);  //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
+		Out1.setFont(new Font("Courier",Font.BOLD,15));//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Ð§ï¿½ï¿½
         panel4.add(Label4);  
         panel4.add(text1);
         panel4.add(like1);
@@ -105,9 +122,9 @@ public class Window extends JApplet {
         FlowLayout flowLayout5 = new FlowLayout(FlowLayout.CENTER , 30 , 5);  
         panel5.setLayout(flowLayout5);  
         //Out2.setMargin(new Insets(5, 5, 5, 5));
-		Out2.setEditable(false);   //Ö»¶Á
-		Out2.setLineWrap(true);  //×Ô¶¯»»ÐÐ
-		Out2.setFont(new Font("Courier",Font.BOLD,15));//×ÖÌåÏÔÊ¾Ð§¹û
+		Out2.setEditable(false);   //Ö»ï¿½ï¿½
+		Out2.setLineWrap(true);  //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
+		Out2.setFont(new Font("Courier",Font.BOLD,15));//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Ð§ï¿½ï¿½
         panel5.add(Label5);  
         panel5.add(text2);
         panel5.add(like2);
@@ -115,9 +132,9 @@ public class Window extends JApplet {
         FlowLayout flowLayout6 = new FlowLayout(FlowLayout.CENTER , 30 , 5);  
         panel6.setLayout(flowLayout6);  
         //Out3.setMargin(new Insets(5, 5, 5, 5));
-		Out3.setEditable(false);   //Ö»¶Á
-		Out3.setLineWrap(true);  //×Ô¶¯»»ÐÐ
-		Out3.setFont(new Font("Courier",Font.BOLD,15));//×ÖÌåÏÔÊ¾Ð§¹û
+		Out3.setEditable(false);   //Ö»ï¿½ï¿½
+		Out3.setLineWrap(true);  //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
+		Out3.setFont(new Font("Courier",Font.BOLD,15));//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Ð§ï¿½ï¿½
         panel6.add(Label6);  
         panel6.add(text3);
         panel6.add(like3);
@@ -133,6 +150,21 @@ public class Window extends JApplet {
 		add(Pan2,BorderLayout.CENTER);
 		
 		addaction();
+		/*
+		try{
+			//create a socket to connect to the server
+			Socket socket = new Socket("172.26.74.203",8000);
+			
+			//Create an input stream to receive data from the server
+			fromServer = new DataInputStream(socket.getInputStream());
+			
+			//create an output stream to send data to the server
+			toServer=new DataOutputStream(socket.getOutputStream());
+		}
+		catch (IOException ex){
+			System.err.println(ex);
+			System.err.println("Fail!");
+		}*/
 	}
 	
 	public void addaction(){
@@ -143,7 +175,6 @@ public class Window extends JApplet {
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				Login login = new Login();
-				login.init();
 			}
 
 			@Override
@@ -177,7 +208,6 @@ public class Window extends JApplet {
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				Register reg = new Register();
-				reg.init();
 			}
 
 			@Override
@@ -233,7 +263,17 @@ public class Window extends JApplet {
 		    @Override 
 		    public void itemStateChanged(ItemEvent e){
 		    	String key = input.getText();
-		    	likeDB.changeLikes(user, key, "baidu");
+		    	
+		    	try{
+					//send
+					toServer.writeInt(5);
+					toServer.writeUTF("Rachel");
+					toServer.writeUTF(key);
+					toServer.writeUTF("baidu");
+				}
+				catch(IOException ex){
+					System.err.println(ex);
+				}
 		    }
 		});
 		
@@ -241,7 +281,17 @@ public class Window extends JApplet {
 		    @Override 
 		    public void itemStateChanged(ItemEvent e){
 		    	String key = input.getText();
-		    	likeDB.changeLikes(user, key, "youdao");
+
+		    	try{
+					//send
+					toServer.writeInt(5);
+					toServer.writeUTF("Rachel");
+					toServer.writeUTF(key);
+					toServer.writeUTF("youdao");
+				}
+				catch(IOException ex){
+					System.err.println(ex);
+				}
 		    }
 		});
 		
@@ -249,7 +299,17 @@ public class Window extends JApplet {
 		    @Override 
 		    public void itemStateChanged(ItemEvent e){
 		    	String key = input.getText();
-		    	likeDB.changeLikes(user, key, "jinshan");
+
+		    	try{
+					//send
+					toServer.writeInt(5);
+					toServer.writeUTF("Rachel");
+					toServer.writeUTF(key);
+					toServer.writeUTF("jinshan");
+				}
+				catch(IOException ex){
+					System.err.println(ex);
+				}
 		    }
 		});
 		
@@ -257,6 +317,23 @@ public class Window extends JApplet {
 		Search.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				String key = input.getText();
+				
+				try{
+					//send
+					toServer.writeInt(3);
+					toServer.writeUTF(user);
+					toServer.writeUTF(key);
+					
+					//receive
+					baiduLikes=fromServer.readInt();
+					youdaoLikes=fromServer.readInt();
+					jinshanLikes=fromServer.readInt();
+				}
+				catch(IOException ex){
+					System.err.println(ex);
+				}
+				
+				
 				if(box1.isSelected()){
 					BaiduTranslate B = new BaiduTranslate();
 					String text = B.Translation(key);

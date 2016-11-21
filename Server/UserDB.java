@@ -1,4 +1,4 @@
-package src.userLogin;
+package Server;
 
 import java.sql.*;
 
@@ -18,7 +18,7 @@ public class UserDB{
 			System.out.println("Driver loaded");
 			
 			//establish a connection
-			connection=DriverManager.getConnection("jdbc:mysql://172.26.74.203:3306/userInfo","testuser","testtoday");
+			connection=DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/userInfo","testuser","testtoday");
 			System.out.println("Database connected");
 			
 		} catch (Exception e) {
@@ -28,17 +28,24 @@ public class UserDB{
 		}
 	}
 	
-	public void addUser(String username, String password, String email) throws SQLException{
+	public boolean addUser(String username, String password, String email){
 	    String sql = "insert into users (username,password,email) values(?,?,?)";
 	 
-	       pstmt = (PreparedStatement) connection.prepareStatement(sql);
-	        
-	       pstmt.setString(1, username);
-	       pstmt.setString(2, password);
-	       pstmt.setString(3, email);
-	        
-	       pstmt.executeUpdate();
-	       pstmt.close();
+	       try {
+			pstmt = (PreparedStatement) connection.prepareStatement(sql);
+			
+			pstmt.setString(1, username);
+		    pstmt.setString(2, password);
+		    pstmt.setString(3, email);
+		        
+		    pstmt.executeUpdate();
+		    pstmt.close();
+		    
+		    return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return false;
+		}
 	}
 	
 	public boolean findUser(String username, String password){

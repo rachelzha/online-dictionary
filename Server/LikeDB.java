@@ -1,4 +1,4 @@
-package src.userLogin;
+package Server;
 
 import java.sql.*;
 import java.util.Vector;
@@ -22,7 +22,7 @@ public class LikeDB {
 			System.out.println("Driver loaded");
 			
 			//establish a connection
-			connection=DriverManager.getConnection("jdbc:mysql://172.26.74.203:3306/userInfo","testuser","testtoday");
+			connection=DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/userInfo","testuser","testtoday");
 			System.out.println("Database connected");
 			
 		} catch (Exception e) {
@@ -153,7 +153,7 @@ public class LikeDB {
 	public int getJinshanLikes(String word){
 		return getLikes(word).get(2);
 	}
-
+/*
 	public static void main(String[] args){
 		LikeDB likedb=new LikeDB();
 		
@@ -166,5 +166,5 @@ public class LikeDB {
 		likedb.add("Rachel", "apple");
 		likedb.add("Rachel", "orange");
 		likedb.add("Ted", "apple");
-	}
+	}*/
 }

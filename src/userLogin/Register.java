@@ -2,15 +2,12 @@ package src.userLogin;
 
 import javax.swing.*;
 
-import Server.UserDB;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.sql.*;
 
 public class Register extends JFrame{
 	/**

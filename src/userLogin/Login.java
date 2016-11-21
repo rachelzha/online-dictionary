@@ -2,8 +2,6 @@ package src.userLogin;
 
 import javax.swing.*;
 
-import Server.UserDB;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;

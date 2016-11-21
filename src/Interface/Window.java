@@ -24,8 +24,8 @@ public class Window extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	JPanel panel1 = new JPanel();
-	JLabel Label1 = new JLabel("ï¿½ï¿½Â½");
-	JLabel Label2 = new JLabel("×¢ï¿½ï¿½");
+	JLabel Label1 = new JLabel("µÇÂ½");
+	JLabel Label2 = new JLabel("×¢²á");
 	
 	JPanel panel2 = new JPanel();
 	JLabel Label3 = new JLabel("Input");
@@ -33,34 +33,34 @@ public class Window extends JFrame {
 	JButton Search = new JButton("Search");
 
 	JPanel panel3 = new JPanel();
-	JCheckBox box1 = new JCheckBox("ï¿½Ù¶ï¿½",true);
-	JCheckBox box2 = new JCheckBox("ï¿½Ğµï¿½",true);
-	JCheckBox box3 = new JCheckBox("ï¿½ï¿½É½",true);
+	JCheckBox box1 = new JCheckBox("°Ù¶È",true);
+	JCheckBox box2 = new JCheckBox("ÓĞµÀ",true);
+	JCheckBox box3 = new JCheckBox("½ğÉ½",true);
 	
 	JPanel Pan1 = new JPanel();
 	
 	
 	JPanel panel4 = new JPanel();
-	JLabel Label4 = new JLabel("ï¿½Ù¶ï¿½");
+	JLabel Label4 = new JLabel("°Ù¶È");
 	JTextArea Out1 = new JTextArea("",5,30);
 	JScrollPane text1=new JScrollPane(Out1);
-	JCheckBox like1 = new JCheckBox("ï¿½ï¿½ï¿½ï¿½",false);
+	JCheckBox like1 = new JCheckBox("µãÔŞ",false);
 	
 	JPanel panel5 = new JPanel();
-	JLabel Label5 = new JLabel("ï¿½Ğµï¿½");
+	JLabel Label5 = new JLabel("ÓĞµÀ");
 	JTextArea Out2 = new JTextArea("",5,30);
 	JScrollPane text2=new JScrollPane(Out2);
-	JCheckBox like2 = new JCheckBox("ï¿½ï¿½ï¿½ï¿½",false);
+	JCheckBox like2 = new JCheckBox("µãÔŞ",false);
 	
 	JPanel panel6 = new JPanel();
-	JLabel Label6 = new JLabel("ï¿½ï¿½É½");
+	JLabel Label6 = new JLabel("½ğÉ½");
 	JTextArea Out3 = new JTextArea("",5,30);
 	JScrollPane text3=new JScrollPane(Out3);
-	JCheckBox like3 = new JCheckBox("ï¿½ï¿½ï¿½ï¿½",false);
+	JCheckBox like3 = new JCheckBox("µãÔŞ",false);
 	
 	JPanel Pan2 = new JPanel();
 	
-	//ç”¨æˆ·çŠ¶æ€
+	//ÓÃ»§×´Ì¬
 	UserState user=new UserState();
 	
 	Socket socket;
@@ -110,9 +110,9 @@ public class Window extends JFrame {
         FlowLayout flowLayout4 = new FlowLayout(FlowLayout.CENTER , 30 , 5);  
         panel4.setLayout(flowLayout4);  
         //Out1.setMargin(new Insets(5, 5, 5, 5));
-        Out1.setEditable(false);   //Ö»ï¿½ï¿½
-		Out1.setLineWrap(true);  //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
-		Out1.setFont(new Font("Courier",Font.BOLD,15));//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Ğ§ï¿½ï¿½
+        Out1.setEditable(false);  
+		Out1.setLineWrap(true);
+		Out1.setFont(new Font("Courier",Font.BOLD,15));
         panel4.add(Label4);  
         panel4.add(text1);
         panel4.add(like1);
@@ -120,9 +120,9 @@ public class Window extends JFrame {
         FlowLayout flowLayout5 = new FlowLayout(FlowLayout.CENTER , 30 , 5);  
         panel5.setLayout(flowLayout5);  
         //Out2.setMargin(new Insets(5, 5, 5, 5));
-		Out2.setEditable(false);   //Ö»ï¿½ï¿½
-		Out2.setLineWrap(true);  //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
-		Out2.setFont(new Font("Courier",Font.BOLD,15));//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Ğ§ï¿½ï¿½
+		Out2.setEditable(false);
+		Out2.setLineWrap(true);
+		Out2.setFont(new Font("Courier",Font.BOLD,15));
         panel5.add(Label5);  
         panel5.add(text2);
         panel5.add(like2);
@@ -130,9 +130,9 @@ public class Window extends JFrame {
         FlowLayout flowLayout6 = new FlowLayout(FlowLayout.CENTER , 30 , 5);  
         panel6.setLayout(flowLayout6);  
         //Out3.setMargin(new Insets(5, 5, 5, 5));
-		Out3.setEditable(false);   //Ö»ï¿½ï¿½
-		Out3.setLineWrap(true);  //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½
-		Out3.setFont(new Font("Courier",Font.BOLD,15));//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Ğ§ï¿½ï¿½
+		Out3.setEditable(false);
+		Out3.setLineWrap(true); 
+		Out3.setFont(new Font("Courier",Font.BOLD,15));
         panel6.add(Label6);  
         panel6.add(text3);
         panel6.add(like3);
@@ -257,7 +257,7 @@ public class Window extends JFrame {
 		    }
 		});
 		
-		//ç‚¹èµ
+		//µãÔŞ
 		like1.addItemListener(new ItemListener(){
 		    @Override 
 		    public void itemStateChanged(ItemEvent e){
@@ -312,7 +312,7 @@ public class Window extends JFrame {
 		    }
 		});
 		
-		//æŸ¥è¯
+		//²éÑ¯
 		Search.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				String key = input.getText();

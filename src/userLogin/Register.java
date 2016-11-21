@@ -41,8 +41,8 @@ public class Register extends JFrame{
 		add(jPanel3);
 		add(jbtRegister);
 		
+		setTitle("Register");
 		setSize(300,300);//宽，高
-		setVisible(true);
 		
 		jbtRegister.addActionListener(
 				new java.awt.event.ActionListener(){

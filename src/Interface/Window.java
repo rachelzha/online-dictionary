@@ -58,7 +58,7 @@ public class Window extends JFrame {
 	JScrollPane text3=new JScrollPane(Out3);
 	JCheckBox like3 = new JCheckBox("点赞",false);
 	
-	JPanel Pan2 = new JPanel();
+	mypanel Pan2 = new mypanel();
 	
 	//用户状态
 	UserState user=new UserState();
@@ -173,6 +173,8 @@ public class Window extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				Login login = new Login(socket);
+				login.setLocation(200,100);
+				login.setVisible(true);
 			}
 
 			@Override
@@ -206,6 +208,8 @@ public class Window extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				Register reg = new Register(socket);
+				reg.setLocation(200,100);
+				reg.setVisible(true);
 			}
 
 			@Override
@@ -236,24 +240,21 @@ public class Window extends JFrame {
 		box1.addItemListener(new ItemListener(){
 		    @Override 
 		    public void itemStateChanged(ItemEvent e){
-		        if(box1.isSelected()) 
-		        	Out1.setText("1");
-		        else
-		        	Out1.setText("2");
+		    	resetPan2();
 		    }
 		});
 		
 		box2.addItemListener(new ItemListener(){
 		    @Override 
 		    public void itemStateChanged(ItemEvent e){
-		         
+		    	resetPan2();
 		    }
 		});
 		
 		box3.addItemListener(new ItemListener(){
 		    @Override 
 		    public void itemStateChanged(ItemEvent e){
-		         
+		    	resetPan2();
 		    }
 		});
 		
@@ -365,4 +366,34 @@ public class Window extends JFrame {
 		
 	}
 	
+	public void resetPan2(){
+		if(!box1.isSelected())
+			Pan2.remove(panel4);
+		if(!box2.isSelected())
+			Pan2.remove(panel5);
+		if(!box3.isSelected())
+			Pan2.remove(panel6);
+		if(box1.isSelected())
+			Pan2.add(panel4);
+		if(box2.isSelected())
+			Pan2.add(panel5);
+		if(box3.isSelected())
+			Pan2.add(panel6);
+    	Pan2.revalidate();
+    	Pan2.repaint();
+	}
 }
+
+
+class mypanel extends JPanel {    
+    private static final long serialVersionUID = 1L;  
+      
+    public mypanel(){  
+        super();  
+    }  
+    public void paint(Graphics g) {  
+        //这一句很重要!!! 不加这句不会清除以前的图像  
+        super.paint(g);  
+    }  
+    
+}  

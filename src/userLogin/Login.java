@@ -36,7 +36,6 @@ public class Login extends JFrame{
 		
 		setTitle("Login");
 		setSize(300,250);//width,height
-		setVisible(true);
 		
 		jbtLogin.addActionListener(
 				new java.awt.event.ActionListener(){

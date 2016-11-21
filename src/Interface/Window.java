@@ -40,21 +40,21 @@ public class Window extends JFrame {
 	JPanel Pan1 = new JPanel();
 	
 	
-	JPanel panel4 = new JPanel();
+	mypanel panel4 = new mypanel();
 	JLabel Label4 = new JLabel("百度");
-	JTextArea Out1 = new JTextArea("",7,35);
+	JTextArea Out1 = new JTextArea("",5,35);
 	JScrollPane text1=new JScrollPane(Out1);
 	JCheckBox like1 = new JCheckBox("点赞",false);
 	
-	JPanel panel5 = new JPanel();
+	mypanel panel5 = new mypanel();
 	JLabel Label5 = new JLabel("有道");
-	JTextArea Out2 = new JTextArea("",7,35);
+	JTextArea Out2 = new JTextArea("",5,35);
 	JScrollPane text2=new JScrollPane(Out2);
 	JCheckBox like2 = new JCheckBox("点赞",false);
 	
-	JPanel panel6 = new JPanel();
+	mypanel panel6 = new mypanel();
 	JLabel Label6 = new JLabel("金山");
-	JTextArea Out3 = new JTextArea("",7,35);
+	JTextArea Out3 = new JTextArea("",5,35);
 	JScrollPane text3=new JScrollPane(Out3);
 	JCheckBox like3 = new JCheckBox("点赞",false);
 	
@@ -152,7 +152,7 @@ public class Window extends JFrame {
 		try{
 			//create a socket to connect to the server
 			//socket = new Socket("172.28.130.138",8000);
-			socket = new Socket("172.26.213.40",8000);
+			socket = new Socket("172.26.74.203",8000);
 			//Create an input stream to receive data from the server
 			fromServer = new DataInputStream(socket.getInputStream());
 			
@@ -177,13 +177,21 @@ public class Window extends JFrame {
 					login.setLocation(200,100);
 					login.setVisible(true);
 					user=login.getUser();
-					Label1.setText(user.getUsername());
-					panel4.add(like1);
-					panel5.add(like2);
-					panel6.add(like3);
+					//System.out.println(user.Logged());		
 				}
-				else{
-					
+				if(user.Logged()){	
+					Label1.setText(user.getUsername());
+					Label1.revalidate();
+					Label1.repaint();
+					panel4.add(like1);
+					panel4.revalidate();
+					panel4.repaint();
+					panel5.add(like2);
+					panel5.revalidate();
+					panel5.repaint();
+					panel6.add(like3);
+					panel6.revalidate();
+					panel6.repaint();
 				}
 				
 			}

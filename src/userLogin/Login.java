@@ -73,7 +73,7 @@ public class Login extends JFrame{
 			
 			if(found==true){
 				JOptionPane.showMessageDialog(null, "Hello! "+ username);
-				user.setUsername("username");
+				user.setUsername(username);
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Username or Password WRONG!");

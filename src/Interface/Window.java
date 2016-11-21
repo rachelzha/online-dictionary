@@ -150,7 +150,7 @@ public class Window extends JFrame {
 		add(Pan2,BorderLayout.CENTER);
 		
 		addaction();
-		/*
+		
 		try{
 			//create a socket to connect to the server
 			Socket socket = new Socket("172.26.74.203",8000);
@@ -164,7 +164,7 @@ public class Window extends JFrame {
 		catch (IOException ex){
 			System.err.println(ex);
 			System.err.println("Fail!");
-		}*/
+		}
 	}
 	
 	public void addaction(){

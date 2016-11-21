@@ -86,8 +86,8 @@ public class Login extends JFrame{
 			System.err.println(ex);
 		}
 	}
-	/*
+	
 	public static void main(String[] args){
 		Login login=new Login();
-	}*/
+	}
 }

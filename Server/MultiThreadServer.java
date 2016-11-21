@@ -118,9 +118,10 @@ public class MultiThreadServer extends JFrame{
 						
 						likedb.add(username, word);
 						
-						int baiduLikes=likedb.getBaiduLikes(word);
-						int youdaoLikes=likedb.getYoudaoLikes(word);
-						int jinshanLikes=likedb.getJinshanLikes(word);
+						Vector<Integer>vec=likedb.getLikes(word);
+						int baiduLikes=vec.get(0);
+						int youdaoLikes=vec.get(1);
+						int jinshanLikes=vec.get(2);
 						
 						outputToClient.writeInt(baiduLikes);
 						outputToClient.writeInt(youdaoLikes);
@@ -130,9 +131,10 @@ public class MultiThreadServer extends JFrame{
 					case 4:{//search words without user name
 						String word=inputFromClient.readUTF();
 						
-						int baiduLikes=likedb.getBaiduLikes(word);
-						int youdaoLikes=likedb.getYoudaoLikes(word);
-						int jinshanLikes=likedb.getJinshanLikes(word);
+						Vector<Integer>vec=likedb.getLikes(word);
+						int baiduLikes=vec.get(0);
+						int youdaoLikes=vec.get(1);
+						int jinshanLikes=vec.get(2);
 						
 						outputToClient.writeInt(baiduLikes);
 						outputToClient.writeInt(youdaoLikes);

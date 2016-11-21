@@ -114,8 +114,9 @@ public class LikeDB {
 	}
 	
 	public Vector<Integer> getLikes(String word){
-		String queryString="select youdao,baidu,jinshan from likes where word=?";
-		
+		String queryString="select baidu,youdao,jinshan from likes where word=?";
+		Vector<Integer> vec=new Vector<Integer>();
+
 		try{
 			pstmt=(PreparedStatement)connection.prepareStatement(queryString);
 			pstmt.setString(1, word);
@@ -123,48 +124,24 @@ public class LikeDB {
 			ResultSet rset=pstmt.executeQuery();
 			
 			if(rset.next()){				
-				Vector<Integer> vec=new Vector<Integer>();
 				vec.add(rset.getInt(1));
 				vec.add(rset.getInt(2));
 				vec.add(rset.getInt(3));
 				
 				pstmt.close();
-				return vec;
 			}
 			else{
+				vec.add(0);
+				vec.add(0);
+				vec.add(0);
+				
 				pstmt.close();
-				return null;
 			}
 		}
 		catch(SQLException ex){
 			ex.printStackTrace();
 		}
-		return null;//不会执行到
+		return vec;
 	}
-	
-	public int getYoudaoLikes(String word){
-		return getLikes(word).get(0);
-	}
-	
-	public int getBaiduLikes(String word){
-		return getLikes(word).get(1);
-	}
-	
-	public int getJinshanLikes(String word){
-		return getLikes(word).get(2);
-	}
-/*
-	public static void main(String[] args){
-		LikeDB likedb=new LikeDB();
-		
-		likedb.changeLikes("Rachel", "apple", "youdao");
-		
-		System.out.println(likedb.getYoudaoLikes("apple"));
-		System.out.println(likedb.getBaiduLikes("apple"));
-		System.out.println(likedb.getJinshanLikes("apple"));
 
-		likedb.add("Rachel", "apple");
-		likedb.add("Rachel", "orange");
-		likedb.add("Ted", "apple");
-	}*/
 }

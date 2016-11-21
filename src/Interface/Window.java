@@ -16,9 +16,6 @@ import java.net.Socket;
 
 import javax.swing.*;
 
-import Server.LikeDB;
-
-
 
 public class Window extends JFrame {
 	/**
@@ -64,8 +61,9 @@ public class Window extends JFrame {
 	JPanel Pan2 = new JPanel();
 	
 	//用户状态
-	String user = null;
+	UserState user=new UserState();
 	
+	Socket socket;
 	//io streams
 	private DataOutputStream toServer;
 	private DataInputStream fromServer;
@@ -78,15 +76,14 @@ public class Window extends JFrame {
 	
 	public static void main(String[] args){
 		Window window=new Window();
+		window.setTitle("Dictionary");
+		window.setLocation(200,100);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setSize(700, 500);
+		window.setVisible(true);
 	}
 	
 	public Window(){
-		setTitle("Dictionary");
-		setLocation(200,100);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(700, 500);
-		setVisible(true);
-        
         FlowLayout flowLayout1 = new FlowLayout(FlowLayout.RIGHT , 30 , 5);  
         panel1.setLayout(flowLayout1);  
         panel1.add(Label1);  
@@ -154,7 +151,7 @@ public class Window extends JFrame {
 		
 		try{
 			//create a socket to connect to the server
-			Socket socket = new Socket("172.28.130.138",8000);
+			socket = new Socket("172.28.130.138",8000);
 			
 			//Create an input stream to receive data from the server
 			fromServer = new DataInputStream(socket.getInputStream());
@@ -175,8 +172,7 @@ public class Window extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				Login login = new Login();
-				user=login.getUserState();
+				Login login = new Login(socket);
 			}
 
 			@Override
@@ -209,8 +205,7 @@ public class Window extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				Register reg = new Register();
-				user=reg.getUserState();
+				Register reg = new Register(socket);
 			}
 
 			@Override
@@ -271,7 +266,7 @@ public class Window extends JFrame {
 		    	try{
 					//send
 					toServer.writeInt(5);
-					toServer.writeUTF(user);
+					toServer.writeUTF(user.getUsername());
 					toServer.writeUTF(key);
 					toServer.writeUTF("baidu");
 				}
@@ -289,7 +284,7 @@ public class Window extends JFrame {
 		    	try{
 					//send
 					toServer.writeInt(5);
-					toServer.writeUTF(user);
+					toServer.writeUTF(user.getUsername());
 					toServer.writeUTF(key);
 					toServer.writeUTF("youdao");
 				}
@@ -307,7 +302,7 @@ public class Window extends JFrame {
 		    	try{
 					//send
 					toServer.writeInt(5);
-					toServer.writeUTF(user);
+					toServer.writeUTF(user.getUsername());
 					toServer.writeUTF(key);
 					toServer.writeUTF("jinshan");
 				}
@@ -324,20 +319,26 @@ public class Window extends JFrame {
 				
 				try{
 					//send
-					if(user==null){
+					if(!user.Logged()){
 						toServer.writeInt(4);
 					}
 					else{
 						toServer.writeInt(3);
-						toServer.writeUTF(user);
+						toServer.writeUTF(user.getUsername());
 					}
 					
 					toServer.writeUTF(key);
 					
 					//receive
 					baiduLikes=fromServer.readInt();
+					System.out.println(baiduLikes);
+
 					youdaoLikes=fromServer.readInt();
+					System.out.println(youdaoLikes);
+
 					jinshanLikes=fromServer.readInt();
+					
+					System.out.println(jinshanLikes);
 				}
 				catch(IOException ex){
 					System.err.println(ex);

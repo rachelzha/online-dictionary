@@ -22,14 +22,7 @@ public class Login extends JFrame{
 	private DataOutputStream toServer;
 	private DataInputStream fromServer;
 	
-	//用户状态
-	String user=null;
-
-	public String getUserState(){
-		return user;
-	}
-	
-	public Login(){
+	public Login(Socket socket){
 		JPanel jPanel1=new JPanel();
 		JPanel jPanel2=new JPanel();
 
@@ -55,9 +48,6 @@ public class Login extends JFrame{
 				});	
 		
 		try{
-			//create a socket to connect to the server
-			Socket socket = new Socket("172.28.130.138",8000);
-			
 			//Create an input stream to receive data from the server
 			fromServer = new DataInputStream(socket.getInputStream());
 			
@@ -84,7 +74,6 @@ public class Login extends JFrame{
 			
 			if(found==true){
 				JOptionPane.showMessageDialog(null, "Hello! "+ username);
-				user=new String(username);
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Username or Password WRONG!");
@@ -94,8 +83,5 @@ public class Login extends JFrame{
 			System.err.println(ex);
 		}
 	}
-	
-	public static void main(String[] args){
-		Login login=new Login();
-	}
+
 }

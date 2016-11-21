@@ -26,6 +26,13 @@ public class Register extends JFrame{
 	private DataOutputStream toServer;
 	private DataInputStream fromServer;
 	
+	//user state
+	String user=null;
+	
+	public String getUserState(){
+		return user;
+	}
+	
 	public Register(){
 		JPanel jPanel1=new JPanel();
 		JPanel jPanel2=new JPanel();
@@ -91,6 +98,7 @@ public class Register extends JFrame{
 			
 			if(success==true){
 				JOptionPane.showMessageDialog(null, "注册成功！");
+				user=new String(username);
 			}
 			else {
 				JOptionPane.showMessageDialog(null,"用户名已被占用！");

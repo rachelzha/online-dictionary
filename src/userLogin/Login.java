@@ -21,7 +21,14 @@ public class Login extends JFrame{
 	//io streams
 	private DataOutputStream toServer;
 	private DataInputStream fromServer;
+	
+	//用户状态
+	String user=null;
 
+	public String getUserState(){
+		return user;
+	}
+	
 	public Login(){
 		JPanel jPanel1=new JPanel();
 		JPanel jPanel2=new JPanel();
@@ -77,6 +84,7 @@ public class Login extends JFrame{
 			
 			if(found==true){
 				JOptionPane.showMessageDialog(null, "Hello! "+ username);
+				user=new String(username);
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Username or Password WRONG!");

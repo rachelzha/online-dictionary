@@ -63,7 +63,8 @@ public class Window extends JFrame {
 	
 	JPanel Pan2 = new JPanel();
 	
-	String user = "Rachel";
+	//用户状态
+	String user = null;
 	
 	//io streams
 	private DataOutputStream toServer;
@@ -175,6 +176,7 @@ public class Window extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				Login login = new Login();
+				user=login.getUserState();
 			}
 
 			@Override
@@ -208,6 +210,7 @@ public class Window extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
 				Register reg = new Register();
+				user=reg.getUserState();
 			}
 
 			@Override
@@ -259,6 +262,7 @@ public class Window extends JFrame {
 		    }
 		});
 		
+		//点赞
 		like1.addItemListener(new ItemListener(){
 		    @Override 
 		    public void itemStateChanged(ItemEvent e){
@@ -267,7 +271,7 @@ public class Window extends JFrame {
 		    	try{
 					//send
 					toServer.writeInt(5);
-					toServer.writeUTF("Rachel");
+					toServer.writeUTF(user);
 					toServer.writeUTF(key);
 					toServer.writeUTF("baidu");
 				}
@@ -285,7 +289,7 @@ public class Window extends JFrame {
 		    	try{
 					//send
 					toServer.writeInt(5);
-					toServer.writeUTF("Rachel");
+					toServer.writeUTF(user);
 					toServer.writeUTF(key);
 					toServer.writeUTF("youdao");
 				}
@@ -303,7 +307,7 @@ public class Window extends JFrame {
 		    	try{
 					//send
 					toServer.writeInt(5);
-					toServer.writeUTF("Rachel");
+					toServer.writeUTF(user);
 					toServer.writeUTF(key);
 					toServer.writeUTF("jinshan");
 				}
@@ -313,15 +317,21 @@ public class Window extends JFrame {
 		    }
 		});
 		
-		
+		//查词
 		Search.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				String key = input.getText();
 				
 				try{
 					//send
-					toServer.writeInt(3);
-					toServer.writeUTF(user);
+					if(user==null){
+						toServer.writeInt(4);
+					}
+					else{
+						toServer.writeInt(3);
+						toServer.writeUTF(user);
+					}
+					
 					toServer.writeUTF(key);
 					
 					//receive
@@ -353,6 +363,5 @@ public class Window extends JFrame {
 		});
 		
 	}
-	
 	
 }

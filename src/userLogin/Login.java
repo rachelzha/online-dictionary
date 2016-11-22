@@ -72,8 +72,9 @@ public class Login extends JFrame{
 			boolean found=fromServer.readBoolean();
 			
 			if(found==true){
-				JOptionPane.showMessageDialog(null, "Hello! "+ username);
 				user.setUsername(username);
+			//	System.out.println(user.getUsername());
+				JOptionPane.showMessageDialog(null, "Hello! "+ username);
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Username or Password WRONG!");

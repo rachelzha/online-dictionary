@@ -3,19 +3,11 @@ package src.Interface;
 import src.Translate.*;
 import src.userLogin.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.Socket;
+import java.awt.event.*;
+import java.io.*;
+import java.net.*;
 
 import javax.swing.*;
-
 
 public class Window extends JFrame {
 	/**
@@ -67,11 +59,12 @@ public class Window extends JFrame {
 	private DataOutputStream toServer;
 	private DataInputStream fromServer;
 	
+	Login login ;
+	
 	//likes
 	int baiduLikes;
 	int youdaoLikes;
 	int jinshanLikes;
-	
 	
 	public static void main(String[] args){
 		Window window=new Window();
@@ -166,32 +159,46 @@ public class Window extends JFrame {
 	
 	public void addaction(){
 		
+		
 		Label1.addMouseListener(new MouseListener(){
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				if(!user.Logged()){
-					Login login = new Login(socket);
-					login.setLocation(200,100);
-					login.setVisible(true);
-					user=login.getUser();
-					//System.out.println(user.Logged());		
+				if(!user.Logged()){	
+					login = new Login(socket);		
+					login.setLocation(200,100);	
+					login.setVisible(true);	
+					
 				}
-				if(user.Logged()){	
-					Label1.setText(user.getUsername());
-					Label1.revalidate();
-					Label1.repaint();
-					panel4.add(like1);
-					panel4.revalidate();
-					panel4.repaint();
-					panel5.add(like2);
-					panel5.revalidate();
-					panel5.repaint();
-					panel6.add(like3);
-					panel6.revalidate();
-					panel6.repaint();
-				}
+			
+				
+				login.addWindowListener(new WindowAdapter(){
+					public void windowClosing(java.awt.event.WindowEvent e){
+						super.windowClosing(e);
+						System.out.println("closed");
+						user=login.getUser();
+						if(user.Logged()){	
+							Label1.setText(user.getUsername());
+							Label1.revalidate();
+							Label1.repaint();
+							panel4.add(like1);
+							panel4.revalidate();
+							panel4.repaint();
+							panel5.add(like2);
+							panel5.revalidate();
+							panel5.repaint();
+							panel6.add(like3);
+							panel6.revalidate();
+							panel6.repaint();
+						} 
+					}
+				});
+						
+
+			//	System.out.println(user.Logged());
+			//	System.out.println(user.getUsername());
+				
 				
 			}
 
@@ -220,6 +227,7 @@ public class Window extends JFrame {
 			}
 		});
 		
+	
 		Label2.addMouseListener(new MouseListener(){
 
 			@Override

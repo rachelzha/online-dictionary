@@ -1,9 +1,12 @@
 package Server;
 
 import java.awt.*;
+import java.awt.List;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.*;
+
 import javax.swing.*;
 
 public class MultiThreadServer extends JFrame{
@@ -13,13 +16,10 @@ public class MultiThreadServer extends JFrame{
 	private static final long serialVersionUID = 1L;
 	//Text area for displaying contents
 	private JTextArea jta=new JTextArea();
-	private UserDB userdb=new UserDB();
-	private LikeDB likedb=new LikeDB();
 	
-	//io stream
-	DataInputStream inputFromClient;
-	DataOutputStream outputToClient;
-	
+	//在线用户
+	HashMap<String,HandleAClient> clients=new HashMap<String,HandleAClient>();
+		
 	public static void main(String[] args){
 		new MultiThreadServer();
 	}
@@ -50,7 +50,7 @@ public class MultiThreadServer extends JFrame{
 				jta.append("Starting thread for client " + clientNo + 
 						" at " + new Date() + '\n');
 				
-				//find the client's host name, and ip address
+				//find the client's host name, and IP address
 				InetAddress inetAddress = socket.getInetAddress();
 				jta.append("Client " + clientNo + "'s host name is "
 						+ inetAddress.getHostName() + "\n");
@@ -73,10 +73,18 @@ public class MultiThreadServer extends JFrame{
 	}
 	
 	//inner class
+	
 	//define the thread class for handling new connection
 	class HandleAClient implements Runnable {
 		private Socket socket;//a connected socket
 			
+		//IO stream
+		DataInputStream inputFromClient;
+		DataOutputStream outputToClient;
+			
+		private UserDB userdb=new UserDB();
+		private LikeDB likedb=new LikeDB();
+				
 		//construct a thread
 		public HandleAClient(Socket socket){
 			this.socket=socket;
@@ -85,48 +93,55 @@ public class MultiThreadServer extends JFrame{
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			try{
-				//create data input and output streams
-				inputFromClient=new DataInputStream(
-						socket.getInputStream());
-				outputToClient=new DataOutputStream(
-						socket.getOutputStream());
-					
+			try{		
 				//continuously serve the client
 				while(true){
+					//create data input and output streams
+					inputFromClient=new DataInputStream(socket.getInputStream());
+					outputToClient=new DataOutputStream(socket.getOutputStream());
+					
 					//receive type from the client
 					int type=inputFromClient.readInt();
-					
+						
 					switch(type){
 					case 1:{//log in
 						String username=inputFromClient.readUTF();
 						String password=inputFromClient.readUTF();
-						
+							
 						boolean found=userdb.findUser(username, password);
-						
+							
 						outputToClient.writeBoolean(found);
+						
+						jta.append("Login: " + username + '\n');
+						//加入在线用户
+						if(found)clients.put(username, this);
+						
 						break;
 					}
 					case 2:{//register
 						String username=inputFromClient.readUTF();
 						String password=inputFromClient.readUTF();
 						String email=inputFromClient.readUTF();
-						
+							
 						boolean success=userdb.addUser(username, password, email);
 						outputToClient.writeBoolean(success);
+						
+						//加入在线用户
+						if(success)clients.put(username, this);
+
 						break;
 					}
 					case 3:{//search words with user name
 						String username=inputFromClient.readUTF();
 						String word=inputFromClient.readUTF();
-						
+							
 						likedb.add(username, word);
 						
 						Vector<Integer>vec=likedb.getLikes(word);
 						int baiduLikes=vec.get(0);
 						int youdaoLikes=vec.get(1);
 						int jinshanLikes=vec.get(2);
-						
+							
 						outputToClient.writeInt(baiduLikes);
 						outputToClient.writeInt(youdaoLikes);
 						outputToClient.writeInt(jinshanLikes);
@@ -154,12 +169,31 @@ public class MultiThreadServer extends JFrame{
 						likedb.changeLikes(username, word, aDict);
 						break;
 					}
+					case 6:{//send message
+						String username=inputFromClient.readUTF();
+						String content=inputFromClient.readUTF();
+						
+						//转发消息
+						HandleAClient c=clients.get(username);
+						if(c!=null){
+							c.sendMsg(content);
+						}
 					}
-					
+					}
+						
 				}
-			}
-			catch(IOException e){
+			}catch (IOException e) {
 				System.err.println(e);
+			}
+		}
+		
+		public void sendMsg(String content){
+			try{
+				outputToClient=new DataOutputStream(this.socket.getOutputStream());
+				outputToClient.writeUTF(content);
+				jta.append("send to " + this.socket + " contents: "+content+'\n');
+			} catch (IOException ex){
+				ex.printStackTrace();
 			}
 		}
 	}

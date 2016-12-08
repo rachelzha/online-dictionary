@@ -8,30 +8,11 @@ public class LikeDB {
 	private PreparedStatement pstmt;
     private PreparedStatement pstmt1;
     private PreparedStatement pstmt2;
-
-    	
-	//contributer
-	public LikeDB(){
-		initDB();
-	}
-	 
-	private void initDB(){
-		try {
-			//load the JDBC driver
-			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("Driver loaded");
-			
-			//establish a connection
-			connection=DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/userInfo","testuser","testtoday");
-			System.out.println("Database connected");
-			
-		} catch (Exception e) {
-		// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Fail!");
-		}
-	}
 	
+    LikeDB(Connection con){
+    	connection=con;
+    }
+    
 	public void changeLikes(String username, String word,String aDict){
 		String sql1,sql2;
 

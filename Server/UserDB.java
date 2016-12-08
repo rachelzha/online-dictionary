@@ -6,28 +6,10 @@ public class UserDB{
 	private Connection connection=null;
     private PreparedStatement pstmt;
 	
-	//contributer
-	UserDB(){
-		initDB();
-	}
-	 
-	private void initDB(){
-		try {
-			//load the JDBC driver
-			Class.forName("com.mysql.jdbc.Driver");
-			System.out.println("Driver loaded");
-			
-			//establish a connection
-			connection=DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/userInfo","testuser","testtoday");
-			System.out.println("Database connected");
-			
-		} catch (Exception e) {
-		// TODO Auto-generated catch block
-			e.printStackTrace();
-			System.out.println("Fail!");
-		}
-	}
-	
+    UserDB(Connection con){
+    	connection=con;
+    }
+    
 	public boolean addUser(String username, String password, String email){
 	    String sql = "insert into users (username,password,email) values(?,?,?)";
 	 

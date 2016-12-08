@@ -1,21 +1,30 @@
 package Server;
 
 import java.awt.*;
-import java.awt.List;
 import java.io.*;
 import java.net.*;
+import java.sql.*;
 import java.util.*;
-import java.util.concurrent.*;
-
+import java.util.Date;
 import javax.swing.*;
+
+import org.apache.commons.dbcp2.BasicDataSource;
 
 public class MultiThreadServer extends JFrame{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
 	//Text area for displaying contents
 	private JTextArea jta=new JTextArea();
+	
+	private static BasicDataSource pool=null;
+	
+	static String driverName="com.mysql.jdbc.Driver";
+	static String dbURL="jdbc:mysql://127.0.0.1:3306/userInfo";
+	static String userName="testuser";		
+	static String userPwd="testtoday";
 	
 	//在线用户
 	HashMap<String,HandleAClient> clients=new HashMap<String,HandleAClient>();
@@ -25,6 +34,8 @@ public class MultiThreadServer extends JFrame{
 	}
 	
 	public MultiThreadServer(){
+		setPool();
+		
 		//place text area on the frame
 		setLayout(new BorderLayout());
 		add(new JScrollPane(jta),BorderLayout.CENTER);
@@ -72,22 +83,53 @@ public class MultiThreadServer extends JFrame{
 		}
 	}
 	
-	//inner class
+	public static void setPool(){
+		//连接池
+		pool=new BasicDataSource();
+		
+		pool.setUsername(userName);
+		pool.setPassword(userPwd);
+		pool.setDriverClassName(driverName);
+		pool.setUrl(dbURL);
+		
+		//设置整个连接池最大连接数
+		pool.setMaxTotal(10);
 	
+		System.out.println("Succeed setting pool");
+	}
+	
+	public static Connection connectUsingPool(){
+		Connection con=null;
+		try {
+            con = pool.getConnection();
+            System.out.println("Connected");
+        } catch (SQLException e) {
+                e.printStackTrace();
+        }
+		return con;
+	}
+	
+	
+	//inner class
 	//define the thread class for handling new connection
 	class HandleAClient implements Runnable {
 		private Socket socket;//a connected socket
+		private Connection dbConn=null;
 			
 		//IO stream
 		DataInputStream inputFromClient;
 		DataOutputStream outputToClient;
-			
-		private UserDB userdb=new UserDB();
-		private LikeDB likedb=new LikeDB();
+		
+		private UserDB userdb;
+		private LikeDB likedb;
 				
 		//construct a thread
 		public HandleAClient(Socket socket){
 			this.socket=socket;
+			
+			dbConn=connectUsingPool();
+			userdb=new UserDB(dbConn);
+			likedb=new LikeDB(dbConn);
 		}
 
 		@Override
@@ -184,6 +226,14 @@ public class MultiThreadServer extends JFrame{
 				}
 			}catch (IOException e) {
 				System.err.println(e);
+			}
+			
+			
+			try {
+				dbConn.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		

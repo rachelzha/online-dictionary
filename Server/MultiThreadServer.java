@@ -34,6 +34,7 @@ public class MultiThreadServer extends JFrame{
 	}
 	
 	public MultiThreadServer(){
+		//数据库连接池
 		setPool();
 		
 		//place text area on the frame
@@ -45,9 +46,10 @@ public class MultiThreadServer extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);//it is necessary to show the frame here!
 		
+		ServerSocket serverSocket=null;
 		try{
 			//create a server socket
-			ServerSocket serverSocket=new ServerSocket(8000);
+			serverSocket=new ServerSocket(8000);
 			jta.append("Server started at "+new Date()+'\n');
 			
 			//number a server socket
@@ -81,8 +83,17 @@ public class MultiThreadServer extends JFrame{
 		catch(IOException ex){
 			System.err.println(ex);
 		}
+		finally{
+			try {
+				serverSocket.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
+	//配置数据库连接池
 	public static void setPool(){
 		//连接池
 		pool=new BasicDataSource();
@@ -98,6 +109,7 @@ public class MultiThreadServer extends JFrame{
 		System.out.println("Succeed setting pool");
 	}
 	
+	//连接数据库
 	public static Connection connectUsingPool(){
 		Connection con=null;
 		try {
@@ -114,14 +126,12 @@ public class MultiThreadServer extends JFrame{
 	//define the thread class for handling new connection
 	class HandleAClient implements Runnable {
 		private Socket socket;//a connected socket
-		private Connection dbConn=null;
-			
-		//IO stream
-		DataInputStream inputFromClient;
-		DataOutputStream outputToClient;
 		
+		private Connection dbConn=null;
 		private UserDB userdb;
 		private LikeDB likedb;
+		
+		private String username=null;
 				
 		//construct a thread
 		public HandleAClient(Socket socket){
@@ -138,21 +148,24 @@ public class MultiThreadServer extends JFrame{
 			try{		
 				//continuously serve the client
 				while(true){
-					//create data input and output streams
-					inputFromClient=new DataInputStream(socket.getInputStream());
-					outputToClient=new DataOutputStream(socket.getOutputStream());
+					DataInputStream inputFromClient=new DataInputStream(socket.getInputStream());
 					
 					//receive type from the client
 					int type=inputFromClient.readInt();
 						
 					switch(type){
 					case 1:{//log in
-						String username=inputFromClient.readUTF();
+						//input
+						username=inputFromClient.readUTF();
 						String password=inputFromClient.readUTF();
-							
+
 						boolean found=userdb.findUser(username, password);
-							
+						
+						//output
+						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
+						outputToClient.writeInt(1);
 						outputToClient.writeBoolean(found);
+						outputToClient.flush();
 						
 						jta.append("Login: " + username + '\n');
 						//加入在线用户
@@ -161,58 +174,48 @@ public class MultiThreadServer extends JFrame{
 						break;
 					}
 					case 2:{//register
-						String username=inputFromClient.readUTF();
+						//input
+						username=inputFromClient.readUTF();
 						String password=inputFromClient.readUTF();
 						String email=inputFromClient.readUTF();
 							
 						boolean success=userdb.addUser(username, password, email);
-						outputToClient.writeBoolean(success);
 						
+						//output
+						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
+						outputToClient.writeInt(2);
+						outputToClient.writeBoolean(success);
+						outputToClient.flush();
+						
+						jta.append("Register: " + username + '\n');
 						//加入在线用户
 						if(success)clients.put(username, this);
 
 						break;
 					}
-					case 3:{//search words with user name
-						String username=inputFromClient.readUTF();
+					case 3://search words
+					{	//input
 						String word=inputFromClient.readUTF();
 							
-						likedb.add(username, word);
-						
-						Vector<Integer>vec=likedb.getLikes(word);
-						int baiduLikes=vec.get(0);
-						int youdaoLikes=vec.get(1);
-						int jinshanLikes=vec.get(2);
-							
-						outputToClient.writeInt(baiduLikes);
-						outputToClient.writeInt(youdaoLikes);
-						outputToClient.writeInt(jinshanLikes);
-						break;
-					}
-					case 4:{//search words without user name
-						String word=inputFromClient.readUTF();
+						if(username!=null)likedb.add(username, word);
 						
 						Vector<Integer>vec=likedb.getLikes(word);
 						int baiduLikes=vec.get(0);
 						int youdaoLikes=vec.get(1);
 						int jinshanLikes=vec.get(2);
 						
+						//output
+						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
+						outputToClient.writeInt(3);
 						outputToClient.writeInt(baiduLikes);
 						outputToClient.writeInt(youdaoLikes);
 						outputToClient.writeInt(jinshanLikes);
+						outputToClient.flush();
 						
 						break;
 					}
-					case 5:{//likes
-						String username=inputFromClient.readUTF();
-						String word=inputFromClient.readUTF();
-						String aDict=inputFromClient.readUTF();
-						
-						likedb.changeLikes(username, word, aDict);
-						break;
-					}
-					case 6:{//send message
-						String username=inputFromClient.readUTF();
+					case 4:{//send message
+						String username=inputFromClient.readUTF();//the user to send message
 						String content=inputFromClient.readUTF();
 						
 						//转发消息
@@ -220,27 +223,85 @@ public class MultiThreadServer extends JFrame{
 						if(c!=null){
 							c.sendMsg(content);
 						}
-					}
-					}
 						
+						break;
+					}
+					case 5:{//get online users
+						Vector<String> online=new Vector<String>();
+						for(Map.Entry<String, HandleAClient> entry : clients.entrySet()) {
+						    String key = entry.getKey();
+						    
+						    online.add(key);
+						}
+						
+						//output
+						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
+						outputToClient.writeInt(5);
+						outputToClient.flush();
+						
+						ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
+						toClient.writeObject(online);
+						toClient.flush();
+						
+						break;
+					}
+					case 6:{
+						Vector<String> allUsers=userdb.getAllUsers();
+						
+						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
+						outputToClient.writeInt(6);
+						outputToClient.flush();
+						
+						ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
+						toClient.writeObject(allUsers);
+						toClient.flush();
+						
+						break;
+					}
+					case 7:{//likes
+						//input
+						String word=inputFromClient.readUTF();
+						String aDict=inputFromClient.readUTF();
+						
+						likedb.changeLikes(username, word, aDict);
+						break;
+					}
+					
+					case 8:{//退出登录
+						if(username!=null)clients.remove(username);
+						username=null;
+						break;
+					}
+					default:break;
+					}
+					
 				}
-			}catch (IOException e) {
+			}
+			catch(java.io.EOFException ex){
+				if(username!=null)clients.remove(username);
+				jta.append("客户端断开连接\n");
+			}
+			catch (IOException e) {
 				System.err.println(e);
 			}
-			
-			
-			try {
-				dbConn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			finally {
+                try
+                {
+                    socket.close();
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
 		}
 		
 		public void sendMsg(String content){
 			try{
-				outputToClient=new DataOutputStream(this.socket.getOutputStream());
+				DataOutputStream outputToClient=new DataOutputStream(this.socket.getOutputStream());
+				outputToClient.writeInt(4);
 				outputToClient.writeUTF(content);
+				outputToClient.flush();
 				jta.append("send to " + this.socket + " contents: "+content+'\n');
 			} catch (IOException ex){
 				ex.printStackTrace();

@@ -1,10 +1,12 @@
 package Server;
 
 import java.sql.*;
+import java.util.Vector;
 
 public class UserDB{	
 	private Connection connection=null;
     private PreparedStatement pstmt;
+    private Statement stmt;
 	
     UserDB(Connection con){
     	connection=con;
@@ -53,5 +55,22 @@ public class UserDB{
 			ex.printStackTrace();
 		}
 		return false;
+	}
+	
+	public Vector<String> getAllUsers(){
+		Vector<String> allUsers=new Vector<String>();
+		try {
+			stmt=connection.createStatement();
+			ResultSet reset=stmt.executeQuery("select username from users;");
+			
+			while(reset.next()){
+				allUsers.add(reset.getString(1));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return allUsers;
 	}
 }

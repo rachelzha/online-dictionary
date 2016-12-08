@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -16,11 +17,12 @@ public class Trail extends JFrame{
 	private JTextField jtfNum = new JTextField(9);
 	private JTextField jtfUsername=new JTextField(9);
 	private JTextField jtfPassword=new JTextField(9);
-	private JButton jbtLogin=new JButton("Log in");
+	private JButton jbtLogin=new JButton("Start");
+	
+	//Text area for displaying contents
+	private JTextArea jta=new JTextArea();
 	
 	public Socket socket=null;
-	public DataInputStream fromServer;
-	public DataOutputStream toServer;
 			
 	public static void main(String[] args){
 		Trail t=new Trail();
@@ -38,6 +40,7 @@ public class Trail extends JFrame{
 		JPanel jPanel3=new JPanel();
 		JPanel jPanel1=new JPanel();
 		JPanel jPanel2=new JPanel();
+		JPanel jPanel4=new JPanel();
 
 		jPanel3.add(new JLabel("Number"));
 		jPanel3.add(jtfNum);
@@ -46,17 +49,19 @@ public class Trail extends JFrame{
 		jPanel2.add(new JLabel("Message"));
 		jPanel2.add(jtfPassword);
 		
-		setLayout(new FlowLayout(FlowLayout.CENTER,80,20));
-		add(jPanel3);
-		add(jPanel1);
-		add(jPanel2);
-		add(jbtLogin);
+		jPanel4.setLayout(new FlowLayout());
+		jPanel4.add(jPanel3);
+		jPanel4.add(jPanel1);
+		jPanel4.add(jPanel2);
+		jPanel4.add(jbtLogin);
+		add(jPanel4,BorderLayout.NORTH);
+		add(new JScrollPane(jta),BorderLayout.CENTER);
 		
 		setTitle("Login");
 		setSize(300,250);//width,height
 		
-		Thread buttonTask=new Thread(new ButtonTask());
-		buttonTask.start();
+		jbtLogin.addActionListener(new ButtonListener());
+		
 		Thread receiveTask=new Thread(new ReceiveTask());
 		receiveTask.start();
 	}
@@ -65,12 +70,6 @@ public class Trail extends JFrame{
 		try{
 			//create a socket to connect to the server
 			socket = new Socket("127.0.0.1",8000);
-			
-			//Create an input stream to receive data from the server
-			fromServer = new DataInputStream(socket.getInputStream());
-			
-			//create an output stream to send data to the server
-			toServer=new DataOutputStream(socket.getOutputStream());
 		}
 		catch (IOException ex){
 			System.err.println(ex);
@@ -85,10 +84,12 @@ public class Trail extends JFrame{
 			String password=jtfPassword.getText();
 			
 			try{
+				DataOutputStream toServer=new DataOutputStream(socket.getOutputStream());
 				//send
 				toServer.writeInt(n);
 				toServer.writeUTF(username);
 				toServer.writeUTF(password);
+				toServer.flush();
 			}
 			catch(IOException ex){
 				System.err.println(ex);
@@ -96,39 +97,66 @@ public class Trail extends JFrame{
 		}
 	}
 	
-	class ButtonTask implements Runnable {
-
-		@Override
-		public void run() {
-			System.out.print("b");
-			// TODO Auto-generated method stub
-			jbtLogin.addActionListener(new ButtonListener());
-			System.out.print("a");
-
-		}
-		
-	}
-	
 	class ReceiveTask implements Runnable{
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			try{
-			    socket.setSoTimeout(1000);
-			   
+			try{			   
 			    while(true){
-					String str=null;
-					str=fromServer.readUTF();
-					System.out.println("ok");
+					DataInputStream fromServer=new DataInputStream(socket.getInputStream());
 					
-					if(str!=null)JOptionPane.showMessageDialog(null, str);
+					int type=fromServer.readInt();
+					
+					switch(type){
+					case 1:{//log in
+						if(fromServer.readBoolean())jta.append("Log in SUCCESS!\n");
+						break;
+					}
+					case 2:{//register
+						if(fromServer.readBoolean())jta.append("Register SUCCESS\n");
+						break;
+					}
+					case 3:{
+						int n1=fromServer.readInt();
+						int n2=fromServer.readInt();
+						int n3=fromServer.readInt();
+						
+						jta.append("likes: "+n1+"\t"+n2+"\t"+n3+"\n");
+						break;
+					}
+					case 4:{
+						String message=fromServer.readUTF();
+						jta.append("The message is : " + message+"\n");
+						break;
+					}
+					case 5:{//online users
+						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
+						
+						Vector<String> onlineUsers=(Vector<String>)ois.readObject();
+						jta.append("The online Clients: \n");
+						for(int i=0;i<onlineUsers.size();i++){
+							jta.append(onlineUsers.get(i)+"\n");
+						}
+						break;
+					}
+					case 6:{//all users 
+						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
+						
+						Vector<String> allUsers=(Vector<String>)ois.readObject();
+						jta.append("All Clients: \n");
+						for(int i=0;i<allUsers.size();i++){
+							jta.append(allUsers.get(i)+"\n");
+						}
+						break;
+					}
+					default:break;
+					}
 			    }
 			}
-			catch (java.net.SocketTimeoutException e) {
-		        // 1000 ms elapsed but nothing was read 
-				this.run();
-		    }
 			catch (IOException ex){
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}	
 		

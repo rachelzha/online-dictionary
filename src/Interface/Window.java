@@ -65,7 +65,7 @@ public class Window extends JFrame {
 	int baiduLikes;
 	int youdaoLikes;
 	int jinshanLikes;
-	
+	/*
 	public static void main(String[] args){
 		Window window=new Window();
 		window.setTitle("Dictionary");
@@ -73,7 +73,7 @@ public class Window extends JFrame {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setSize(700, 500);
 		window.setVisible(true);
-	}
+	}*/
 	
 	public Window(){
         FlowLayout flowLayout1 = new FlowLayout(FlowLayout.RIGHT , 30 , 5);  

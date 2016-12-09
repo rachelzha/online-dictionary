@@ -7,23 +7,25 @@ public class TextPanel {
 	drawComponent draw=new drawComponent();
 	
 	JPanel Left = new JPanel();
-	JButton baidu = new JButton();//click to see baidu translation
-	JButton youdao = new JButton();//click to see youdao translation
-	JButton jinshan = new JButton();//click to see jinshan translation
+	public JCheckBox baidu = new JCheckBox();//click to see baidu translation
+	public JCheckBox youdao = new JCheckBox();//click to see youdao translation
+	public JCheckBox jinshan = new JCheckBox();//click to see jinshan translation
+	ButtonGroup bookmark = new ButtonGroup(); 
 	
 	JPanel Center =new JPanel();
-	JLabel tranword = new JLabel("Word");//output the word you translate
-	JButton share = new JButton(); //share
-	JButton like = new JButton(); //like
-	JTextArea Out= new JTextArea("",12,35);
-	JScrollPane text=new JScrollPane(Out);//translation
+	public JLabel tranword = new JLabel("Word");//output the word you translate
+	public JButton share = new JButton(); //share
+	//JButton like = new JButton(); //like
+	public JCheckBox like = new JCheckBox();//like
+	public JTextArea Out= new JTextArea("",12,35);
+	public JScrollPane text=new JScrollPane(Out);//translation
 	
 	JPanel Right = new JPanel();
 	JLabel Daily = new JLabel("Daily Sentence");//no edit
-	JLabel cartoon = new JLabel();
-	JTextArea sen= new JTextArea("",15,10);
+	public JLabel cartoon = new JLabel();
+	public JTextArea sen= new JTextArea("",15,10);
 //	JScrollPane sentence=new JScrollPane(sen);//daily sentence
-	JCheckBox takeword = new JCheckBox("È¡´Ê");
+	public JCheckBox takeword = new JCheckBox("È¡´Ê");
 	
 	public JPanel getPanel(){
 		return MyPanel;
@@ -49,12 +51,19 @@ public class TextPanel {
 	public void drawLeft(){
 		GridLayout gridLayout = new GridLayout(3,1,5,10);  
 		Left.setLayout(gridLayout);
-		String baidufile="image/tag.png";
-		String youdaofile="image/tag.png";
-		String jinshanfile="image/tag.png";
-		draw.drawButton(baidufile, null, 30, 30, baidu);
-	    draw.drawButton(youdaofile, null, 30, 30, youdao);
-	    draw.drawButton(jinshanfile, null, 30, 30, jinshan);
+		String baidufile1="image/tag.png";
+		String youdaofile1="image/tag.png";
+		String jinshanfile1="image/tag.png";
+		String baidufile2="image/taged.png";
+		String youdaofile2="image/taged.png";
+		String jinshanfile2="image/taged.png";
+		
+		draw.drawCheckBox(baidufile1, baidufile2, 30, 30, baidu);
+	    draw.drawCheckBox(youdaofile1, youdaofile2, 30, 30, youdao);
+	    draw.drawCheckBox(jinshanfile1, jinshanfile2, 30, 30, jinshan);
+	    bookmark.add(baidu);
+	    bookmark.add(youdao);
+	    bookmark.add(jinshan);
 		Left.add(baidu);
 		Left.add(youdao);
 		Left.add(jinshan);
@@ -85,10 +94,12 @@ public class TextPanel {
 		JPanel Above = new JPanel();
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT ,5, 5);  
 		Above.setLayout(flowLayout);
-		String likefile="image/"+color+"/like.png";
-		String sharefile="image/"+color+"/share.png";
-		draw.drawButton(likefile, null, 20, 20, like);
-	    draw.drawButton(sharefile, null, 20, 20, share);
+		String likefile1="image/"+color+"/like.png";
+		String likefile2="image/"+color+"/liked.png";
+		String sharefile1="image/"+color+"/share.png";
+		String sharefile2="image/grey/share.png";
+		draw.drawCheckBox(likefile1,likefile2, 20, 20, like);
+		draw.drawButton(sharefile1,sharefile2, 20, 20, share);
 	    Above.add(tranword);
 	    Above.add(like);
 	    Above.add(share);

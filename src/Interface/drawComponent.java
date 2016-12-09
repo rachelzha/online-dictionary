@@ -27,6 +27,21 @@ public class drawComponent {
         button.setPressedIcon(icon2 );
 	}
 	
+	public void drawCheckBox(String file1,String file2,int width,int height,JCheckBox box){
+		ImageIcon icon1 = new ImageIcon(file1);  
+        icon1.setImage(icon1.getImage().getScaledInstance(width,height,Image.SCALE_DEFAULT));
+        ImageIcon icon2 = new ImageIcon(file2);  
+        icon2.setImage(icon2.getImage().getScaledInstance(width,height,Image.SCALE_DEFAULT));
+        
+        box.setBorder(null);
+        box.setBorderPainted(false);
+        box.setContentAreaFilled(false);
+        
+        box.setIcon(icon1);
+        box.setSelectedIcon(icon2);    
+      
+	}
+	
 	
 	public drawComponent(){
 		

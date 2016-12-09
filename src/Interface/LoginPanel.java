@@ -20,9 +20,9 @@ public class LoginPanel {
 	}
 	
 	public LoginPanel(){
-		drawRight("blue");
+		drawRight("blue"); 
 		dict.setFont(new java.awt.Font("Times new Roman",Font.BOLD+Font.ITALIC,20));
-		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEADING ,200, 5);  
+		FlowLayout flowLayout = new FlowLayout(FlowLayout.TRAILING ,200, 5);  
 		MyPanel.setLayout(flowLayout);
 		MyPanel.add(dict);
 		MyPanel.add(Right);

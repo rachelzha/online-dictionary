@@ -70,6 +70,7 @@ public class Trail extends JFrame{
 		try{
 			//create a socket to connect to the server
 			socket = new Socket("172.26.218.88",8080);
+			//socket = new Socket("172.26.218.88",8000);
 		}
 		catch (IOException ex){
 			System.err.println(ex);

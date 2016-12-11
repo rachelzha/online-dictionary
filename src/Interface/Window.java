@@ -1,5 +1,5 @@
 package src.Interface;
-
+  
 import src.Translate.*;
 import src.userLogin.*;
 import java.awt.*;
@@ -33,19 +33,19 @@ public class Window extends JFrame {
 	
 	
 	mypanel panel4 = new mypanel();
-	JLabel Label4 = new JLabel("Baidu");
+	JLabel Label4 = new JLabel("百度");
 	JTextArea Out1 = new JTextArea("",5,35);
 	JScrollPane text1=new JScrollPane(Out1);
 	JCheckBox like1 = new JCheckBox("likes",false);
 	
 	mypanel panel5 = new mypanel();
-	JLabel Label5 = new JLabel("Youdao");
+	JLabel Label5 = new JLabel("有道");
 	JTextArea Out2 = new JTextArea("",5,35);
 	JScrollPane text2=new JScrollPane(Out2);
 	JCheckBox like2 = new JCheckBox("likes",false);
 	
 	mypanel panel6 = new mypanel();
-	JLabel Label6 = new JLabel("Jinshan");
+	JLabel Label6 = new JLabel("金山");
 	JTextArea Out3 = new JTextArea("",5,35);
 	JScrollPane text3=new JScrollPane(Out3);
 	JCheckBox like3 = new JCheckBox("likes",false);
@@ -65,7 +65,7 @@ public class Window extends JFrame {
 	int baiduLikes;
 	int youdaoLikes;
 	int jinshanLikes;
-	
+	/*
 	public static void main(String[] args){
 		Window window=new Window();
 		window.setTitle("Dictionary");
@@ -73,7 +73,7 @@ public class Window extends JFrame {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setSize(700, 500);
 		window.setVisible(true);
-	}
+	}*/
 	
 	public Window(){
         FlowLayout flowLayout1 = new FlowLayout(FlowLayout.RIGHT , 30 , 5);  
@@ -143,7 +143,9 @@ public class Window extends JFrame {
 		
 		try{
 			//create a socket to connect to the server
-			socket = new Socket("127.0.0.1",8080);
+			//socket = new Socket("127.0.0.1",8080);
+			//socket = new Socket("172.28.130.138",8000);
+			socket = new Socket("172.26.218.88",8080);
 			//Create an input stream to receive data from the server
 			fromServer = new DataInputStream(socket.getInputStream());
 			
@@ -170,13 +172,13 @@ public class Window extends JFrame {
 					login.setVisible(true);	
 					
 				}
-			
+			 
 				
 				login.addWindowListener(new WindowAdapter(){
 					public void windowClosing(java.awt.event.WindowEvent e){
 						super.windowClosing(e);
 						System.out.println("closed");
-						user=login.getUser();
+						//user=login.getUser();
 						if(user.Logged()){	
 							Label1.setText(user.getUsername());
 							Label1.revalidate();
@@ -193,7 +195,10 @@ public class Window extends JFrame {
 						} 
 					}
 				});
-			
+						
+
+			//	System.out.println(user.Logged());
+			//	System.out.println(user.getUsername());
 				
 				
 			}

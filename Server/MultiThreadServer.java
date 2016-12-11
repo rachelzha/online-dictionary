@@ -245,7 +245,7 @@ public class MultiThreadServer extends JFrame{
 						
 						break;
 					}
-					case 6:{
+					case 6:{//get all users
 						Vector<String> allUsers=userdb.getAllUsers();
 						
 						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());

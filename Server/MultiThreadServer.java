@@ -49,7 +49,7 @@ public class MultiThreadServer extends JFrame{
 		ServerSocket serverSocket=null;
 		try{
 			//create a server socket
-			serverSocket=new ServerSocket(8000);
+			serverSocket=new ServerSocket(8080);
 			jta.append("Server started at "+new Date()+'\n');
 			
 			//number a server socket

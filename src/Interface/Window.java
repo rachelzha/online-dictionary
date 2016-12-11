@@ -143,7 +143,7 @@ public class Window extends JFrame {
 		
 		try{
 			//create a socket to connect to the server
-			socket = new Socket("127.0.0.1",8000);
+			socket = new Socket("127.0.0.1",8080);
 			//Create an input stream to receive data from the server
 			fromServer = new DataInputStream(socket.getInputStream());
 			

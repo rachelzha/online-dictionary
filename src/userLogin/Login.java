@@ -18,9 +18,9 @@ public class Login extends JFrame{
 	
 	//io streams
 	private DataOutputStream toServer;
-	private DataInputStream fromServer;
+//	private DataInputStream fromServer;
 	
-	UserState user=new UserState();
+//	UserState user=new UserState();
 	
 	public Login(Socket socket){
 		JPanel jPanel1=new JPanel();
@@ -48,7 +48,7 @@ public class Login extends JFrame{
 		
 		try{
 			//Create an input stream to receive data from the server
-			fromServer = new DataInputStream(socket.getInputStream());
+	//		fromServer = new DataInputStream(socket.getInputStream());
 			
 			//create an output stream to send data to the server
 			toServer=new DataOutputStream(socket.getOutputStream());
@@ -69,7 +69,7 @@ public class Login extends JFrame{
 			toServer.writeUTF(password);
 			
 			//receive
-			boolean found=fromServer.readBoolean();
+	/*		boolean found=fromServer.readBoolean();
 			
 			if(found==true){
 				user.setUsername(username);
@@ -78,15 +78,15 @@ public class Login extends JFrame{
 			}
 			else {
 				JOptionPane.showMessageDialog(null, "Username or Password WRONG!");
-			}
+			}*/
 		}
 		catch(IOException ex){
 			System.err.println(ex);
 		}
 	}
 	
-	public UserState getUser(){
+/*	public UserState getUser(){
 		return user;
-	}
+	}*/ 
 
 }

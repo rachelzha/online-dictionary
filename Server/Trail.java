@@ -23,7 +23,7 @@ public class Trail extends JFrame{
 	private JTextArea jta=new JTextArea();
 	
 	public Socket socket=null;
-			
+/*			
 	public static void main(String[] args){
 		Trail t=new Trail();
 		t.setLocation(200,100);
@@ -31,7 +31,7 @@ public class Trail extends JFrame{
 		t.setSize(700, 500);
 		t.setVisible(true);
 	}
-	
+	*/
 	Trail(){
 		//连接
 		this.connect();
@@ -69,7 +69,7 @@ public class Trail extends JFrame{
 	public void connect(){
 		try{
 			//create a socket to connect to the server
-			socket = new Socket("127.0.0.1",8000);
+			socket = new Socket("172.26.218.88",8000);
 		}
 		catch (IOException ex){
 			System.err.println(ex);

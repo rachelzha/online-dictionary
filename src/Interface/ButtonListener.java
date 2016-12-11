@@ -1,30 +1,42 @@
 package src.Interface;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+
 import javax.swing.*;
 
 import src.Translate.BaiduTranslate;
 import src.Translate.JinshanTranslate;
 import src.Translate.YoudaoTranslate;
+import src.userLogin.Login;
+import src.userLogin.UserState;
 
 public class ButtonListener implements ActionListener{
-
+	Object []obj;
 	private int type;
-	private SearchPanel searchpanel = new SearchPanel();
-	private TextPanel textpanel = new TextPanel();
-	private ChoosePanel choosepanel = new ChoosePanel();
-	private LoginPanel loginpanel = new LoginPanel();
-	
-	public ButtonListener(LoginPanel login,SearchPanel search,ChoosePanel choose,TextPanel text){
-		this.type=0;
-		this.loginpanel = login;
-		this.searchpanel = search;
-		this.choosepanel = choose;
-		this.textpanel = text;
-	}
-	
-	public void setType(int type){
-		this.type = type;
+	private UserState user=new UserState();
+	private Socket socket;
+	private DataOutputStream toServer;
+	Login login;
+	public ButtonListener(int type,UserState user, Socket soct,Object []obj){
+		this.obj=obj;
+		this.type=type;
+		this.user=user;
+		this.socket=soct;
+		try{
+			//create an output stream to send data to the server
+			toServer=new DataOutputStream(socket.getOutputStream());
+		}
+		catch (IOException ex){
+			System.err.println(ex);
+			System.err.println("Fail!");
+		}
 	}
 	
 	@Override
@@ -43,7 +55,25 @@ public class ButtonListener implements ActionListener{
 	}
 
 	public void handleSearch(){
+		SearchPanel searchpanel=(SearchPanel)obj[0];
+		TextPanel textpanel=(TextPanel)obj[1];
 		String key = searchpanel.input.getText();
+		
+		try{
+			//send
+			if(!user.Logged()){
+				toServer.writeInt(4);
+			}
+			else{
+				toServer.writeInt(3);
+				toServer.writeUTF(user.getUsername());
+			}
+			toServer.writeUTF(key);		
+		}
+		catch(IOException ex){
+			System.err.println(ex);
+		}
+		
 		if(textpanel.baidu.isSelected()){
 			BaiduTranslate B = new BaiduTranslate();
 			String text = B.Translation(key);
@@ -58,7 +88,7 @@ public class ButtonListener implements ActionListener{
 			JinshanTranslate J = new JinshanTranslate();
 			String text = J.Translate(key);
 			textpanel.Out.setText(text);
-		}
+		}	
 	}
 	
 	public void handlePrev(){
@@ -74,7 +104,25 @@ public class ButtonListener implements ActionListener{
 	}
 	
 	public void handleLogin(){
-		
+		TextPanel textpanel = (TextPanel)obj[0];
+		if(!user.Logged()){	
+			login = new Login(socket);		
+			login.setLocation(200,100);	
+			login.setVisible(true);
+		}
+		login.addWindowListener(new WindowAdapter(){
+			public void windowClosing(java.awt.event.WindowEvent e){
+				super.windowClosing(e);
+				System.out.println("closed");
+				//user=login.getUser();
+				if(user.Logged()){	
+					textpanel.Above.add(textpanel.like);
+					textpanel.Above.add(textpanel.share);
+					textpanel.Above.revalidate();
+					textpanel.Above.repaint();
+				}
+			}
+		});
 	}
 	
 	public void handleIndividuation(){

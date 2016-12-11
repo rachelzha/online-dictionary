@@ -144,7 +144,7 @@ public class Window extends JFrame {
 		try{
 			//create a socket to connect to the server
 			//socket = new Socket("172.28.130.138",8000);
-			socket = new Socket("114.212.135.139",8000);
+			socket = new Socket("172.26.218.88",8000);
 			//Create an input stream to receive data from the server
 			fromServer = new DataInputStream(socket.getInputStream());
 			
@@ -171,13 +171,13 @@ public class Window extends JFrame {
 					login.setVisible(true);	
 					
 				}
-			
+			 
 				
 				login.addWindowListener(new WindowAdapter(){
 					public void windowClosing(java.awt.event.WindowEvent e){
 						super.windowClosing(e);
 						System.out.println("closed");
-						user=login.getUser();
+						//user=login.getUser();
 						if(user.Logged()){	
 							Label1.setText(user.getUsername());
 							Label1.revalidate();

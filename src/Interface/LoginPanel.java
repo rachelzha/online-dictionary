@@ -4,14 +4,18 @@ import java.awt.Font;
 
 import javax.swing.*;
 
+import src.userLogin.Login;
+
 public class LoginPanel {
 	drawComponent draw=new drawComponent();
-	JPanel MyPanel = new JPanel();
+	public JPanel MyPanel = new JPanel();
 	
 	JPanel Right = new JPanel();
 	public JButton Login = new JButton();//login
 	public JButton individuation = new JButton(); //choose background color
 	public JButton message = new JButton(); //get message
+	
+	public JList<String> loginlist = new JList<String>();//click button Login, appear login and register options
 	
 	public JLabel dict = new JLabel("Online Dictionary");//no edit
 	
@@ -38,9 +42,11 @@ public class LoginPanel {
 		
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.CENTER ,15, 5);  
 		Right.setLayout(flowLayout);
+		
 		draw.drawButton(loginfile1, loginfile2, 20, 20, Login);
-		draw.drawButton(indvfile1, indvfile2, 20, 20, individuation);
+        draw.drawButton(indvfile1, indvfile2, 20, 20, individuation);
 		Right.add(individuation);
 		Right.add(Login);
+		
 	}
 }

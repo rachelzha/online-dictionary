@@ -30,6 +30,7 @@ public class drawComponent {
 	public void drawCheckBox(String file1,String file2,int width,int height,JCheckBox box){
 		ImageIcon icon1 = new ImageIcon(file1);  
         icon1.setImage(icon1.getImage().getScaledInstance(width,height,Image.SCALE_DEFAULT));
+       
         ImageIcon icon2 = new ImageIcon(file2);  
         icon2.setImage(icon2.getImage().getScaledInstance(width,height,Image.SCALE_DEFAULT));
         
@@ -37,11 +38,26 @@ public class drawComponent {
         box.setBorderPainted(false);
         box.setContentAreaFilled(false);
         
-        box.setIcon(icon1);
+         box.setIcon(icon1);
         box.setSelectedIcon(icon2);    
       
 	}
 	
+	public void drawMenu(String file1,String file2,int width,int height,JMenu menu){
+		ImageIcon icon1 = new ImageIcon(file1);  
+        icon1.setImage(icon1.getImage().getScaledInstance(width,height,Image.SCALE_DEFAULT));
+    
+        ImageIcon icon2 = new ImageIcon(file2);  
+        icon2.setImage(icon2.getImage().getScaledInstance(width,height,Image.SCALE_DEFAULT));
+        
+        menu.setBorder(null);
+        menu.setBorderPainted(false);
+        menu.setContentAreaFilled(false);
+     
+        menu.setIcon(icon1);
+        menu.setPressedIcon(icon2);    
+      
+	}
 	
 	public drawComponent(){
 		

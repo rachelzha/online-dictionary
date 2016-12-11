@@ -1,71 +1,155 @@
 package src.Interface;
+import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+
+import src.Translate.BaiduTranslate;
+import src.Translate.JinshanTranslate;
+import src.Translate.YoudaoTranslate;
+import src.userLogin.UserState;
 
 public class CheckBoxListener implements ItemListener{
-
+	Object []obj;
 	private int type;
-	private SearchPanel searchpanel = new SearchPanel();
-	private TextPanel textpanel = new TextPanel();
-	private ChoosePanel choosepanel = new ChoosePanel();
-	private LoginPanel loginpanel = new LoginPanel();
+	private UserState user;
+	private Socket socket;
 	
-	public CheckBoxListener(LoginPanel login,SearchPanel search,ChoosePanel choose,TextPanel text){
-		this.type=0;
-		this.loginpanel = login;
-		this.searchpanel = search;
-		this.choosepanel = choose;
-		this.textpanel = text;
+	public CheckBoxListener(int type,UserState user,Object []obj){
+		this.obj=obj;
+		this.type=type;
+		this.user=user;
 	}
 	
-	public void setType(int type){
-		this.type = type;
-	}
-
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub
 		switch(type){
-		case 1:handleChoosebaidu();break;//choosepanel.baidu
-		case 2:handleChooseyoudao();break;//choosepanel.youdao
-		case 3:handleChoosejinshan();break;//choosepanel.jinshan
-		case 4:handlemarkbaidu();break;//bookmark.baidu
-		case 5:handlemarkyoudao();break;//bookmark.youdao
-		case 6:handlemarkjinshan();break;//bookmark.jinshan
+		case 1:handleChoose();break;//choosepanel.baidu,youdao,jinshan
+	//	case 2:handleChoose();break;//choosepanel.youdao
+	//	case 3:handleChoose();break;//choosepanel.jinshan
+		case 4:handlebookmark();break;//bookmark.baidu
+	//	case 5:handlebookmark();break;//bookmark.youdao
+	//	case 6:handlebookmark();break;//bookmark.jinshan
 		case 7:handleLike();break;//textpanel.like
 		case 8:handleTakeword();break;//textpanel.takeword
 		}
 	}
 	
-	public void handleChoosebaidu(){
-		
+	public void handleChoose(){
+		resetBookMark();
 	}
 	
-	public void handleChooseyoudao(){
-		
+	public void handlebookmark(){
+		SearchPanel searchpanel = (SearchPanel)obj[0];
+		TextPanel textpanel = (TextPanel)obj[1];
+		String key = searchpanel.input.getText();
+		if(key==null||key.length()==0)
+			return;
+		if(textpanel.baidu.isSelected()){
+			BaiduTranslate B = new BaiduTranslate();
+			String text = B.Translation(key);
+			textpanel.Out.setText(text);
+		}
+		if(textpanel.youdao.isSelected()){
+			YoudaoTranslate Y = new YoudaoTranslate();
+			String text = Y.Translation(key);
+			textpanel.Out.setText(text);
+		}
+		if(textpanel.jinshan.isSelected()){
+			JinshanTranslate J = new JinshanTranslate();
+			String text = J.Translate(key);
+			textpanel.Out.setText(text);
+		}	
+	
 	}
 	
-	public void handleChoosejinshan(){
-		
-	}
-	
-	public void handlemarkbaidu(){
-		
-	}
-	
-	public void handlemarkyoudao(){
-		
-	}
-	
-	public void handlemarkjinshan(){
-		
-	}
 	
 	public void handleLike(){
-		
+		Socket socket = (Socket)obj[0];
+		SearchPanel searchpanel = (SearchPanel)obj[1];
+		TextPanel textpanel = (TextPanel) obj[2];
+		String key = searchpanel.input.getText();
+		DataOutputStream toServer;
+		try{
+			//create an output stream to send data to the server
+			toServer=new DataOutputStream(socket.getOutputStream());
+			toServer.writeInt(5);
+			toServer.writeUTF(user.getUsername());
+			toServer.writeUTF(key);
+			if(textpanel.baidu.isSelected())
+				toServer.writeUTF("baidu");
+			else if(textpanel.youdao.isSelected())
+				toServer.writeUTF("youdao");
+			else if(textpanel.jinshan.isSelected())
+				toServer.writeUTF("jinshan");
+		}
+		catch (IOException ex){
+			System.err.println(ex);
+			System.err.println("Fail!");
+		}
 	}
 	
 	public void handleTakeword(){
 		
+	}
+	
+	public void resetBookMark(){
+		TextPanel textpanel = (TextPanel)obj[3];
+		ChoosePanel choosepanel = (ChoosePanel)obj[4];
+		int a = (int)obj[0];
+		int b = (int)obj[1];
+		int c = (int)obj[2];
+		textpanel.Left.removeAll();
+		if(a>=b&&b>=c){
+			textpanel.Left.add(textpanel.baidu);  
+			textpanel.Left.add(textpanel.youdao);  
+			textpanel.Left.add(textpanel.jinshan);
+		}
+		else if(a>=c&&c>=b){
+			textpanel.Left.add(textpanel.baidu);  
+			textpanel.Left.add(textpanel.jinshan);  
+			textpanel.Left.add(textpanel.youdao);
+		}
+		else if(b>=a&&a>=c){
+			textpanel.Left.add(textpanel.youdao);  
+			textpanel.Left.add(textpanel.baidu);  
+			textpanel.Left.add(textpanel.jinshan);
+		}
+		else if(b>=c&&c>=a){
+			textpanel.Left.add(textpanel.youdao);  
+			textpanel.Left.add(textpanel.jinshan);  
+			textpanel.Left.add(textpanel.baidu);
+		}
+		else if(c>=a&&a>=b){
+			textpanel.Left.add(textpanel.jinshan);  
+			textpanel.Left.add(textpanel.baidu);  
+			textpanel.Left.add(textpanel.youdao);
+		}
+		else{//c>=b>=a
+			textpanel.Left.add(textpanel.jinshan);  
+			textpanel.Left.add(textpanel.youdao);  
+			textpanel.Left.add(textpanel.baidu);
+		}
+
+		int count = 3;
+		if(!choosepanel.baidu.isSelected()){
+			textpanel.Left.remove(textpanel.baidu);
+			count--;
+		}
+		if(!choosepanel.youdao.isSelected()){
+			textpanel.Left.remove(textpanel.youdao);
+			count--;
+		}
+		if(!choosepanel.jinshan.isSelected()){
+			textpanel.Left.remove(textpanel.jinshan);
+			count--;
+		}
+		
+		textpanel.Left.setLayout(new GridLayout(count,1,5,10));
+		textpanel.Left.revalidate();
+		textpanel.Left.repaint();
 	}
 }

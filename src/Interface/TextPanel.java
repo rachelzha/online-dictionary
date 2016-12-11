@@ -6,13 +6,14 @@ public class TextPanel {
 	JPanel MyPanel = new JPanel();
 	drawComponent draw=new drawComponent();
 	
-	JPanel Left = new JPanel();
+	public JPanel Left = new JPanel();
 	public JCheckBox baidu = new JCheckBox();//click to see baidu translation
 	public JCheckBox youdao = new JCheckBox();//click to see youdao translation
 	public JCheckBox jinshan = new JCheckBox();//click to see jinshan translation
 	ButtonGroup bookmark = new ButtonGroup(); 
 	
 	JPanel Center =new JPanel();
+	JPanel Above = new JPanel();
 	public JLabel tranword = new JLabel("Word");//output the word you translate
 	public JButton share = new JButton(); //share
 	//JButton like = new JButton(); //like
@@ -35,16 +36,16 @@ public class TextPanel {
 		drawLeft();
 		drawRight();
 		drawCenter("blue"); 
-		JPanel pan = new JPanel();
-		FlowLayout flowLayout = new FlowLayout(FlowLayout.CENTER ,5, 5);  
-		pan.setLayout(flowLayout);
-		pan.add(Left);
-		pan.add(Center);
+	//	Panel pan = new Panel();
+	//	FlowLayout flowLayout = new FlowLayout(FlowLayout.CENTER ,5, 5);  
+	//	pan.setLayout(flowLayout);
+	//	pan.add(Left);
+	///	pan.add(Center);
 	
 		MyPanel.setLayout(new BorderLayout(10,10));  
 	
-	//	MyPanel.add(useless,BorderLayout.WEST);
-		MyPanel.add(pan,BorderLayout.CENTER);
+		MyPanel.add(Left,BorderLayout.WEST);
+		MyPanel.add(Center,BorderLayout.CENTER);
 		MyPanel.add(Right,BorderLayout.EAST);
 	}
 	
@@ -91,7 +92,6 @@ public class TextPanel {
 	}
 	
 	public void drawCenter(String color){
-		JPanel Above = new JPanel();
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT ,5, 5);  
 		Above.setLayout(flowLayout);
 		String likefile1="image/"+color+"/like.png";
@@ -101,8 +101,8 @@ public class TextPanel {
 		draw.drawCheckBox(likefile1,likefile2, 20, 20, like);
 		draw.drawButton(sharefile1,sharefile2, 20, 20, share);
 	    Above.add(tranword);
-	    Above.add(like);
-	    Above.add(share);
+	 //   Above.add(like);
+	 //   Above.add(share);
 	    Above.setBackground(Color.WHITE);
 	    text.setBackground(Color.WHITE);
 	    text.setBorder(null);

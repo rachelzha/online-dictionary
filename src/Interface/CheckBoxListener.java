@@ -49,7 +49,7 @@ public class CheckBoxListener implements ItemListener{
 	public void handlebookmark(){
 		SearchPanel searchpanel = (SearchPanel)obj[0];
 		TextPanel textpanel = (TextPanel)obj[1];
-		String key = searchpanel.input.getText();
+		String key = searchpanel.input.getSelectedItem().toString();
 		if(key==null||key.length()==0)
 			return;
 		if(textpanel.baidu.isSelected()){
@@ -75,7 +75,7 @@ public class CheckBoxListener implements ItemListener{
 		//Socket socket = (Socket)obj[0];
 		SearchPanel searchpanel = (SearchPanel)obj[0];
 		TextPanel textpanel = (TextPanel) obj[1];
-		String key = searchpanel.input.getText();
+		String key = searchpanel.input.getSelectedItem().toString();
 		DataOutputStream toServer;
 		try{
 			//create an output stream to send data to the server
@@ -150,6 +150,12 @@ public class CheckBoxListener implements ItemListener{
 			textpanel.Left.remove(textpanel.jinshan);
 			count--;
 		}
+		if(choosepanel.baidu.isSelected())
+			textpanel.baidu.setSelected(true);
+		else if(choosepanel.youdao.isSelected())
+			textpanel.youdao.setSelected(true);
+		else if(choosepanel.jinshan.isSelected())
+			textpanel.jinshan.setSelected(true);
 		
 		textpanel.Left.setLayout(new GridLayout(count,1,5,10));
 		textpanel.Left.revalidate();

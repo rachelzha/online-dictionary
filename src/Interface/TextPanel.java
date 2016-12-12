@@ -65,6 +65,7 @@ public class TextPanel {
 	    bookmark.add(baidu);
 	    bookmark.add(youdao);
 	    bookmark.add(jinshan);
+	    baidu.setSelected(true);
 		Left.add(baidu);
 		Left.add(youdao);
 		Left.add(jinshan);
@@ -106,6 +107,7 @@ public class TextPanel {
 	    Above.setBackground(Color.WHITE);
 	    text.setBackground(Color.WHITE);
 	    text.setBorder(null);
+	    Out.setEditable(false);  
 		Center.setLayout (new BorderLayout(0,0));
 		Center.add(Above,BorderLayout.NORTH);
 		Center.add(text,BorderLayout.CENTER);

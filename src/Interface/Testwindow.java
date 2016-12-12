@@ -1,6 +1,8 @@
 package src.Interface;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,11 +10,15 @@ import java.net.Socket;
 import java.util.Vector;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
+
+import src.Translate.BaiduTranslate;
 import src.userLogin.UserState;
 
 
 public class Testwindow extends JFrame{
-
 	/**
 	 * 
 	 */
@@ -34,6 +40,7 @@ public class Testwindow extends JFrame{
     Object []BoxObj1={baidulike,youdaolike,jinshanlike,textpanel,choosepanel};
     Object []BoxObj2={searchpanel,textpanel};
     Object []BoxObj3={searchpanel,textpanel};
+   
     
 	public static void main(String[] args){
 		Testwindow win=new Testwindow();
@@ -73,6 +80,7 @@ public class Testwindow extends JFrame{
      //   loginpanel.message.addActionListener(new ButtonListener(7,user,socket,obj));
      //   textpanel.share.addActionListener(new ButtonListener(8,user,socket,obj));
        
+
         //checkboxlistener
         choosepanel.baidu.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
         choosepanel.youdao.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
@@ -82,8 +90,11 @@ public class Testwindow extends JFrame{
         textpanel.jinshan.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
         textpanel.like.addItemListener(new CheckBoxListener(socket,7,user,BoxObj3));
   //      textpanel.takeword.addItemListener(new CheckBoxListener(8,));
-        
-        
+     
+        JTextField x=searchpanel.input.getTextField();
+        x.getDocument().addDocumentListener(new documentListener(searchpanel));
+
+		
         Thread receiveTask=new Thread(new ReceiveTask());
 		receiveTask.start();
 	}

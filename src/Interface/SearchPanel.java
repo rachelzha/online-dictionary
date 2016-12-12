@@ -1,5 +1,6 @@
 package src.Interface;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.*;
 
@@ -16,8 +17,10 @@ public class SearchPanel {
 	JPanel Center=new JPanel();
 	JLabel En=new JLabel();//english,no edit
 	JLabel Line2=new JLabel();//parting line , no edit
-	public JTextField input=new JTextField(30);//input word
-	public JButton pulldown=new JButton();//open or close related word list
+	//public JTextField input=new JTextField(30);//input word
+	//public JComboBox<String> Input=new JComboBox<String>();
+	public AutoComboBox input;
+	//public JButton pulldown=new JButton();///open or close related word list
 	
 	JPanel Right=new JPanel();
 	JLabel Line3=new JLabel();//parting line , no edit
@@ -57,6 +60,14 @@ public class SearchPanel {
 	}
 	
 	public void drawCenter(String color){
+	/*	DefaultComboBoxModel<String>   model   =   new   DefaultComboBoxModel<String>(); 
+        input=   new AutoComboBox(model); 
+        model.addElement( "abc "); 
+        model.addElement( "aab "); 
+        model.addElement( "aba ");*/ //¸Ä¸Ä¸Ä 
+		input.setEditable(true);
+		input.setPreferredSize(new Dimension(300,25));
+		
 		Center.setBackground(Color.WHITE);
 		String Enfile="image/"+color+"/en.png";
 		String partline="image/"+color+"/line.png";
@@ -66,12 +77,14 @@ public class SearchPanel {
         Center.setLayout(flowLayout);
         draw.drawLabel(Enfile, 30, 30, En);
         draw.drawLabel(partline, 30, 30, Line2);
-        draw.drawButton(downfile1, downfile2, 15, 15, pulldown);
+      //  draw.drawButton(downfile1, downfile2, 15, 15, pulldown);
         input.setBorder(BorderFactory.createEtchedBorder());
         Center.add(En);
         Center.add(Line2);
         Center.add(input);
-        Center.add(pulldown);
+      //  Center.add(Input);
+      //  Center.add(input);
+     //   Center.add(pulldown);
 	}
 	
 	public void drawRight(String color){

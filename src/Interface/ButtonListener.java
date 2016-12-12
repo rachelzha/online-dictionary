@@ -57,7 +57,7 @@ public class ButtonListener implements ActionListener{
 	public void handleSearch(){
 		SearchPanel searchpanel=(SearchPanel)obj[0];
 		TextPanel textpanel=(TextPanel)obj[1];
-		String key = searchpanel.input.getText();
+		String key = searchpanel.input.getSelectedItem().toString();
 		
 		try{
 			//send
@@ -68,7 +68,7 @@ public class ButtonListener implements ActionListener{
 		}
 		catch(IOException ex){
 			System.err.println(ex);
-		}
+		} 
 		
 		if(textpanel.baidu.isSelected()){
 			BaiduTranslate B = new BaiduTranslate();

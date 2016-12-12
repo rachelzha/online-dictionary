@@ -5,9 +5,9 @@
 	<classpathentry kind="lib" path="jdom-1.0.jar"/>
 	<classpathentry kind="lib" path="mysql-connector-java-5.1.7-bin.jar"/>
 	<classpathentry kind="lib" path="org.json.jar"/>
-	<classpathentry kind="lib" path="E:/java/eclipse/workplace/online-dict/commons-dbcp2-2.1.1.jar"/>
-	<classpathentry kind="lib" path="E:/java/eclipse/workplace/online-dict/commons-logging-1.2.jar"/>
-	<classpathentry kind="lib" path="E:/java/eclipse/workplace/online-dict/commons-pool2-2.4.2.jar"/>
-	<classpathentry kind="lib" path="E:/java/eclipse/workplace/online-dict/jsoup-1.7.2.jar"/>
+	<classpathentry kind="lib" path="commons-dbcp2-2.1.1.jar"/>
+	<classpathentry kind="lib" path="commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="commons-pool2-2.4.2.jar"/>
+	<classpathentry kind="lib" path="online-dict/jsoup-1.7.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

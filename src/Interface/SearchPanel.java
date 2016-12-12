@@ -19,7 +19,8 @@ public class SearchPanel {
 	JLabel Line2=new JLabel();//parting line , no edit
 	//public JTextField input=new JTextField(30);//input word
 	//public JComboBox<String> Input=new JComboBox<String>();
-	public AutoComboBox input;
+	public AutoComboBox input=new AutoComboBox();
+	DefaultComboBoxModel<String>   model   =   new   DefaultComboBoxModel<String>(); 
 	//public JButton pulldown=new JButton();///open or close related word list
 	
 	JPanel Right=new JPanel();
@@ -60,12 +61,7 @@ public class SearchPanel {
 	}
 	
 	public void drawCenter(String color){
-	/*	DefaultComboBoxModel<String>   model   =   new   DefaultComboBoxModel<String>(); 
-        input=   new AutoComboBox(model); 
-        model.addElement( "abc "); 
-        model.addElement( "aab "); 
-        model.addElement( "aba ");*/ //¸Ä¸Ä¸Ä 
-		input.setEditable(true);
+       	input.setEditable(true);
 		input.setPreferredSize(new Dimension(300,25));
 		
 		Center.setBackground(Color.WHITE);
@@ -78,7 +74,7 @@ public class SearchPanel {
         draw.drawLabel(Enfile, 30, 30, En);
         draw.drawLabel(partline, 30, 30, Line2);
       //  draw.drawButton(downfile1, downfile2, 15, 15, pulldown);
-        input.setBorder(BorderFactory.createEtchedBorder());
+     //   input.setBorder(BorderFactory.createEtchedBorder());
         Center.add(En);
         Center.add(Line2);
         Center.add(input);

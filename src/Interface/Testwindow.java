@@ -52,7 +52,7 @@ public class Testwindow extends JFrame{
 	
 	Testwindow(){	
 		
-		this.connect();
+	///	this.connect();
 		
 		JPanel panel1=loginpanel.getPanel();
         JPanel panel2=searchpanel.getPanel();
@@ -89,12 +89,12 @@ public class Testwindow extends JFrame{
         textpanel.like.addItemListener(new CheckBoxListener(socket,7,user,BoxObj3));
   //      textpanel.takeword.addItemListener(new CheckBoxListener(8,));
      
-        JTextField x=searchpanel.input.getTextField();
-        x.getDocument().addDocumentListener(new documentListener(searchpanel));
+     //   JTextField x=searchpanel.input.getTextField();
+     //   x.getDocument().addDocumentListener(new documentListener(searchpanel,textpanel));
 
 		
-        Thread receiveTask=new Thread(new ReceiveTask());
-		receiveTask.start();
+     //   Thread receiveTask=new Thread(new ReceiveTask());
+	//	receiveTask.start();
 	}
 	
 	

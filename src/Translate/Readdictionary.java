@@ -1,5 +1,6 @@
 package src.Translate;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.TreeMap;
 
@@ -91,15 +92,15 @@ public class Readdictionary {
 	}
 	
 	//获取编辑长度小于单词长度一半的相似单词
-	public String[] getsimilarwords(String key){
-		int len = 2;
-		int num=0;
-		String[] similar =  new String[1000];//////////////////////////
+	public ArrayList<String> getsimilarwords(String key){
+		int len = 1;
+		ArrayList<String> similar=new ArrayList<String>();
+		//String[] similar =  new String[1000];//////////////////////////
 		String word = Tree.firstKey();
 		for(int i=1;i<Tree.size();i++){
-			if(Levenshtein(word,key)<len){
-				similar[num]=word;
-				num++;
+			if(Levenshtein(word,key)<=len){
+				//similar[num]=word;
+				similar.add(word);
 			}
 			word=Tree.higherKey(word);
 		}

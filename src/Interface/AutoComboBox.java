@@ -27,9 +27,7 @@ public class AutoComboBox extends JComboBox<String>{
 	}
 	
 	public void addWords(String[] relatedwords){
-		//for(int i=0;i<1;i++){
-		//	this.addItem(relatedwords[i]);
-		//}
+		
 	}
 }
 

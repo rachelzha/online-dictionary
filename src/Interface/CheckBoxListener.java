@@ -32,11 +32,7 @@ public class CheckBoxListener implements ItemListener{
 		// TODO Auto-generated method stub
 		switch(type){
 		case 1:handleChoose();break;//choosepanel.baidu,youdao,jinshan
-	//	case 2:handleChoose();break;//choosepanel.youdao
-	//	case 3:handleChoose();break;//choosepanel.jinshan
 		case 4:handlebookmark();break;//bookmark.baidu
-	//	case 5:handlebookmark();break;//bookmark.youdao
-	//	case 6:handlebookmark();break;//bookmark.jinshan
 		case 7:handleLike();break;//textpanel.like
 		case 8:handleTakeword();break;//textpanel.takeword
 		}

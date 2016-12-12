@@ -46,7 +46,6 @@ public class ButtonListener implements ActionListener{
 		case 1:handleSearch();break;//search button
 		case 2:handlePrev();break;//prev button
 		case 3:handleNext();break;//next button
-		case 4:handlePulldown();break;//pulldown button
 		case 5:handleLogin();break;//login button
 		case 6:handleIndividuation();break;//individuation button
 		case 7:handleMessage();break;//message button
@@ -92,10 +91,6 @@ public class ButtonListener implements ActionListener{
 	}
 	
 	public void handleNext(){
-		
-	}
-	
-	public void handlePulldown(){
 		
 	}
 	

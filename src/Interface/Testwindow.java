@@ -74,7 +74,6 @@ public class Testwindow extends JFrame{
         searchpanel.Search.addActionListener(new ButtonListener(1,user,socket,obj1));
      //   searchpanel.Prev.addActionListener(new ButtonListener(2,user,socket,obj));
      //   searchpanel.Next.addActionListener(new ButtonListener(3,user,socket,obj));
-     //   searchpanel.pulldown.addActionListener(new ButtonListener(4,user,socket,obj));
         loginpanel.Login.addActionListener(new ButtonListener(5,user,socket,obj2));
      //   loginpanel.individuation.addActionListener(new ButtonListener(6,user,socket,obj));
      //   loginpanel.message.addActionListener(new ButtonListener(7,user,socket,obj));

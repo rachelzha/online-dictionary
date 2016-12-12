@@ -44,7 +44,6 @@ public class Testwindow extends JFrame{
     
 	public static void main(String[] args){
 		Testwindow win=new Testwindow();
-		//win.setTitle("Dictionary");
 		win.setLocation(200,100);
 		win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		win.setSize(700, 500);

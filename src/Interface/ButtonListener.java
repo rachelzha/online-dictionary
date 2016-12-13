@@ -14,6 +14,8 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.*;
 
 import Server.Picture;
+import src.Interface.panel.SearchPanel;
+import src.Interface.panel.TextPanel;
 import src.Translate.BaiduTranslate;
 import src.Translate.JinshanTranslate;
 import src.Translate.YoudaoTranslate;
@@ -80,7 +82,7 @@ public class ButtonListener implements ActionListener{
 			lock.unlock();
 		}
 		
-		if(textpanel.baidu.isSelected()){
+		if(textpanel.bing.isSelected()){
 			BaiduTranslate B = new BaiduTranslate();
 			String text = B.Translation(key);
 			textpanel.Out.setText(text);

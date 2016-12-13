@@ -19,6 +19,12 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
 import Server.Card;
+import src.Interface.listener.ButtonListener;
+import src.Interface.listener.CheckBoxListener;
+import src.Interface.panel.ChoosePanel;
+import src.Interface.panel.LoginPanel;
+import src.Interface.panel.SearchPanel;
+import src.Interface.panel.TextPanel;
 import src.Translate.BaiduTranslate;
 import src.userLogin.UserState;
 
@@ -34,7 +40,7 @@ public class Testwindow extends JFrame{
 	
 	Vector<Card>cards=new Vector<Card>();
 	
-	int baidulike;
+	int binglike;
 	int youdaolike;
 	int jinshanlike;
 	
@@ -44,7 +50,8 @@ public class Testwindow extends JFrame{
 	TextPanel textpanel = new TextPanel();
 	Object obj1[]={searchpanel,textpanel};
     Object obj2[]={textpanel};
-    Object []BoxObj1={baidulike,youdaolike,jinshanlike,textpanel,choosepanel};
+    Object obj3[]={loginpanel,searchpanel,choosepanel,textpanel};
+    Object []BoxObj1={binglike,youdaolike,jinshanlike,textpanel,choosepanel};
     Object []BoxObj2={searchpanel,textpanel};
     Object []BoxObj3={searchpanel,textpanel};
    
@@ -81,16 +88,23 @@ public class Testwindow extends JFrame{
      //   searchpanel.Prev.addActionListener(new ButtonListener(2,user,socket,obj));
      //   searchpanel.Next.addActionListener(new ButtonListener(3,user,socket,obj));
         loginpanel.Login.addActionListener(new ButtonListener(5,user,socket,obj2));
-     //   loginpanel.individuation.addActionListener(new ButtonListener(6,user,socket,obj));
      //   loginpanel.message.addActionListener(new ButtonListener(7,user,socket,obj));
         textpanel.share.addActionListener(new ButtonListener(8,user,socket,obj1));
        
+        //change color
+        loginpanel.colorgreen.addActionListener(new ButtonListener(10,user,socket,obj3));
+        loginpanel.coloryellow.addActionListener(new ButtonListener(11,user,socket,obj3));
+        loginpanel.colorblue.addActionListener(new ButtonListener(12,user,socket,obj3));
+        loginpanel.colordarkblue.addActionListener(new ButtonListener(13,user,socket,obj3));
+        loginpanel.colorpink.addActionListener(new ButtonListener(14,user,socket,obj3));
+        loginpanel.colorblack.addActionListener(new ButtonListener(15,user,socket,obj3));
+       
 
         //checkboxlistener
-        choosepanel.baidu.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
+        choosepanel.bing.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
         choosepanel.youdao.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
         choosepanel.jinshan.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
-        textpanel.baidu.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
+        textpanel.bing.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
         textpanel.youdao.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
         textpanel.jinshan.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
         textpanel.like.addItemListener(new CheckBoxListener(socket,7,user,BoxObj3));
@@ -179,7 +193,7 @@ public class Testwindow extends JFrame{
 						break;
 					}
 					case 3:{
-						baidulike=fromServer.readInt();
+						binglike=fromServer.readInt();
 						youdaolike=fromServer.readInt();
 						jinshanlike=fromServer.readInt();
 						

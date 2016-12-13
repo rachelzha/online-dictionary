@@ -128,6 +128,11 @@ public class ButtonListener implements ActionListener{
 		SearchPanel searchpanel = (SearchPanel)obj[0];
 		TextPanel textpanel = (TextPanel)obj[1];
 		String key = searchpanel.input.getText();
+		if(textpanel.bing.isSelected()){
+			BingTranslate B = new BingTranslate();
+			String text = B.Translate(key);
+			Picture pic=new Picture(text,socket);
+		}
 		if(textpanel.youdao.isSelected()){
 			YoudaoTranslate Y = new YoudaoTranslate();
 			String text = Y.Translation(key);

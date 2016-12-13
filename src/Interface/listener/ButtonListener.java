@@ -6,6 +6,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import Server.Picture;
 import src.Interface.panel.ChoosePanel;
 import src.Interface.panel.LoginPanel;
 import src.Interface.panel.SearchPanel;
@@ -124,7 +125,21 @@ public class ButtonListener implements ActionListener{
 	}
 	
 	public void handleShare(){
-		
+		SearchPanel searchpanel = (SearchPanel)obj[0];
+		TextPanel textpanel = (TextPanel)obj[1];
+		String key = searchpanel.input.getText();
+		if(textpanel.youdao.isSelected()){
+			YoudaoTranslate Y = new YoudaoTranslate();
+			String text = Y.Translation(key);
+			Picture pic=new Picture(text,socket);
+		//	textpanel.Out.setText(text);
+		}
+		if(textpanel.jinshan.isSelected()){
+			JinshanTranslate J = new JinshanTranslate();
+			String text = J.Translate(key);
+			Picture pic=new Picture(text,socket);
+		//	textpanel.Out.setText(text);
+		}	
 	}
 	
 	public void handleColor(){

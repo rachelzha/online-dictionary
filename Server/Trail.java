@@ -26,50 +26,22 @@ public class Trail extends JFrame{
 			
 	public static void main(String[] args){
 		Trail t=new Trail();
-		t.setLocation(200,100);
-		t.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		t.setSize(700, 500);
-		t.setVisible(true);
+
 	}
 	
 	Trail(){
 		//连接
 		this.connect();
-				
-		// 界面
-		JPanel jPanel3=new JPanel();
-		JPanel jPanel1=new JPanel();
-		JPanel jPanel2=new JPanel();
-		JPanel jPanel4=new JPanel();
-
-		jPanel3.add(new JLabel("Number"));
-		jPanel3.add(jtfNum);
-		jPanel1.add(new JLabel("Username"));
-		jPanel1.add(jtfUsername);
-		jPanel2.add(new JLabel("Message"));
-		jPanel2.add(jtfPassword);
 		
-		jPanel4.setLayout(new FlowLayout());
-		jPanel4.add(jPanel3);
-		jPanel4.add(jPanel1);
-		jPanel4.add(jPanel2);
-		jPanel4.add(jbtLogin);
-		add(jPanel4,BorderLayout.NORTH);
-		add(new JScrollPane(jta),BorderLayout.CENTER);
-		
-		setTitle("Login");
-		setSize(300,250);//width,height
-		
-		jbtLogin.addActionListener(new ButtonListener());
-		
-		Thread receiveTask=new Thread(new ReceiveTask());
-		receiveTask.start();
+		JFrame frame = new Picture("hello");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setVisible(true);
 	}
 	
 	public void connect(){
 		try{
 			//create a socket to connect to the server
-			socket = new Socket("172.26.218.88",8080);
+			socket = new Socket("127.0.0.1",8080);
 			//socket = new Socket("172.26.218.88",8000);
 		}
 		catch (IOException ex){

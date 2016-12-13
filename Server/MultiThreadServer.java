@@ -1,11 +1,15 @@
 package Server;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -122,7 +126,7 @@ public class MultiThreadServer extends JFrame{
 	}
 	
 	
-	//inner class
+	// listen
 	//define the thread class for handling new connection
 	class HandleAClient implements Runnable {
 		private Socket socket;//a connected socket
@@ -130,6 +134,7 @@ public class MultiThreadServer extends JFrame{
 		private Connection dbConn=null;
 		private UserDB userdb;
 		private LikeDB likedb;
+		private MessageDB messagedb;
 		
 		private String username=null;
 				
@@ -140,6 +145,7 @@ public class MultiThreadServer extends JFrame{
 			dbConn=connectUsingPool();
 			userdb=new UserDB(dbConn);
 			likedb=new LikeDB(dbConn);
+			messagedb=new MessageDB(dbConn);
 		}
 
 		@Override
@@ -215,14 +221,15 @@ public class MultiThreadServer extends JFrame{
 						break;
 					}
 					case 4:{//send message
-						String username=inputFromClient.readUTF();//the user to send message
-						String content=inputFromClient.readUTF();
+						String receiver=inputFromClient.readUTF();//the user to send message
 						
-						//转发消息
-						HandleAClient c=clients.get(username);
-						if(c!=null){
-							c.sendMsg(content);
-						}
+						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());			
+						Card card=(Card)ois.readObject();
+						
+						//save to server directory
+						String filename=card.saveCard("./wordcards");
+						
+						messagedb.add(receiver, "Rachel", filename);
 						
 						break;
 					}
@@ -277,12 +284,9 @@ public class MultiThreadServer extends JFrame{
 					
 				}
 			}
-			catch(java.io.EOFException ex){
+			catch(Exception ex){
 				if(username!=null)clients.remove(username);
 				jta.append("客户端断开连接\n");
-			}
-			catch (IOException e) {
-				System.err.println(e);
 			}
 			finally {
                 try

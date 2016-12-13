@@ -8,6 +8,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.*;
 
@@ -25,6 +27,10 @@ public class ButtonListener implements ActionListener{
 	private Socket socket;
 	private DataOutputStream toServer;
 	Login login;
+	
+	private Lock lock=new ReentrantLock();
+
+	
 	public ButtonListener(int type,UserState user, Socket soct,Object []obj){
 		this.obj=obj;
 		this.type=type;
@@ -59,15 +65,19 @@ public class ButtonListener implements ActionListener{
 		TextPanel textpanel=(TextPanel)obj[1];
 	//	String key = searchpanel.input.getSelectedItem().toString();
 		String key=searchpanel.input.getText();
+		
+		lock.lock();
 		try{
 			//send
-			
 			toServer.writeInt(3);
 			
 			toServer.writeUTF(key);		
 		}
 		catch(IOException ex){
 			System.err.println(ex);
+		}
+		finally{
+			lock.unlock();
 		}
 		
 		if(textpanel.baidu.isSelected()){

@@ -54,7 +54,7 @@ public class Card implements Serializable{
     	else return true;
     }
     
-    //直接在一张已有的图片上写字，可指定文字颜色。如果背景图片参数为空或者""，则写张白图
+    //��ͼƬ��д��
     public void draw(String content, String name , boolean b ){
     		File background=new File(name);
     		
@@ -74,15 +74,16 @@ public class Card implements Serializable{
                Graphics g = image.getGraphics();
 
                if( b == false){
-            	   g.setColor(new Color(102,102,102));  //设字体为黑色,否则就是白色
+            	   g.setColor(new Color(102,102,102)); 
                }
 
-               Font mFont = new Font("宋体",Font.PLAIN,100);
+               Font mFont = new Font("Arial",Font.PLAIN,20);
                g.setFont(mFont);
                 
-               g.drawString(content, 300, 150); 
+               g.drawString(content, 200, 200); 
     }
     
+    //����ͼƬ������
     public String saveCard(String path){
     	SimpleDateFormat tempDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
     	String datetime = tempDate.format(new java.util.Date());

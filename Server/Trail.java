@@ -30,7 +30,7 @@ public class Trail extends JFrame{
 	}
 	
 	Trail(){
-		//连接
+
 		this.connect();
 		
 		//JFrame frame = new Picture("hello");

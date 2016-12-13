@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.Vector;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -118,35 +120,42 @@ public class Testwindow extends JFrame{
 	}
 	
 	class FetchMessageTask implements Runnable{
-
+		//create a new lock
+		private Lock lock=new ReentrantLock();
+		
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			while(true){
-				if(user.Logged()){
-					try{
-						DataOutputStream toServer=new DataOutputStream(socket.getOutputStream());
-						toServer.writeInt(0);
-						Thread.sleep(10000);
-					}
-					catch (IOException ex){
-						ex.printStackTrace();
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+				try{
+					lock.lock();
+					DataOutputStream toServer=new DataOutputStream(socket.getOutputStream());
+					toServer.writeInt(0);
+					toServer.flush();
+					lock.unlock();
+					Thread.sleep(10000);
 				}
+				catch (IOException ex){
+					ex.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
 			}
 		}
 		
 	}
 	
 	class ReceiveTask implements Runnable{
+		private Lock lock=new ReentrantLock();
+
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			try{			   
 			    while(true){
+			    	lock.lock();
+			    	
 					DataInputStream fromServer=new DataInputStream(socket.getInputStream());
 					
 					int type=fromServer.readInt();
@@ -159,6 +168,7 @@ public class Testwindow extends JFrame{
 						for(int i=0;i<temp.size();i++){
 							cards.add(temp.get(i));
 						}
+						break;
 					}
 					case 1:{//log in
 						if(fromServer.readBoolean())user.setUsername("Zarah");////?????
@@ -202,6 +212,8 @@ public class Testwindow extends JFrame{
 					}
 					default:break;
 					}
+					
+					lock.unlock();
 			    }
 			}
 			catch (IOException ex){

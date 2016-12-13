@@ -6,6 +6,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Login extends JFrame{
 	/**
@@ -18,9 +20,9 @@ public class Login extends JFrame{
 	
 	//io streams
 	private DataOutputStream toServer;
-//	private DataInputStream fromServer;
-	
-//	UserState user=new UserState();
+
+	private Lock lock=new ReentrantLock();
+
 	
 	public Login(Socket socket){
 		JPanel jPanel1=new JPanel();
@@ -62,31 +64,19 @@ public class Login extends JFrame{
 		String username=jtfUsername.getText();
 		String password=jtfPassword.getText();
 		
+		lock.lock();
 		try{
 			//send
 			toServer.writeInt(1);
 			toServer.writeUTF(username);
 			toServer.writeUTF(password);
-			
-			//receive
-	/*		boolean found=fromServer.readBoolean();
-			
-			if(found==true){
-				user.setUsername(username);
-			//	System.out.println(user.getUsername());
-				JOptionPane.showMessageDialog(null, "Hello! "+ username);
-			}
-			else {
-				JOptionPane.showMessageDialog(null, "Username or Password WRONG!");
-			}*/
 		}
 		catch(IOException ex){
 			System.err.println(ex);
 		}
+		finally{
+			lock.unlock();
+		}
 	}
-	
-/*	public UserState getUser(){
-		return user;
-	}*/ 
 
 }

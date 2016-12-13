@@ -12,6 +12,8 @@ import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -40,6 +42,9 @@ public class Picture extends JFrame{
 	Card card=new Card();
 	
 	Socket socket=null;
+	
+	private Lock lock=new ReentrantLock();
+
 	
 	public Picture(String content,Socket socket){
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -126,6 +131,7 @@ public class Picture extends JFrame{
 	
 	//send the card
 	public void sendCard(String usernames){
+		lock.lock();
 		try {
 			DataOutputStream toServer = new DataOutputStream(socket.getOutputStream());
 			//send
@@ -143,6 +149,9 @@ public class Picture extends JFrame{
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+		finally{
+			lock.unlock();
 		}
 		
 	}

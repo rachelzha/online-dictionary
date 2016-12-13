@@ -1,15 +1,14 @@
 package Server;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.*;
 import java.sql.*;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 
 import org.apache.commons.dbcp2.BasicDataSource;
@@ -31,7 +30,7 @@ public class MultiThreadServer extends JFrame{
 	static String userName="testuser";		
 	static String userPwd="testtoday";
 	
-	//在线用户
+
 	HashMap<String,HandleAClient> clients=new HashMap<String,HandleAClient>();
 		
 	public static void main(String[] args){
@@ -39,7 +38,7 @@ public class MultiThreadServer extends JFrame{
 	}
 	
 	public MultiThreadServer(){
-		//数据库连接池
+
 		setPool();
 		
 		//place text area on the frame
@@ -98,9 +97,9 @@ public class MultiThreadServer extends JFrame{
 		}
 	}
 	
-	//配置数据库连接池
+
 	public static void setPool(){
-		//连接池
+
 		pool=new BasicDataSource();
 		
 		pool.setUsername(userName);
@@ -108,13 +107,13 @@ public class MultiThreadServer extends JFrame{
 		pool.setDriverClassName(driverName);
 		pool.setUrl(dbURL);
 		
-		//设置整个连接池最大连接数
+
 		pool.setMaxTotal(10);
 	
 		System.out.println("Succeed setting pool");
 	}
 	
-	//连接数据库
+
 	public static Connection connectUsingPool(){
 		Connection con=null;
 		try {
@@ -138,6 +137,9 @@ public class MultiThreadServer extends JFrame{
 		private MessageDB messagedb;
 		
 		private String username=null;
+		
+		private Lock lock=new ReentrantLock();
+
 				
 		//construct a thread
 		public HandleAClient(Socket socket){
@@ -155,6 +157,8 @@ public class MultiThreadServer extends JFrame{
 			try{		
 				//continuously serve the client
 				while(true){
+					lock.lock();
+					
 					DataInputStream inputFromClient=new DataInputStream(socket.getInputStream());
 					
 					//receive type from the client
@@ -163,12 +167,19 @@ public class MultiThreadServer extends JFrame{
 					switch(type){
 					case 0:{//message required
 						if(username==null)break;
-						
+
 						Vector<String> filenames=messagedb.getMessages(username);
-						
-						int n=filenames.size();
-						
+						if(filenames.size()!=0){
+							jta.append("Send to "+username+":\n");
+							for(int i=0;i<filenames.size();i++){
+								jta.append(filenames.get(i)+'\n');
+							}
+						}
 						//output
+						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
+						outputToClient.writeInt(0);
+						outputToClient.flush();
+						
 						Vector<Card> cards=new Vector<Card>();
 						
 						for(int i=0;i<filenames.size();i++){
@@ -183,10 +194,11 @@ public class MultiThreadServer extends JFrame{
 					}
 					case 1:{//log in
 						//input
-						username=inputFromClient.readUTF();
+						String usernametmp=inputFromClient.readUTF();
 						String password=inputFromClient.readUTF();
-
-						boolean found=userdb.findUser(username, password);
+						jta.append(usernametmp+"\t"+password+"\n");
+						
+						boolean found=userdb.findUser(usernametmp, password);
 						
 						//output
 						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
@@ -194,10 +206,12 @@ public class MultiThreadServer extends JFrame{
 						outputToClient.writeBoolean(found);
 						outputToClient.flush();
 						
-						jta.append("Login: " + username + '\n');
-						//加入在线用户
-						if(found)clients.put(username, this);
-						
+						if(found){
+							username=usernametmp;
+							jta.append("Login: " + username + '\n');
+
+							clients.put(username, this);
+						}
 						break;
 					}
 					case 2:{//register
@@ -215,7 +229,7 @@ public class MultiThreadServer extends JFrame{
 						outputToClient.flush();
 						
 						jta.append("Register: " + username + '\n');
-						//加入在线用户
+
 						if(success)clients.put(username, this);
 
 						break;
@@ -295,19 +309,19 @@ public class MultiThreadServer extends JFrame{
 						break;
 					}
 					
-					case 8:{//退出登录
+					case 8:{
 						if(username!=null)clients.remove(username);
 						username=null;
 						break;
 					}
 					default:break;
 					}
-					
+					lock.unlock();
 				}
 			}
 			catch(Exception ex){
 				if(username!=null)clients.remove(username);
-				jta.append("客户端断开连接\n");
+				jta.append("�û��Ͽ�����\n");
 			}
 			finally {
                 try
@@ -320,18 +334,7 @@ public class MultiThreadServer extends JFrame{
                 }
             }
 		}
-		
-		public void sendMsg(String content){
-			try{
-				DataOutputStream outputToClient=new DataOutputStream(this.socket.getOutputStream());
-				outputToClient.writeInt(4);
-				outputToClient.writeUTF(content);
-				outputToClient.flush();
-				jta.append("send to " + this.socket + " contents: "+content+'\n');
-			} catch (IOException ex){
-				ex.printStackTrace();
-			}
-		}
+	
 	}
 }
 

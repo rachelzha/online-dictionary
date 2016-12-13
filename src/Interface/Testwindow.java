@@ -1,6 +1,8 @@
 package src.Interface;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -8,11 +10,15 @@ import java.net.Socket;
 import java.util.Vector;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent;
+
+import src.Translate.BaiduTranslate;
 import src.userLogin.UserState;
 
 
 public class Testwindow extends JFrame{
-
 	/**
 	 * 
 	 */
@@ -34,10 +40,10 @@ public class Testwindow extends JFrame{
     Object []BoxObj1={baidulike,youdaolike,jinshanlike,textpanel,choosepanel};
     Object []BoxObj2={searchpanel,textpanel};
     Object []BoxObj3={searchpanel,textpanel};
+   
     
 	public static void main(String[] args){
 		Testwindow win=new Testwindow();
-		//win.setTitle("Dictionary");
 		win.setLocation(200,100);
 		win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		win.setSize(700, 500);
@@ -46,7 +52,7 @@ public class Testwindow extends JFrame{
 	
 	Testwindow(){	
 		
-		this.connect();
+	///	this.connect();
 		
 		JPanel panel1=loginpanel.getPanel();
         JPanel panel2=searchpanel.getPanel();
@@ -67,12 +73,12 @@ public class Testwindow extends JFrame{
         searchpanel.Search.addActionListener(new ButtonListener(1,user,socket,obj1));
      //   searchpanel.Prev.addActionListener(new ButtonListener(2,user,socket,obj));
      //   searchpanel.Next.addActionListener(new ButtonListener(3,user,socket,obj));
-     //   searchpanel.pulldown.addActionListener(new ButtonListener(4,user,socket,obj));
         loginpanel.Login.addActionListener(new ButtonListener(5,user,socket,obj2));
      //   loginpanel.individuation.addActionListener(new ButtonListener(6,user,socket,obj));
      //   loginpanel.message.addActionListener(new ButtonListener(7,user,socket,obj));
      //   textpanel.share.addActionListener(new ButtonListener(8,user,socket,obj));
        
+
         //checkboxlistener
         choosepanel.baidu.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
         choosepanel.youdao.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
@@ -82,10 +88,13 @@ public class Testwindow extends JFrame{
         textpanel.jinshan.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
         textpanel.like.addItemListener(new CheckBoxListener(socket,7,user,BoxObj3));
   //      textpanel.takeword.addItemListener(new CheckBoxListener(8,));
-        
-        
-        Thread receiveTask=new Thread(new ReceiveTask());
-		receiveTask.start();
+     
+     //   JTextField x=searchpanel.input.getTextField();
+     //   x.getDocument().addDocumentListener(new documentListener(searchpanel,textpanel));
+
+		
+     //   Thread receiveTask=new Thread(new ReceiveTask());
+	//	receiveTask.start();
 	}
 	
 	

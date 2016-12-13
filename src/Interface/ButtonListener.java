@@ -28,7 +28,7 @@ public class ButtonListener implements ActionListener{
 		this.obj=obj;
 		this.type=type;
 		this.user=user;
-		this.socket=soct;
+	/*	this.socket=soct;
 		try{
 			//create an output stream to send data to the server
 			toServer=new DataOutputStream(socket.getOutputStream());
@@ -36,7 +36,7 @@ public class ButtonListener implements ActionListener{
 		catch (IOException ex){
 			System.err.println(ex);
 			System.err.println("Fail!");
-		}
+		}*/
 	}
 	
 	@Override
@@ -46,7 +46,6 @@ public class ButtonListener implements ActionListener{
 		case 1:handleSearch();break;//search button
 		case 2:handlePrev();break;//prev button
 		case 3:handleNext();break;//next button
-		case 4:handlePulldown();break;//pulldown button
 		case 5:handleLogin();break;//login button
 		case 6:handleIndividuation();break;//individuation button
 		case 7:handleMessage();break;//message button
@@ -57,9 +56,9 @@ public class ButtonListener implements ActionListener{
 	public void handleSearch(){
 		SearchPanel searchpanel=(SearchPanel)obj[0];
 		TextPanel textpanel=(TextPanel)obj[1];
-		String key = searchpanel.input.getText();
+		String key = searchpanel.input.getSelectedItem().toString();
 		
-		try{
+	/*	try{
 			//send
 			
 			toServer.writeInt(3);
@@ -68,7 +67,7 @@ public class ButtonListener implements ActionListener{
 		}
 		catch(IOException ex){
 			System.err.println(ex);
-		}
+		}*/ 
 		
 		if(textpanel.baidu.isSelected()){
 			BaiduTranslate B = new BaiduTranslate();
@@ -92,10 +91,6 @@ public class ButtonListener implements ActionListener{
 	}
 	
 	public void handleNext(){
-		
-	}
-	
-	public void handlePulldown(){
 		
 	}
 	

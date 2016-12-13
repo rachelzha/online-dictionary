@@ -12,6 +12,7 @@ import java.net.Socket;
 import javax.swing.*;
 
 import src.Translate.BaiduTranslate;
+import src.Translate.BingTranslate;
 import src.Translate.JinshanTranslate;
 import src.Translate.YoudaoTranslate;
 import src.userLogin.Login;
@@ -69,9 +70,9 @@ public class ButtonListener implements ActionListener{
 			System.err.println(ex);
 		}
 		
-		if(textpanel.baidu.isSelected()){
-			BaiduTranslate B = new BaiduTranslate();
-			String text = B.Translation(key);
+		if(textpanel.bing.isSelected()){
+			BingTranslate B = new BingTranslate();
+			String text = B.Translate(key);
 			textpanel.Out.setText(text);
 		}
 		if(textpanel.youdao.isSelected()){

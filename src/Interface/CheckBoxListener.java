@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import src.Translate.BaiduTranslate;
+import src.Translate.BingTranslate;
 import src.Translate.JinshanTranslate;
 import src.Translate.YoudaoTranslate;
 import src.userLogin.UserState;
@@ -49,9 +50,9 @@ public class CheckBoxListener implements ItemListener{
 		String key=searchpanel.input.getText();
 		if(key==null||key.length()==0)
 			return;
-		if(textpanel.baidu.isSelected()){
-			BaiduTranslate B = new BaiduTranslate();
-			String text = B.Translation(key);
+		if(textpanel.bing.isSelected()){
+			BingTranslate B = new BingTranslate();
+			String text = B.Translate(key);
 			textpanel.Out.setText(text);
 		}
 		if(textpanel.youdao.isSelected()){
@@ -80,7 +81,7 @@ public class CheckBoxListener implements ItemListener{
 			toServer=new DataOutputStream(socket.getOutputStream());
 			toServer.writeInt(7);
 			toServer.writeUTF(key);
-			if(textpanel.baidu.isSelected())
+			if(textpanel.bing.isSelected())
 				toServer.writeUTF("baidu");
 			else if(textpanel.youdao.isSelected())
 				toServer.writeUTF("youdao");
@@ -105,39 +106,39 @@ public class CheckBoxListener implements ItemListener{
 		int c = (int)obj[2];
 		textpanel.Left.removeAll();
 		if(a>=b&&b>=c){
-			textpanel.Left.add(textpanel.baidu);  
+			textpanel.Left.add(textpanel.bing);  
 			textpanel.Left.add(textpanel.youdao);  
 			textpanel.Left.add(textpanel.jinshan);
 		}
 		else if(a>=c&&c>=b){
-			textpanel.Left.add(textpanel.baidu);  
+			textpanel.Left.add(textpanel.bing);  
 			textpanel.Left.add(textpanel.jinshan);  
 			textpanel.Left.add(textpanel.youdao);
 		}
 		else if(b>=a&&a>=c){
 			textpanel.Left.add(textpanel.youdao);  
-			textpanel.Left.add(textpanel.baidu);  
+			textpanel.Left.add(textpanel.bing);  
 			textpanel.Left.add(textpanel.jinshan);
 		}
 		else if(b>=c&&c>=a){
 			textpanel.Left.add(textpanel.youdao);  
 			textpanel.Left.add(textpanel.jinshan);  
-			textpanel.Left.add(textpanel.baidu);
+			textpanel.Left.add(textpanel.bing);
 		}
 		else if(c>=a&&a>=b){
 			textpanel.Left.add(textpanel.jinshan);  
-			textpanel.Left.add(textpanel.baidu);  
+			textpanel.Left.add(textpanel.bing);  
 			textpanel.Left.add(textpanel.youdao);
 		}
 		else{//c>=b>=a
 			textpanel.Left.add(textpanel.jinshan);  
 			textpanel.Left.add(textpanel.youdao);  
-			textpanel.Left.add(textpanel.baidu);
+			textpanel.Left.add(textpanel.bing);
 		}
 
 		int count = 3;
-		if(!choosepanel.baidu.isSelected()){
-			textpanel.Left.remove(textpanel.baidu);
+		if(!choosepanel.bing.isSelected()){
+			textpanel.Left.remove(textpanel.bing);
 			count--;
 		}
 		if(!choosepanel.youdao.isSelected()){
@@ -148,8 +149,8 @@ public class CheckBoxListener implements ItemListener{
 			textpanel.Left.remove(textpanel.jinshan);
 			count--;
 		}
-		if(choosepanel.baidu.isSelected())
-			textpanel.baidu.setSelected(true);
+		if(choosepanel.bing.isSelected())
+			textpanel.bing.setSelected(true);
 		else if(choosepanel.youdao.isSelected())
 			textpanel.youdao.setSelected(true);
 		else if(choosepanel.jinshan.isSelected())

@@ -7,7 +7,7 @@ public class TextPanel {
 	drawComponent draw=new drawComponent();
 	
 	public JPanel Left = new JPanel();
-	public JCheckBox baidu = new JCheckBox();//click to see baidu translation
+	public JCheckBox bing = new JCheckBox();//click to see baidu translation
 	public JCheckBox youdao = new JCheckBox();//click to see youdao translation
 	public JCheckBox jinshan = new JCheckBox();//click to see jinshan translation
 	ButtonGroup bookmark = new ButtonGroup(); 
@@ -52,21 +52,21 @@ public class TextPanel {
 	public void drawLeft(){
 		GridLayout gridLayout = new GridLayout(3,1,5,10);  
 		Left.setLayout(gridLayout);
-		String baidufile1="image/tag.png";
-		String youdaofile1="image/tag.png";
-		String jinshanfile1="image/tag.png";
-		String baidufile2="image/taged.png";
-		String youdaofile2="image/taged.png";
-		String jinshanfile2="image/taged.png";
+		String bingfile1="image/mark/Bingtag.png";
+		String youdaofile1="image/mark/Youdaotag.png";
+		String jinshanfile1="image/mark/Jinshantag.png";
+		String bingfile2="image/mark/Bingtaged.png";
+		String youdaofile2="image/mark/Youdaotaged.png";
+		String jinshanfile2="image/mark/Jinshantaged.png";
 		
-		draw.drawCheckBox(baidufile1, baidufile2, 30, 30, baidu);
-	    draw.drawCheckBox(youdaofile1, youdaofile2, 30, 30, youdao);
-	    draw.drawCheckBox(jinshanfile1, jinshanfile2, 30, 30, jinshan);
-	    bookmark.add(baidu);
+		draw.drawCheckBox(bingfile1, bingfile2, 82, 40, bing);
+	    draw.drawCheckBox(youdaofile1, youdaofile2, 82, 40, youdao);
+	    draw.drawCheckBox(jinshanfile1, jinshanfile2, 82, 40, jinshan);
+	    bookmark.add(bing);
 	    bookmark.add(youdao);
 	    bookmark.add(jinshan);
-	    baidu.setSelected(true);
-		Left.add(baidu);
+	    bing.setSelected(true);
+		Left.add(bing);
 		Left.add(youdao);
 		Left.add(jinshan);
 	}

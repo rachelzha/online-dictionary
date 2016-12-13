@@ -27,7 +27,7 @@ public class Testwindow extends JFrame{
 	UserState user=new UserState();
 	public Socket socket=null;
 	
-	int baidulike;
+	int binglike;
 	int youdaolike;
 	int jinshanlike;
 	
@@ -37,7 +37,7 @@ public class Testwindow extends JFrame{
 	TextPanel textpanel = new TextPanel();
 	Object obj1[]={searchpanel,textpanel};
     Object obj2[]={textpanel};
-    Object []BoxObj1={baidulike,youdaolike,jinshanlike,textpanel,choosepanel};
+    Object []BoxObj1={binglike,youdaolike,jinshanlike,textpanel,choosepanel};
     Object []BoxObj2={searchpanel,textpanel};
     Object []BoxObj3={searchpanel,textpanel};
    
@@ -80,10 +80,10 @@ public class Testwindow extends JFrame{
        
 
         //checkboxlistener
-        choosepanel.baidu.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
+        choosepanel.bing.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
         choosepanel.youdao.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
         choosepanel.jinshan.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
-        textpanel.baidu.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
+        textpanel.bing.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
         textpanel.youdao.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
         textpanel.jinshan.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
         textpanel.like.addItemListener(new CheckBoxListener(socket,7,user,BoxObj3));
@@ -129,7 +129,7 @@ public class Testwindow extends JFrame{
 						break;
 					}
 					case 3:{
-						baidulike=fromServer.readInt();
+						binglike=fromServer.readInt();
 						youdaolike=fromServer.readInt();
 						jinshanlike=fromServer.readInt();
 						

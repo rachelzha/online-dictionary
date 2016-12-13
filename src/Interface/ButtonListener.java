@@ -11,6 +11,7 @@ import java.net.Socket;
 
 import javax.swing.*;
 
+import Server.Picture;
 import src.Translate.BaiduTranslate;
 import src.Translate.JinshanTranslate;
 import src.Translate.YoudaoTranslate;
@@ -125,6 +126,19 @@ public class ButtonListener implements ActionListener{
 	}
 	
 	public void handleShare(){
-		
-	}
+		SearchPanel searchpanel = (SearchPanel)obj[0];
+		TextPanel textpanel = (TextPanel)obj[1];
+		String key = searchpanel.input.getText();
+		if(textpanel.youdao.isSelected()){
+			YoudaoTranslate Y = new YoudaoTranslate();
+			String text = Y.Translation(key);
+			Picture pic=new Picture(text,socket);
+		//	textpanel.Out.setText(text);
+		}
+		if(textpanel.jinshan.isSelected()){
+			JinshanTranslate J = new JinshanTranslate();
+			String text = J.Translate(key);
+			Picture pic=new Picture(text,socket);
+		//	textpanel.Out.setText(text);
+		}	}
 }

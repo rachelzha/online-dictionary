@@ -14,6 +14,7 @@ import javax.swing.*;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 
+
 public class MultiThreadServer extends JFrame{
 	/**
 	 * 
@@ -160,6 +161,26 @@ public class MultiThreadServer extends JFrame{
 					int type=inputFromClient.readInt();
 						
 					switch(type){
+					case 0:{//message required
+						if(username==null)break;
+						
+						Vector<String> filenames=messagedb.getMessages(username);
+						
+						int n=filenames.size();
+						
+						//output
+						Vector<Card> cards=new Vector<Card>();
+						
+						for(int i=0;i<filenames.size();i++){
+							cards.add(new Card(filenames.get(i)));
+						}
+						
+						ObjectOutputStream objectOutputStream=new ObjectOutputStream(socket.getOutputStream());
+						objectOutputStream.writeObject(cards);
+						objectOutputStream.flush();
+						
+						break;
+					}
 					case 1:{//log in
 						//input
 						username=inputFromClient.readUTF();

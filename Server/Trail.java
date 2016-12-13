@@ -33,9 +33,9 @@ public class Trail extends JFrame{
 		//连接
 		this.connect();
 		
-		JFrame frame = new Picture("hello");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+		//JFrame frame = new Picture("hello");
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //frame.setVisible(true);
 	}
 	
 	public void connect(){

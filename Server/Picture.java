@@ -40,34 +40,12 @@ public class Picture extends JFrame{
 	Card card=new Card();
 	
 	Socket socket=null;
-
-	public static void main(String[] args) {
-        // TODO Auto-generated method stub
-        EventQueue.invokeLater(new Runnable() {
-            
-            @Override
-            public void run() {
-                // TODO Auto-generated method stub
-                JFrame frame = new Picture("hello");
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                frame.setVisible(true);
-            }
-        });
-    }
 	
-	public void connect(){
-		try{
-			//create a socket to connect to the server
-			socket = new Socket("127.0.0.1",8080);
-		}
-		catch (IOException ex){
-			System.err.println(ex);
-			System.err.println("Fail!");
-		}
-	}
-	
-	public Picture(String content){
-		this.connect();
+	public Picture(String content,Socket socket){
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+        
+        this.socket=socket;
 		
         setTitle("Make a word card!");
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -104,9 +82,7 @@ public class Picture extends JFrame{
                     path.setText(name);
                     
                     //draw
-                    File f = new File(name);
-                    
-                    card.draw(content,f,true);
+                    card.draw(content,name,true);
 		            
                     if(card.validable()){
 	                    icon=new ImageIcon(card.image);

@@ -12,10 +12,28 @@ import javax.swing.JOptionPane;
 
 public class Card implements Serializable{
 	
-	transient BufferedImage image;
+	transient BufferedImage image=null;
 	
 	Card(){
 		image=null;
+	}
+	
+	Card(String name){
+		File picture=new File(name);
+		
+		BufferedImage temp=null;
+        try {
+     	   temp = ImageIO.read(picture);
+           if (temp == null) {  
+         	   JOptionPane.showMessageDialog(null,"The file could not be opened , it is not an image");
+                return ;
+           }
+        } catch (IOException e1) {
+     	   JOptionPane.showMessageDialog(null,"The file could not be opened , an error occurred.");
+            return ;
+        }
+         
+        image=temp;
 	}
 	
 	private void writeObject(ObjectOutputStream out)throws IOException{
@@ -37,7 +55,9 @@ public class Card implements Serializable{
     }
     
     //直接在一张已有的图片上写字，可指定文字颜色。如果背景图片参数为空或者""，则写张白图
-    public void draw(String content, File background , boolean b ){
+    public void draw(String content, String name , boolean b ){
+    		File background=new File(name);
+    		
     		BufferedImage temp=null;
                try {
             	   temp = ImageIO.read(background);

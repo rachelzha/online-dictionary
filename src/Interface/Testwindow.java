@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -14,6 +16,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
+import Server.Card;
 import src.Translate.BaiduTranslate;
 import src.userLogin.UserState;
 
@@ -26,6 +29,8 @@ public class Testwindow extends JFrame{
 	
 	UserState user=new UserState();
 	public Socket socket=null;
+	
+	Vector<Card>cards=new Vector<Card>();
 	
 	int baidulike;
 	int youdaolike;
@@ -76,7 +81,7 @@ public class Testwindow extends JFrame{
         loginpanel.Login.addActionListener(new ButtonListener(5,user,socket,obj2));
      //   loginpanel.individuation.addActionListener(new ButtonListener(6,user,socket,obj));
      //   loginpanel.message.addActionListener(new ButtonListener(7,user,socket,obj));
-     //   textpanel.share.addActionListener(new ButtonListener(8,user,socket,obj));
+        textpanel.share.addActionListener(new ButtonListener(8,user,socket,obj1));
        
 
         //checkboxlistener
@@ -95,6 +100,9 @@ public class Testwindow extends JFrame{
 		
        Thread receiveTask=new Thread(new ReceiveTask());
 		receiveTask.start();
+		
+		Thread fetchMessageTask=new Thread(new FetchMessageTask());
+		fetchMessageTask.start();
 	}
 	
 	
@@ -109,6 +117,30 @@ public class Testwindow extends JFrame{
 		}
 	}
 	
+	class FetchMessageTask implements Runnable{
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			while(true){
+				if(user.Logged()){
+					try{
+						DataOutputStream toServer=new DataOutputStream(socket.getOutputStream());
+						toServer.writeInt(0);
+						Thread.sleep(10000);
+					}
+					catch (IOException ex){
+						ex.printStackTrace();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		
+	}
+	
 	class ReceiveTask implements Runnable{
 		@Override
 		public void run() {
@@ -120,6 +152,14 @@ public class Testwindow extends JFrame{
 					int type=fromServer.readInt();
 					
 					switch(type){
+					case 0:{//get message
+						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
+						Vector<Card> temp=(Vector<Card>)ois.readObject();
+						
+						for(int i=0;i<temp.size();i++){
+							cards.add(temp.get(i));
+						}
+					}
 					case 1:{//log in
 						if(fromServer.readBoolean())user.setUsername("Zarah");////?????
 						break;
@@ -133,7 +173,6 @@ public class Testwindow extends JFrame{
 						youdaolike=fromServer.readInt();
 						jinshanlike=fromServer.readInt();
 						
-					//	textpanel.Out.append("likes: "+n1+"\t"+n2+"\t"+n3+"\n");
 						break;
 					}
 					case 4:{

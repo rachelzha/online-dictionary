@@ -227,7 +227,7 @@ public class MultiThreadServer extends JFrame{
 						Card card=(Card)ois.readObject();
 						
 						//save to server directory
-						String filename=card.saveCard("./wordcards");
+						String filename=card.saveCard("wordcards");
 						
 						messagedb.add(receiver, "Rachel", filename);
 						

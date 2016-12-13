@@ -54,6 +54,9 @@ public class Testwindow extends JFrame{
     Object []BoxObj1={binglike,youdaolike,jinshanlike,textpanel,choosepanel};
     Object []BoxObj2={searchpanel,textpanel};
     Object []BoxObj3={searchpanel,textpanel};
+    
+    //create a new lock
+  	private Lock lock=new ReentrantLock();
    
     
 	public static void main(String[] args){
@@ -67,6 +70,21 @@ public class Testwindow extends JFrame{
 	Testwindow(){	
 		
 		this.connect();
+		
+		lock.lock();
+		DataOutputStream toServer;
+		try {
+			toServer = new DataOutputStream(socket.getOutputStream());
+			toServer.writeInt(7);
+			toServer.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally{
+			lock.unlock();
+		}
+		
 		
 		JPanel panel1=loginpanel.getPanel();
         JPanel panel2=searchpanel.getPanel();
@@ -134,8 +152,6 @@ public class Testwindow extends JFrame{
 	}
 	
 	class FetchMessageTask implements Runnable{
-		//create a new lock
-		private Lock lock=new ReentrantLock();
 		
 		@Override
 		public void run() {
@@ -222,6 +238,12 @@ public class Testwindow extends JFrame{
 						for(int i=0;i<allUsers.size();i++){
 							textpanel.Out.append(allUsers.get(i)+"\n");
 						}
+						break;
+					}
+					case 7:{//get everyday sentence
+						String sentence=fromServer.readUTF();
+						System.out.println(sentence);
+						textpanel.sen.setText(sentence);
 						break;
 					}
 					default:break;

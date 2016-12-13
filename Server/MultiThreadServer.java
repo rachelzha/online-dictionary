@@ -135,6 +135,7 @@ public class MultiThreadServer extends JFrame{
 		private UserDB userdb;
 		private LikeDB likedb;
 		private MessageDB messagedb;
+		private SentenceDB sentencedb;
 		
 		private String username=null;
 		
@@ -146,9 +147,11 @@ public class MultiThreadServer extends JFrame{
 			this.socket=socket;
 			
 			dbConn=connectUsingPool();
+			System.out.println(dbConn);
 			userdb=new UserDB(dbConn);
 			likedb=new LikeDB(dbConn);
 			messagedb=new MessageDB(dbConn);
+			sentencedb=new SentenceDB(dbConn);
 		}
 
 		@Override
@@ -300,7 +303,18 @@ public class MultiThreadServer extends JFrame{
 						
 						break;
 					}
-					case 7:{//likes
+					case 7:{//get everyday sentence
+						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
+						String sentence=sentencedb.getSentence();
+						System.out.println(sentence+"!!!!");
+						//String sent="happy";
+						
+						outputToClient.writeInt(7);
+						outputToClient.writeUTF(sentence);
+						outputToClient.flush();
+						break;
+					}
+					case 8:{//likes
 						//input
 						String word=inputFromClient.readUTF();
 						String aDict=inputFromClient.readUTF();
@@ -309,7 +323,7 @@ public class MultiThreadServer extends JFrame{
 						break;
 					}
 					
-					case 8:{
+					case 9:{//退出
 						if(username!=null)clients.remove(username);
 						username=null;
 						break;
@@ -320,6 +334,7 @@ public class MultiThreadServer extends JFrame{
 				}
 			}
 			catch(Exception ex){
+				//ex.printStackTrace();
 				if(username!=null)clients.remove(username);
 				jta.append("用户断开连接\n");
 			}

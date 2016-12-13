@@ -45,7 +45,8 @@ public class CheckBoxListener implements ItemListener{
 	public void handlebookmark(){
 		SearchPanel searchpanel = (SearchPanel)obj[0];
 		TextPanel textpanel = (TextPanel)obj[1];
-		String key = searchpanel.input.getSelectedItem().toString();
+		//String key = searchpanel.input.getSelectedItem().toString();
+		String key=searchpanel.input.getText();
 		if(key==null||key.length()==0)
 			return;
 		if(textpanel.baidu.isSelected()){
@@ -71,7 +72,8 @@ public class CheckBoxListener implements ItemListener{
 		//Socket socket = (Socket)obj[0];
 		SearchPanel searchpanel = (SearchPanel)obj[0];
 		TextPanel textpanel = (TextPanel) obj[1];
-		String key = searchpanel.input.getSelectedItem().toString();
+		//String key = searchpanel.input.getSelectedItem().toString();
+		String key=searchpanel.input.getText();
 		DataOutputStream toServer;
 		try{
 			//create an output stream to send data to the server

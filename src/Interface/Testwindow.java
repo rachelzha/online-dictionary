@@ -52,7 +52,7 @@ public class Testwindow extends JFrame{
 	
 	Testwindow(){	
 		
-	///	this.connect();
+		this.connect();
 		
 		JPanel panel1=loginpanel.getPanel();
         JPanel panel2=searchpanel.getPanel();
@@ -93,15 +93,15 @@ public class Testwindow extends JFrame{
      //   x.getDocument().addDocumentListener(new documentListener(searchpanel,textpanel));
 
 		
-     //   Thread receiveTask=new Thread(new ReceiveTask());
-	//	receiveTask.start();
+       Thread receiveTask=new Thread(new ReceiveTask());
+		receiveTask.start();
 	}
 	
 	
 	public void connect(){
 		try{
 			//create a socket to connect to the server
-			socket = new Socket("172.26.218.88",8080);
+			socket = new Socket("114.212.135.139",8080);
 		}
 		catch (IOException ex){
 			System.err.println(ex);

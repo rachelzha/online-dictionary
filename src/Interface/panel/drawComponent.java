@@ -1,4 +1,4 @@
-package src.Interface;
+package src.Interface.panel;
 import java.awt.Dimension;
 import java.awt.Image;
 

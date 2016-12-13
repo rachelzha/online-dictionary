@@ -1,4 +1,4 @@
-package src.Interface;
+package src.Interface.panel;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;

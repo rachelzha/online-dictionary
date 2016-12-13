@@ -1,4 +1,5 @@
-package src.Interface;
+package src.Interface.panel;
+import java.awt.Color;
 import java.awt.FlowLayout;
 
 import javax.swing.*;
@@ -27,5 +28,22 @@ public class ChoosePanel {
 	    MyPanel.add(bing);  
 	    MyPanel.add(youdao);
 	    MyPanel.add(jinshan); 
+	}
+	public void setColor(String color){
+		Color bg=null;
+		switch(color){
+		case "green":bg=Color.green;break;
+		case "yellow":bg=Color.yellow;break;
+		case "blue":bg=new Color(135,206,235,255);break;
+		case "darkblue":bg=new Color(0,0,139,255);break;
+		case "pink":bg=new Color(218,112,214,255);break;
+		case "black":bg=Color.darkGray;break;
+		}
+		bing.setBackground(bg);
+		youdao.setBackground(bg);
+		jinshan.setBackground(bg);
+		MyPanel.setBackground(bg);
+		MyPanel.revalidate();
+		MyPanel.repaint();
 	}
 }

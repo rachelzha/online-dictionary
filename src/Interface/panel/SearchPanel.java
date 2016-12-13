@@ -1,4 +1,4 @@
-package src.Interface;
+package src.Interface.panel;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -44,6 +44,7 @@ public class SearchPanel {
 	}
 	
 	public void drawLeft(String color){
+		Left.removeAll();
 		Left.setBackground(Color.WHITE);
 		String prevfile1="image/"+color+"/front.png";
 		String prevfile2="image/grey/front.png";
@@ -58,17 +59,18 @@ public class SearchPanel {
         Left.add(Prev);  
         Left.add(Next);
         Left.add(Line1);
+        Left.revalidate();
+        Left.repaint();
 	}
 	
 	public void drawCenter(String color){
+		Center.removeAll();
        	input.setEditable(true);
 		input.setPreferredSize(new Dimension(300,25));
 		
 		Center.setBackground(Color.WHITE);
 		String Enfile="image/"+color+"/en.png";
 		String partline="image/"+color+"/line.png";
-		String downfile1="image/"+color+"/down.png";
-		String downfile2="image/grey/down.png";
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.CENTER ,5, 5);  
         Center.setLayout(flowLayout);
         draw.drawLabel(Enfile, 30, 30, En);
@@ -81,9 +83,12 @@ public class SearchPanel {
       //  Center.add(Input);
       //  Center.add(input);
      //   Center.add(pulldown);
+        Center.revalidate();
+        Center.repaint();
 	}
 	
 	public void drawRight(String color){
+		Right.removeAll();
 		Right.setBackground(Color.WHITE);
 		String partline="image/"+color+"/line.png";
 		String searchfile1="image/"+color+"/search.png";
@@ -94,5 +99,13 @@ public class SearchPanel {
 		draw.drawLabel(partline, 40, 40, Line3);
 		Right.add(Line3);
 		Right.add(Search);
+		Right.revalidate();
+		Right.repaint();
+	}
+	
+	public void setColor(String color){
+		drawLeft(color);
+		drawCenter(color);
+		drawRight(color);
 	}
 }

@@ -1,17 +1,15 @@
-package src.Interface;
-import java.awt.MouseInfo;
-import java.awt.Point;
+package src.Interface.listener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import javax.swing.*;
-
-import src.Translate.BaiduTranslate;
+import src.Interface.panel.ChoosePanel;
+import src.Interface.panel.LoginPanel;
+import src.Interface.panel.SearchPanel;
+import src.Interface.panel.TextPanel;
 import src.Translate.BingTranslate;
 import src.Translate.JinshanTranslate;
 import src.Translate.YoudaoTranslate;
@@ -48,9 +46,9 @@ public class ButtonListener implements ActionListener{
 		case 2:handlePrev();break;//prev button
 		case 3:handleNext();break;//next button
 		case 5:handleLogin();break;//login button
-		case 6:handleIndividuation();break;//individuation button
 		case 7:handleMessage();break;//message button
 		case 8:handleShare();break;//share button
+		case 10:case 11:case 12:case 13:case 14:case 15:handleColor();break;
 		}
 	}
 
@@ -126,6 +124,28 @@ public class ButtonListener implements ActionListener{
 	}
 	
 	public void handleShare(){
+		
+	}
+	
+	public void handleColor(){
+		String color="";
+		switch(type){
+		case 10:color="green";break;
+		case 11:color="yellow";break;
+		case 12:color="blue";break;
+		case 13:color="darkblue";break;
+		case 14:color="pink";break;
+		case 15:color="black";break;
+		}
+		LoginPanel loginpanel = (LoginPanel)obj[0];
+		SearchPanel searchpanel = (SearchPanel)obj[1];
+		ChoosePanel choosepanel= (ChoosePanel)obj[2];
+		TextPanel textpanel = (TextPanel)obj[3];
+		
+		loginpanel.setColor(color);
+		searchpanel.setColor(color);
+		choosepanel.setColor(color);
+		textpanel.setColor(color);
 		
 	}
 }

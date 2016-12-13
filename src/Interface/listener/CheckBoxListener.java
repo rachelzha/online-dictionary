@@ -1,4 +1,4 @@
-package src.Interface;
+package src.Interface.listener;
 import java.awt.GridLayout;
 
 import java.awt.event.ItemEvent;
@@ -7,6 +7,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import src.Interface.panel.ChoosePanel;
+import src.Interface.panel.SearchPanel;
+import src.Interface.panel.TextPanel;
 import src.Translate.BaiduTranslate;
 import src.Translate.BingTranslate;
 import src.Translate.JinshanTranslate;

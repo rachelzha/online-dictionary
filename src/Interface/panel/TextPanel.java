@@ -1,4 +1,4 @@
-package src.Interface;
+package src.Interface.panel;
 import java.awt.*;
 import javax.swing.*;
 
@@ -12,8 +12,8 @@ public class TextPanel {
 	public JCheckBox jinshan = new JCheckBox();//click to see jinshan translation
 	ButtonGroup bookmark = new ButtonGroup(); 
 	
-	JPanel Center =new JPanel();
-	JPanel Above = new JPanel();
+	public JPanel Center =new JPanel();
+	public JPanel Above = new JPanel();
 	public JLabel tranword = new JLabel("Word");//output the word you translate
 	public JButton share = new JButton(); //share
 	//JButton like = new JButton(); //like
@@ -79,20 +79,23 @@ public class TextPanel {
 		pan1.setLayout(new BorderLayout(5,5));
 		pan2.setLayout(new BorderLayout(5,5));
 		
-		String cartoonfile="image/bd_logo1_31bdc765.png";
-		draw.drawLabel(cartoonfile, 200, 120, cartoon);
+		String cartoonfile="image/green/color.png";
+		draw.drawLabel(cartoonfile, 120, 120, cartoon);
 		sen.setBorder(null);
-		
+		pan1.setBackground(null);
 		pan1.add(Daily,BorderLayout.NORTH);
 		pan1.add(cartoon,BorderLayout.CENTER);
+		pan2.setBackground(null);
 		pan2.add(sen,BorderLayout.CENTER);
 		pan2.add(takeword,BorderLayout.SOUTH);
-		
+		takeword.setBackground(null);
 		Right.add(pan1);
 		Right.add(pan2);
 	}
 	
 	public void drawCenter(String color){
+		Above.removeAll();
+		Center.removeAll();
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.LEFT ,5, 5);  
 		Above.setLayout(flowLayout);
 		String likefile1="image/"+color+"/like.png";
@@ -111,6 +114,28 @@ public class TextPanel {
 		Center.setLayout (new BorderLayout(0,0));
 		Center.add(Above,BorderLayout.NORTH);
 		Center.add(text,BorderLayout.CENTER);
+		Above.revalidate();
+		Above.repaint();
+		Center.revalidate();
+		Center.repaint();
+	}
+	
+	public void setColor(String color){
+		Color bg=null;
+		switch(color){
+		case "green":bg=Color.green;break;
+		case "yellow":bg=Color.yellow;break;
+		case "blue":bg=new Color(135,206,235,255);break;
+		case "darkblue":bg=new Color(0,0,139,255);break;
+		case "pink":bg=new Color(218,112,214,255);break;
+		case "black":bg=Color.darkGray;break;
+		}
+		Left.setBackground(bg);
+		Center.setBackground(bg);
+		Right.setBackground(bg);
+		MyPanel.setBackground(bg);
+		MyPanel.revalidate();
+		MyPanel.repaint();
 	}
 	
 }

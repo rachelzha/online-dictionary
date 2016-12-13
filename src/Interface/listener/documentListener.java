@@ -1,4 +1,4 @@
-package src.Interface;
+package src.Interface.listener;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -7,6 +7,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import src.Interface.panel.SearchPanel;
+import src.Interface.panel.TextPanel;
 import src.Translate.Readdictionary;
 
 public class documentListener implements DocumentListener {
@@ -35,7 +37,7 @@ public class documentListener implements DocumentListener {
 		String key=searchpanel.input.getText();
 		//searchpanel.model.addElement("ok");
 		relatedwords=Dic.getsimilarwords(key);
-        searchpanel.model.addElement( "abc "); 
+      //  searchpanel.model.addElement( "abc "); 
 		//	searchpanel.input.addWords();
 	}
 

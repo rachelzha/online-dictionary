@@ -97,7 +97,7 @@ public class RecievePicture extends JFrame{
 		            
                     if(card.validable()){
 	                    icon=new ImageIcon(card.image);
-	                    icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));
+	                    //icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));
 			                
 	                    label.setIcon(icon);
                     }

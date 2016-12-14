@@ -39,9 +39,9 @@ public class Testwindow extends JFrame{
 	public Socket socket=null;
 	
 	UserState user=new UserState();
-	String [] userlist;
-	String [] onlineuserlist;
 	
+	Vector<String>userlist=new Vector<String>();
+	Vector<String>onlineuserlist=new Vector<String>();
 	Vector<Message>messages=new Vector<Message>();
 	History history= new History();
 	
@@ -146,7 +146,7 @@ public class Testwindow extends JFrame{
 	public void connect(){
 		try{
 			//create a socket to connect to the server
-			socket = new Socket("114.212.133.212",8080);
+			socket = new Socket("172.26.210.33",8080);
 		}
 		catch (IOException ex){
 			System.err.println(ex);
@@ -161,11 +161,13 @@ public class Testwindow extends JFrame{
 			// TODO Auto-generated method stub
 			while(true){
 				try{
-					lock.lock();
-					DataOutputStream toServer=new DataOutputStream(socket.getOutputStream());
-					toServer.writeInt(0);
-					toServer.flush();
-					lock.unlock();
+					if(user.Logged()){
+						lock.lock();
+						DataOutputStream toServer=new DataOutputStream(socket.getOutputStream());
+						toServer.writeInt(0);
+						toServer.flush();
+						lock.unlock();
+					}
 					Thread.sleep(10000);
 				}
 				catch (IOException ex){
@@ -242,21 +244,14 @@ public class Testwindow extends JFrame{
 						
 						Vector<String> onlineUsers=(Vector<String>)ois.readObject();
 					//	textpanel.Out.append("The online Clients: \n");
-						for(int i=0;i<onlineUsers.size();i++){
-							onlineuserlist[i]=onlineUsers.get(i);
-							//textpanel.Out.append(onlineUsers.get(i)+"\n");
-						}
+						onlineuserlist=onlineUsers;
 						break;
 					}
 					case 6:{//all users 
 						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
 						
 						Vector<String> allUsers=(Vector<String>)ois.readObject();
-					//	textpanel.Out.append("All Clients: \n");
-						for(int i=0;i<allUsers.size();i++){
-							userlist[i]=allUsers.get(i);
-							//textpanel.Out.append(allUsers.get(i)+"\n");
-						}
+						userlist=allUsers;
 						break;
 					}
 					default:break;

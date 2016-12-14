@@ -17,8 +17,8 @@ public class SearchPanel {
 	JPanel Center=new JPanel();
 	JLabel En=new JLabel();//english,no edit
 	JLabel Line2=new JLabel();//parting line , no edit
-	public JTextField input=new JTextField(30);//input word
-	//public JComboBox<String> Input=new JComboBox<String>();
+	//public JTextField input=new JTextField(30);//input word
+	public JComboBox<String> input=new JComboBox<String>();
 	//public AutoComboBox input=new AutoComboBox();
 	DefaultComboBoxModel<String>   model   =   new   DefaultComboBoxModel<String>(); 
 	//public JButton pulldown=new JButton();///open or close related word list

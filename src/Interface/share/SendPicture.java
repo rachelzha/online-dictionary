@@ -9,6 +9,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.*;
 import java.net.Socket;
+import java.util.Vector;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -22,7 +23,7 @@ public class SendPicture extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	String []list;//userlist
+	Vector<String>list = new Vector<String>();
 	
 	JTextField path=new JTextField(20);
 	JButton open=new JButton("open file");
@@ -36,7 +37,8 @@ public class SendPicture extends JFrame{
     JFileChooser chooserToSave = new JFileChooser();
     
     JList<String> userlist;
-    JCheckBox online = new JCheckBox();
+    JCheckBox online = new JCheckBox("online");
+    JPanel Left = new JPanel();
     
     private static final int DEFAULT_WIDTH = 600;
     private static final int DEFAULT_HEIGHT = 400;
@@ -49,7 +51,7 @@ public class SendPicture extends JFrame{
 	private Lock lock=new ReentrantLock();
 
 	
-	public SendPicture(String content,Socket socket,String []namelist,String []onlinenamelist){
+	public SendPicture(String content,Socket socket,Vector<String>namelist,Vector<String>onlinenamelist){
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         this.list=namelist;
@@ -66,8 +68,7 @@ public class SendPicture extends JFrame{
         panel2.add(users, FlowLayout.LEFT);
         panel2.add(send,FlowLayout.CENTER);
     //    panel2.add(save,FlowLayout.RIGHT);
-        
-        JPanel Left = new JPanel();
+       
         GridLayout gridLayout = new GridLayout(2,1,5,10);  
 		Left.setLayout(gridLayout);
 		userlist=new JList<String>(list);
@@ -105,7 +106,7 @@ public class SendPicture extends JFrame{
 			            
 	                    if(card.validable()){
 		                    icon=new ImageIcon(card.image);
-		                    icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));
+		                    //icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));
 				                
 		                    label.setIcon(icon);
 	                    }
@@ -135,7 +136,7 @@ public class SendPicture extends JFrame{
 				// TODO Auto-generated method stub
 				if(userlist.getSelectedValue()==null) return;
 				int num = userlist.getSelectedIndex();
-				String key = list[num];
+				String key = list.elementAt(num);
 				users.setText(key);
 			}
 		});
@@ -151,6 +152,10 @@ public class SendPicture extends JFrame{
 				}
 				else
 					list=namelist;
+				userlist.revalidate();
+				userlist.repaint();
+				Left.revalidate();
+				Left.repaint();
 			}
         	
         });

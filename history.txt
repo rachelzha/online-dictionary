@@ -1,10 +1,10 @@
-baidu
-pen
-java
-eight
-nine
-one
 green
 blue
 water
 water
+red
+hello
+hello
+hello
+hello
+clone

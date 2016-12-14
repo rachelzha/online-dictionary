@@ -73,8 +73,8 @@ public class ButtonListener implements ActionListener{
 		SearchPanel searchpanel=(SearchPanel)obj[0];
 		TextPanel textpanel=(TextPanel)obj[1];
 		History his  = (History)obj[2];
-	//	String key = searchpanel.input.getSelectedItem().toString();
-		String key=searchpanel.input.getText();
+		String key = searchpanel.input.getSelectedItem().toString();
+	//	String key=searchpanel.input.getText();
 		
 		lock.lock();
 		try{
@@ -122,7 +122,8 @@ public class ButtonListener implements ActionListener{
 		his.prevpointer();
 		String key = H.elementAt(his.getpointer());
 		
-		searchpanel.input.setText(key);
+		searchpanel.input.setSelectedItem(key);
+		//searchpanel.input.setText(key);
 		if(textpanel.bing.isSelected()){
 			BingTranslate B = new BingTranslate();
 			String text = B.Translation(key);
@@ -149,8 +150,8 @@ public class ButtonListener implements ActionListener{
 		his.nextpointer();
 		String key = H.elementAt(his.getpointer());
 
-		
-		searchpanel.input.setText(key);
+		searchpanel.input.setSelectedItem(key);
+		//searchpanel.input.setText(key);
 		if(textpanel.bing.isSelected()){
 			BingTranslate B = new BingTranslate();
 			String text = B.Translation(key);
@@ -208,24 +209,27 @@ public class ButtonListener implements ActionListener{
 	public void handleShare(){
 		SearchPanel searchpanel = (SearchPanel)obj[0];
 		TextPanel textpanel = (TextPanel)obj[1];
-		String[] userlist = (String[])obj[2];
-		String[] onlineuserlist = (String [])obj[3]; 
-		String key = searchpanel.input.getText();
+		Vector<String>userlist = (Vector<String>)obj[2];
+		Vector<String>onlineuserlist = (Vector<String>)obj[3]; 
+		//String key = searchpanel.input.getText();
+	//	for(int i=0;i<onlineuserlist.length;i++)
+	//		System.out.println(onlineuserlist[i]);
+		String key = searchpanel.input.getSelectedItem().toString();
 		if(textpanel.bing.isSelected()){
 			BingTranslate B = new BingTranslate();
 			String text = B.Translation(key);
-			SendPicture pic=new SendPicture(text,socket,userlist,onlineuserlist);
+			new SendPicture(text,socket,userlist,onlineuserlist);
 		}
 		if(textpanel.youdao.isSelected()){
 			YoudaoTranslate Y = new YoudaoTranslate();
 			String text = Y.Translation(key);
-			SendPicture pic=new SendPicture(text,socket,userlist,onlineuserlist);
+			new SendPicture(text,socket,userlist,onlineuserlist);
 		//	textpanel.Out.setText(text);
 		}
 		if(textpanel.jinshan.isSelected()){
 			JinshanTranslate J = new JinshanTranslate();
 			String text = J.Translate(key);
-			SendPicture pic=new SendPicture(text,socket,userlist,onlineuserlist);
+			new SendPicture(text,socket,userlist,onlineuserlist);
 		//	textpanel.Out.setText(text);
 		}	
 	}

@@ -1,4 +1,5 @@
 package src.Interface.listener;
+import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -147,7 +148,11 @@ public class ButtonListener implements ActionListener{
 	}
 	
 	public void handleMessage(){
-		
+		LoginPanel loginpanel = (LoginPanel)obj[0];
+		String messagefile="image/message/2.png";
+		ImageIcon icon = new ImageIcon(messagefile);  
+        icon.setImage(icon.getImage().getScaledInstance(20,20,Image.SCALE_DEFAULT));
+		loginpanel.message.setIcon(icon);
 	}
 	
 	public void handleShare(){

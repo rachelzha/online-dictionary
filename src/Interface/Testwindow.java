@@ -54,6 +54,7 @@ public class Testwindow extends JFrame{
     Object obj2[]={loginpanel,textpanel};
     Object obj3[]={loginpanel,searchpanel,choosepanel,textpanel};
     Object obj4[]={searchpanel,textpanel,userlist,onlineuserlist};
+   // Object obj5[]={loginpanel,cards};
     Object []BoxObj1={binglike,youdaolike,jinshanlike,textpanel,choosepanel};
     Object []BoxObj2={searchpanel,textpanel};
     Object []BoxObj3={searchpanel,textpanel};
@@ -109,7 +110,7 @@ public class Testwindow extends JFrame{
      //   searchpanel.Prev.addActionListener(new ButtonListener(2,user,socket,obj));
      //   searchpanel.Next.addActionListener(new ButtonListener(3,user,socket,obj));
         loginpanel.Login.addActionListener(new ButtonListener(5,user,socket,obj2));
-     //   loginpanel.message.addActionListener(new ButtonListener(7,user,socket,obj));
+        loginpanel.message.addActionListener(new ButtonListener(7,user,socket,obj2));
         textpanel.share.addActionListener(new ButtonListener(8,user,socket,obj4));
        
         //change color
@@ -130,10 +131,6 @@ public class Testwindow extends JFrame{
         textpanel.jinshan.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
         textpanel.like.addItemListener(new CheckBoxListener(socket,7,user,BoxObj3));
   //      textpanel.takeword.addItemListener(new CheckBoxListener(8,));
-     
-     //   JTextField x=searchpanel.input.getTextField();
-     //   x.getDocument().addDocumentListener(new documentListener(searchpanel,textpanel));
-
 		
        Thread receiveTask=new Thread(new ReceiveTask());
 		receiveTask.start();
@@ -198,6 +195,12 @@ public class Testwindow extends JFrame{
 						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
 						Vector<Card> temp=(Vector<Card>)ois.readObject();
 						
+						if(temp.size()>0){
+							String messagefile="image/message/3.png";
+							ImageIcon icon = new ImageIcon(messagefile);  
+					        icon.setImage(icon.getImage().getScaledInstance(20,20,Image.SCALE_DEFAULT));
+							loginpanel.message.setIcon(icon);
+						}
 						for(int i=0;i<temp.size();i++){
 							cards.add(temp.get(i));
 						}

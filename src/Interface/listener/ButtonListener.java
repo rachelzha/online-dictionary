@@ -45,14 +45,14 @@ public class ButtonListener implements ActionListener{
 		this.type=type;
 		this.user=user;
 		this.socket=soct;
-	/*	try{
+		try{
 			//create an output stream to send data to the server
 			toServer=new DataOutputStream(socket.getOutputStream());
 		}
 		catch (IOException ex){
 			System.err.println(ex);
 			System.err.println("Fail!");
-		}*/
+		}
 	}
 	
 	@Override

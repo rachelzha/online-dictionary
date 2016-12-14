@@ -135,7 +135,7 @@ public class Picture extends JFrame{
 		try {
 			DataOutputStream toServer = new DataOutputStream(socket.getOutputStream());
 			//send
-			toServer.writeInt(4);
+			toServer.writeInt(9);
 			toServer.writeUTF(usernames);
 
 			toServer.flush();

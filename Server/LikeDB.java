@@ -124,5 +124,37 @@ public class LikeDB {
 		}
 		return vec;
 	}
+	
+	public Vector<Integer> getPersonalLikes(String username,String word){
+		String queryString="select baidu,youdao,jinshan from personal_likes where pusername=? and pword=?";
+		Vector<Integer> vec=new Vector<Integer>();
+
+		try{
+			pstmt=(PreparedStatement)connection.prepareStatement(queryString);
+			pstmt.setString(1, username);
+			pstmt.setString(2, word);
+			
+			ResultSet rset=pstmt.executeQuery();
+			
+			if(rset.next()){				
+				vec.add(rset.getInt(1));
+				vec.add(rset.getInt(2));
+				vec.add(rset.getInt(3));
+				
+				pstmt.close();
+			}
+			else{
+				vec.add(-1);
+				vec.add(-1);
+				vec.add(-1);
+				
+				pstmt.close();
+			}
+		}
+		catch(SQLException ex){
+			ex.printStackTrace();
+		}
+		return vec;
+	}
 
 }

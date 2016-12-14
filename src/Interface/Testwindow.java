@@ -19,6 +19,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
 import Server.Card;
+import Server.Message;
 import src.Interface.listener.ButtonListener;
 import src.Interface.listener.CheckBoxListener;
 import src.Interface.panel.ChoosePanel;
@@ -38,7 +39,7 @@ public class Testwindow extends JFrame{
 	UserState user=new UserState();
 	public Socket socket=null;
 	
-	Vector<Card>cards=new Vector<Card>();
+	Vector<Message>messages=new Vector<Message>();
 	
 	int binglike;
 	int youdaolike;
@@ -75,7 +76,7 @@ public class Testwindow extends JFrame{
 		DataOutputStream toServer;
 		try {
 			toServer = new DataOutputStream(socket.getOutputStream());
-			toServer.writeInt(7);
+			toServer.writeInt(4);//everyday sentences
 			toServer.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -193,31 +194,39 @@ public class Testwindow extends JFrame{
 					switch(type){
 					case 0:{//get message
 						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
-						Vector<Card> temp=(Vector<Card>)ois.readObject();
+						Vector<Message> temp=(Vector<Message>)ois.readObject();
 						
 						for(int i=0;i<temp.size();i++){
-							cards.add(temp.get(i));
+							messages.add(temp.get(i));
 						}
 						break;
 					}
 					case 1:{//log in
-						if(fromServer.readBoolean())user.setUsername("Zarah");////?????
+						String username=fromServer.readUTF();
+						if(username!=null){
+							user.setUsername(username);
+						}
 						break;
 					}
 					case 2:{//register
 						if(fromServer.readBoolean())textpanel.Out.append("Register SUCCESS\n");
 						break;
 					}
-					case 3:{
+					case 3:{//get likes
 						binglike=fromServer.readInt();
 						youdaolike=fromServer.readInt();
 						jinshanlike=fromServer.readInt();
 						
+						if(user.Logged()){
+							
+						}
+						
 						break;
 					}
-					case 4:{
-						String message=fromServer.readUTF();
-						textpanel.Out.append("The message is : " + message+"\n");
+					case 4:{//everyday sentences
+						String sentence=fromServer.readUTF();
+						System.out.println(sentence);
+						textpanel.sen.setText(sentence);
 						break;
 					}
 					case 5:{//online users
@@ -238,12 +247,6 @@ public class Testwindow extends JFrame{
 						for(int i=0;i<allUsers.size();i++){
 							textpanel.Out.append(allUsers.get(i)+"\n");
 						}
-						break;
-					}
-					case 7:{//get everyday sentence
-						String sentence=fromServer.readUTF();
-						System.out.println(sentence);
-						textpanel.sen.setText(sentence);
 						break;
 					}
 					default:break;

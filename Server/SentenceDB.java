@@ -5,11 +5,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 public class SentenceDB {
 	private Connection connection=null;
 	private Statement stmt;
+	
+	private Lock lock=new ReentrantLock();
+
 	
     SentenceDB(Connection con){
     	connection=con;
@@ -20,6 +25,7 @@ public class SentenceDB {
 	    String queryString="select sentence from sentences where id="+n+";";
 	    String sentence=null;
 	    
+	    lock.lock();
 	    try {
 	    	stmt=connection.createStatement();
 	    	ResultSet rset=stmt.executeQuery(queryString);
@@ -31,6 +37,9 @@ public class SentenceDB {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 		}
+	    finally{
+	    	lock.unlock();
+	    }
 	    
 	    return sentence;
 	}

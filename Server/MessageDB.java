@@ -50,10 +50,10 @@ public class MessageDB {
 		}
 	}
 	
-	public Vector<String> getMessages(String receiver){
-		String queryString="select photoname from all_message where receiver=?";
+	public Vector<Message> getMessages(String receiver){
+		String queryString="select sender,photoname,time from all_message where receiver=?";
 		String deleteString="delete from all_message where receiver=?";
-		Vector<String> vec=new Vector<String>();
+		Vector<Message> vec=new Vector<Message>();
 
 		try{
 			// find the messages
@@ -62,8 +62,13 @@ public class MessageDB {
 			
 			ResultSet rset=pstmt.executeQuery();
 			
-			while(rset.next()){				
-				vec.add(rset.getString(1));			
+			while(rset.next()){			
+				String sender=rset.getString(1);
+				String photoname=rset.getString(2);
+				String time=rset.getString(3);
+				
+				Message message=new Message(sender,new Card(photoname),time);
+				vec.add(message);
 			}
 		
 			//delete the messages

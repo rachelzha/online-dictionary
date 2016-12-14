@@ -1,4 +1,5 @@
 package src.Interface.listener;
+import java.awt.Image;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -18,6 +19,7 @@ import src.Interface.panel.ChoosePanel;
 import src.Interface.panel.LoginPanel;
 import src.Interface.panel.SearchPanel;
 import src.Interface.panel.TextPanel;
+import src.Interface.share.SendPicture;
 import src.Translate.BaiduTranslate;
 import src.Translate.BingTranslate;
 import src.Translate.JinshanTranslate;
@@ -76,8 +78,10 @@ public class ButtonListener implements ActionListener{
 		try{
 			//send
 			toServer.writeInt(3);
+			toServer.writeUTF(key);
 			
-			toServer.writeUTF(key);		
+			toServer.writeInt(5);
+			toServer.writeInt(6);
 		}
 		catch(IOException ex){
 			System.err.println(ex);
@@ -112,7 +116,8 @@ public class ButtonListener implements ActionListener{
 	}
 	
 	public void handleLogin(){
-		TextPanel textpanel = (TextPanel)obj[0];
+		LoginPanel loginpanel = (LoginPanel)obj[0];
+		TextPanel textpanel = (TextPanel)obj[1];
 		if(!user.Logged()){	
 			login = new Login(socket);		
 			login.setLocation(200,100);	
@@ -124,10 +129,15 @@ public class ButtonListener implements ActionListener{
 				System.out.println("closed");
 				//user=login.getUser();
 				if(user.Logged()){	
+					loginpanel.Right.add(loginpanel.message);
+					loginpanel.Right.add(loginpanel.Logout);
+					loginpanel.Right.revalidate();
+					loginpanel.Right.repaint();
 					textpanel.Above.add(textpanel.like);
 					textpanel.Above.add(textpanel.share);
 					textpanel.Above.revalidate();
 					textpanel.Above.repaint();
+					
 				}
 			}
 		});
@@ -138,28 +148,34 @@ public class ButtonListener implements ActionListener{
 	}
 	
 	public void handleMessage(){
-		
+		LoginPanel loginpanel = (LoginPanel)obj[0];
+		String messagefile="image/message/2.png";
+		ImageIcon icon = new ImageIcon(messagefile);  
+        icon.setImage(icon.getImage().getScaledInstance(20,20,Image.SCALE_DEFAULT));
+		loginpanel.message.setIcon(icon);
 	}
 	
 	public void handleShare(){
 		SearchPanel searchpanel = (SearchPanel)obj[0];
 		TextPanel textpanel = (TextPanel)obj[1];
+		String[] userlist = (String[])obj[2];
+		String[] onlineuserlist = (String [])obj[3]; 
 		String key = searchpanel.input.getText();
 		if(textpanel.bing.isSelected()){
 			BingTranslate B = new BingTranslate();
 			String text = B.Translate(key);
-			Picture pic=new Picture(text,socket);
+			SendPicture pic=new SendPicture(text,socket,userlist,onlineuserlist);
 		}
 		if(textpanel.youdao.isSelected()){
 			YoudaoTranslate Y = new YoudaoTranslate();
 			String text = Y.Translation(key);
-			Picture pic=new Picture(text,socket);
+			SendPicture pic=new SendPicture(text,socket,userlist,onlineuserlist);
 		//	textpanel.Out.setText(text);
 		}
 		if(textpanel.jinshan.isSelected()){
 			JinshanTranslate J = new JinshanTranslate();
 			String text = J.Translate(key);
-			Picture pic=new Picture(text,socket);
+			SendPicture pic=new SendPicture(text,socket,userlist,onlineuserlist);
 		//	textpanel.Out.setText(text);
 		}	
 	}

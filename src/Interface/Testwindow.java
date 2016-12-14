@@ -35,9 +35,11 @@ public class Testwindow extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	public Socket socket=null;
 	
 	UserState user=new UserState();
-	public Socket socket=null;
+	String [] userlist;
+	String [] onlineuserlist;
 	
 	Vector<Message>messages=new Vector<Message>();
 	
@@ -50,8 +52,10 @@ public class Testwindow extends JFrame{
 	ChoosePanel choosepanel = new ChoosePanel();
 	TextPanel textpanel = new TextPanel();
 	Object obj1[]={searchpanel,textpanel};
-    Object obj2[]={textpanel};
+    Object obj2[]={loginpanel,textpanel};
     Object obj3[]={loginpanel,searchpanel,choosepanel,textpanel};
+    Object obj4[]={searchpanel,textpanel,userlist,onlineuserlist};
+   // Object obj5[]={loginpanel,cards};
     Object []BoxObj1={binglike,youdaolike,jinshanlike,textpanel,choosepanel};
     Object []BoxObj2={searchpanel,textpanel};
     Object []BoxObj3={searchpanel,textpanel};
@@ -107,8 +111,8 @@ public class Testwindow extends JFrame{
      //   searchpanel.Prev.addActionListener(new ButtonListener(2,user,socket,obj));
      //   searchpanel.Next.addActionListener(new ButtonListener(3,user,socket,obj));
         loginpanel.Login.addActionListener(new ButtonListener(5,user,socket,obj2));
-     //   loginpanel.message.addActionListener(new ButtonListener(7,user,socket,obj));
-        textpanel.share.addActionListener(new ButtonListener(8,user,socket,obj1));
+        loginpanel.message.addActionListener(new ButtonListener(7,user,socket,obj2));
+        textpanel.share.addActionListener(new ButtonListener(8,user,socket,obj4));
        
         //change color
         loginpanel.colorgreen.addActionListener(new ButtonListener(10,user,socket,obj3));
@@ -128,10 +132,6 @@ public class Testwindow extends JFrame{
         textpanel.jinshan.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
         textpanel.like.addItemListener(new CheckBoxListener(socket,7,user,BoxObj3));
   //      textpanel.takeword.addItemListener(new CheckBoxListener(8,));
-     
-     //   JTextField x=searchpanel.input.getTextField();
-     //   x.getDocument().addDocumentListener(new documentListener(searchpanel,textpanel));
-
 		
        Thread receiveTask=new Thread(new ReceiveTask());
 		receiveTask.start();
@@ -144,7 +144,7 @@ public class Testwindow extends JFrame{
 	public void connect(){
 		try{
 			//create a socket to connect to the server
-			socket = new Socket("114.212.135.139",8080);
+			socket = new Socket("114.212.133.212",8080);
 		}
 		catch (IOException ex){
 			System.err.println(ex);
@@ -196,6 +196,12 @@ public class Testwindow extends JFrame{
 						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
 						Vector<Message> temp=(Vector<Message>)ois.readObject();
 						
+						if(temp.size()>0){
+							String messagefile="image/message/3.png";
+							ImageIcon icon = new ImageIcon(messagefile);  
+					        icon.setImage(icon.getImage().getScaledInstance(20,20,Image.SCALE_DEFAULT));
+							loginpanel.message.setIcon(icon);
+						}
 						for(int i=0;i<temp.size();i++){
 							messages.add(temp.get(i));
 						}
@@ -233,9 +239,10 @@ public class Testwindow extends JFrame{
 						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
 						
 						Vector<String> onlineUsers=(Vector<String>)ois.readObject();
-						textpanel.Out.append("The online Clients: \n");
+					//	textpanel.Out.append("The online Clients: \n");
 						for(int i=0;i<onlineUsers.size();i++){
-							textpanel.Out.append(onlineUsers.get(i)+"\n");
+							onlineuserlist[i]=onlineUsers.get(i);
+							//textpanel.Out.append(onlineUsers.get(i)+"\n");
 						}
 						break;
 					}
@@ -243,9 +250,10 @@ public class Testwindow extends JFrame{
 						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
 						
 						Vector<String> allUsers=(Vector<String>)ois.readObject();
-						textpanel.Out.append("All Clients: \n");
+					//	textpanel.Out.append("All Clients: \n");
 						for(int i=0;i<allUsers.size();i++){
-							textpanel.Out.append(allUsers.get(i)+"\n");
+							userlist[i]=allUsers.get(i);
+							//textpanel.Out.append(allUsers.get(i)+"\n");
 						}
 						break;
 					}

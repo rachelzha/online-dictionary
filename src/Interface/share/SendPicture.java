@@ -49,7 +49,7 @@ public class SendPicture extends JFrame{
 	private Lock lock=new ReentrantLock();
 
 	
-	public SendPicture(String content,Socket socket,String []namelist){
+	public SendPicture(String content,Socket socket,String []namelist,String []onlinenamelist){
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         this.list=namelist;
@@ -147,8 +147,10 @@ public class SendPicture extends JFrame{
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
 				if(online.isSelected()){
-					//list....
+					list=onlinenamelist;
 				}
+				else
+					list=namelist;
 			}
         	
         });

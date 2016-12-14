@@ -11,7 +11,7 @@ public class LoginPanel {
 	drawComponent draw=new drawComponent();
 	public JPanel MyPanel = new JPanel();
 	
-	JPanel Right = new JPanel();
+	public JPanel Right = new JPanel();
 	public JButton Login = new JButton();//login
 	public JButton Logout = new JButton();//logout
 	

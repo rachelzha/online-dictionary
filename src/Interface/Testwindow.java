@@ -22,6 +22,8 @@ import Server.Card;
 import Server.Message;
 import src.Interface.listener.ButtonListener;
 import src.Interface.listener.CheckBoxListener;
+import src.Interface.listener.ComboBoxListener;
+import src.Interface.listener.Info;
 import src.Interface.panel.ChoosePanel;
 import src.Interface.panel.LoginPanel;
 import src.Interface.panel.SearchPanel;
@@ -40,17 +42,8 @@ public class Testwindow extends JFrame{
 	
 	UserState user=new UserState();
 	
-	Vector<String>userlist=new Vector<String>();
-	Vector<String>onlineuserlist=new Vector<String>();
-	Vector<Message>messages=new Vector<Message>();
+	Info info = new Info();
 	History history= new History();
-	
-	int binglike;
-	int youdaolike;
-	int jinshanlike;
-	int judgebing;
-	int judgeyoudao;
-	int judgejinshan;
 	
 	LoginPanel loginpanel = new LoginPanel();
 	SearchPanel searchpanel = new SearchPanel();
@@ -59,12 +52,12 @@ public class Testwindow extends JFrame{
 	Object obj1[]={searchpanel,textpanel,history};
     Object obj2[]={loginpanel,textpanel};
     Object obj3[]={loginpanel,searchpanel,choosepanel,textpanel};
-    Object obj4[]={searchpanel,textpanel,userlist,onlineuserlist};
+    Object obj4[]={searchpanel,textpanel,info};
+    Object obj5[]={loginpanel,info};
 
-    Object []BoxObj1={binglike,youdaolike,jinshanlike,textpanel,choosepanel};
+    Object []BoxObj1={info,textpanel,choosepanel};
     Object []BoxObj2={searchpanel,textpanel};
-    Object []BoxObj3={searchpanel,textpanel,judgebing,judgeyoudao,judgejinshan};
-    
+    Object []BoxObj3={searchpanel,textpanel,info};
     //create a new lock
   	private Lock lock=new ReentrantLock();
    
@@ -78,8 +71,7 @@ public class Testwindow extends JFrame{
 	}
 	
 	Testwindow(){	
-		
-		this.connect();
+/*		this.connect();
 	
 		lock.lock();
 		DataOutputStream toServer;
@@ -94,7 +86,7 @@ public class Testwindow extends JFrame{
 		finally{
 			lock.unlock();
 		}
-		
+		*/
 		
 		JPanel panel1=loginpanel.getPanel();
         JPanel panel2=searchpanel.getPanel();
@@ -116,8 +108,9 @@ public class Testwindow extends JFrame{
         searchpanel.Prev.addActionListener(new ButtonListener(2,user,socket,obj1));
         searchpanel.Next.addActionListener(new ButtonListener(3,user,socket,obj1));
         loginpanel.Login.addActionListener(new ButtonListener(5,user,socket,obj2));
-        loginpanel.message.addActionListener(new ButtonListener(7,user,socket,obj2));
+        loginpanel.message.addActionListener(new ButtonListener(7,user,socket,obj5));
         textpanel.share.addActionListener(new ButtonListener(8,user,socket,obj4));
+        loginpanel.Logout.addActionListener(new ButtonListener(9,user,socket,obj2));
        
         //change color
         loginpanel.colorgreen.addActionListener(new ButtonListener(10,user,socket,obj3));
@@ -132,25 +125,28 @@ public class Testwindow extends JFrame{
         choosepanel.bing.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
         choosepanel.youdao.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
         choosepanel.jinshan.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
-        textpanel.bing.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
-        textpanel.youdao.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
-        textpanel.jinshan.addItemListener(new CheckBoxListener(socket,4,user,BoxObj2));
+        textpanel.bing.addItemListener(new CheckBoxListener(socket,4,user,BoxObj3));
+        textpanel.youdao.addItemListener(new CheckBoxListener(socket,4,user,BoxObj3));
+        textpanel.jinshan.addItemListener(new CheckBoxListener(socket,4,user,BoxObj3));
         textpanel.like.addItemListener(new CheckBoxListener(socket,7,user,BoxObj3));
+        
+  //      searchpanel.input.getComponent(0).addMouseListener(new ComboBoxListener(searchpanel,textpanel) );
   //      textpanel.takeword.addItemListener(new CheckBoxListener(8,));
 		
-       Thread receiveTask=new Thread(new ReceiveTask());
+   /*    Thread receiveTask=new Thread(new ReceiveTask());
 		receiveTask.start();
 		
 		Thread fetchMessageTask=new Thread(new FetchMessageTask());
-		fetchMessageTask.start();
+		fetchMessageTask.start();*/
 	}
 	
 	
 	public void connect(){
 		try{
+			socket = new Socket("192.168.43.126",9999);
 			//create a socket to connect to the server
-		//	socket = new Socket("172.26.210.33",8080);
-			socket = new Socket("172.26.217.164",8080);
+		//	socket = new Socket("192.168.43.195",9999);
+		//	socket = new Socket("172.26.217.164",8080);
 		}
 		catch (IOException ex){
 			System.err.println(ex);
@@ -212,9 +208,7 @@ public class Testwindow extends JFrame{
 							loginpanel.Right.revalidate();
 							loginpanel.Right.repaint();
 						}
-						for(int i=0;i<temp.size();i++){
-							messages.add(temp.get(i));
-						}
+						info.setmessage(temp);
 						break;
 					}
 					case 1:{//log in
@@ -229,14 +223,15 @@ public class Testwindow extends JFrame{
 						break;
 					}
 					case 3:{//get likes
-						binglike=fromServer.readInt();
-						youdaolike=fromServer.readInt();
-						jinshanlike=fromServer.readInt();
+						info.setbinglikes(fromServer.readInt());
+						info.setyoudaolikes(fromServer.readInt());
+						info.setjinshanlikes(fromServer.readInt());
 						
 						if(user.Logged()){
-							judgebing=fromServer.readInt();
-							judgeyoudao=fromServer.readInt();
-							judgejinshan=fromServer.readInt();
+							info.setjudgebing(fromServer.readInt());
+							info.setjudgeyoudao(fromServer.readInt());
+							info.setjudgejinshan(fromServer.readInt());
+							//System.out.println(judgebing+":"+judgeyoudao+":"+judgejinshan);
 						}
 						
 						break;
@@ -252,14 +247,14 @@ public class Testwindow extends JFrame{
 						
 						Vector<String> onlineUsers=(Vector<String>)ois.readObject();
 					//	textpanel.Out.append("The online Clients: \n");
-						onlineuserlist=onlineUsers;
+						info.setonlineuserlist(onlineUsers);
 						break;
 					}
 					case 6:{//all users 
 						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
 						
 						Vector<String> allUsers=(Vector<String>)ois.readObject();
-						userlist=allUsers;
+						info.setuserlist(allUsers);
 						break;
 					}
 					default:break;

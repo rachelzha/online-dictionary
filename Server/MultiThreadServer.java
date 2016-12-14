@@ -26,7 +26,7 @@ public class MultiThreadServer extends JFrame{
 	private static BasicDataSource pool=null;
 	
 	static String driverName="com.mysql.jdbc.Driver";
-	static String dbURL="jdbc:mysql://127.0.0.1:3306/userInfo";
+	static String dbURL="jdbc:mysql://172.26.210.33:3306/userInfo";
 	static String userName="testuser";		
 	static String userPwd="testtoday";
 	

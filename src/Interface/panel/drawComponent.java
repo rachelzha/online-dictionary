@@ -38,7 +38,7 @@ public class drawComponent {
         box.setBorderPainted(false);
         box.setContentAreaFilled(false);
         
-         box.setIcon(icon1);
+        box.setIcon(icon1);
         box.setSelectedIcon(icon2);    
       
 	}

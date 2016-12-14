@@ -23,7 +23,7 @@ public class TextPanel {
 	
 	JPanel Right = new JPanel();
 	JLabel Daily = new JLabel("Daily Sentence");//no edit
-	public JLabel cartoon = new JLabel();
+	public ImagePanel cartoon = new ImagePanel();
 	public JTextArea sen= new JTextArea("",15,10);
 	JScrollPane sentence=new JScrollPane(sen);//daily sentence
 	public JCheckBox takeword = new JCheckBox("È¡´Ê");
@@ -80,7 +80,7 @@ public class TextPanel {
 		pan2.setLayout(new BorderLayout(5,5));
 		
 		String cartoonfile="image/green/color.png";
-		draw.drawLabel(cartoonfile, 200, 200, cartoon);
+		//draw.drawLabel(cartoonfile, 200, 200, cartoon);
 		
 		sen.setBorder(null);
 		sen.setEditable(false);

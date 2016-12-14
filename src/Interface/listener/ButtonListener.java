@@ -15,11 +15,12 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.*;
 
-import Server.Picture;
+import Server.Message;
 import src.Interface.panel.ChoosePanel;
 import src.Interface.panel.LoginPanel;
 import src.Interface.panel.SearchPanel;
 import src.Interface.panel.TextPanel;
+import src.Interface.share.RecievePicture;
 import src.Interface.share.SendPicture;
 import src.Translate.BaiduTranslate;
 import src.Translate.BingTranslate;
@@ -45,14 +46,14 @@ public class ButtonListener implements ActionListener{
 		this.type=type;
 		this.user=user;
 		this.socket=soct;
-		try{
+	/*	try{
 			//create an output stream to send data to the server
 			toServer=new DataOutputStream(socket.getOutputStream());
 		}
 		catch (IOException ex){
 			System.err.println(ex);
 			System.err.println("Fail!");
-		}
+		}*/
 	}
 	
 	@Override
@@ -65,6 +66,7 @@ public class ButtonListener implements ActionListener{
 		case 5:handleLogin();break;//login button
 		case 7:handleMessage();break;//message button
 		case 8:handleShare();break;//share button
+		case 9:handleLogout();break;//logout
 		case 10:case 11:case 12:case 13:case 14:case 15:handleColor();break;
 		}
 	}
@@ -75,8 +77,9 @@ public class ButtonListener implements ActionListener{
 		History his  = (History)obj[2];
 		String key = searchpanel.input.getSelectedItem().toString();
 	//	String key=searchpanel.input.getText();
+		textpanel.tranword.setText(key);
 		
-		lock.lock();
+	/*	lock.lock();
 		try{
 			//send
 			toServer.writeInt(3);
@@ -91,7 +94,7 @@ public class ButtonListener implements ActionListener{
 		finally{
 			lock.unlock();
 		}
-		
+		*/
 		if(textpanel.bing.isSelected()){
 			BingTranslate B = new BingTranslate();
 			String text = B.Translation(key);
@@ -121,6 +124,7 @@ public class ButtonListener implements ActionListener{
 		Vector<String>H=his.Read();
 		his.prevpointer();
 		String key = H.elementAt(his.getpointer());
+		textpanel.tranword.setText(key);
 		
 		searchpanel.input.setSelectedItem(key);
 		//searchpanel.input.setText(key);
@@ -149,7 +153,8 @@ public class ButtonListener implements ActionListener{
 		Vector<String>H=his.Read();
 		his.nextpointer();
 		String key = H.elementAt(his.getpointer());
-
+		textpanel.tranword.setText(key);
+		
 		searchpanel.input.setSelectedItem(key);
 		//searchpanel.input.setText(key);
 		if(textpanel.bing.isSelected()){
@@ -195,22 +200,28 @@ public class ButtonListener implements ActionListener{
 				}
 			}
 		});
+	
 	}
 	
 	
 	public void handleMessage(){
 		LoginPanel loginpanel = (LoginPanel)obj[0];
+		Info info = (Info)obj[1];
+		//Vector<Message>messages=(Vector<Message>)obj[1];
+		new RecievePicture(socket,info.getmessage());
+		
 		String messagefile="image/message/2.png";
 		ImageIcon icon = new ImageIcon(messagefile);  
         icon.setImage(icon.getImage().getScaledInstance(20,20,Image.SCALE_DEFAULT));
 		loginpanel.message.setIcon(icon);
+		loginpanel.Right.revalidate();
+		loginpanel.Right.repaint();
 	}
 	
 	public void handleShare(){
 		SearchPanel searchpanel = (SearchPanel)obj[0];
 		TextPanel textpanel = (TextPanel)obj[1];
-		Vector<String>userlist = (Vector<String>)obj[2];
-		Vector<String>onlineuserlist = (Vector<String>)obj[3]; 
+		Info info = (Info)obj[2];
 		//String key = searchpanel.input.getText();
 	//	for(int i=0;i<onlineuserlist.length;i++)
 	//		System.out.println(onlineuserlist[i]);
@@ -218,20 +229,36 @@ public class ButtonListener implements ActionListener{
 		if(textpanel.bing.isSelected()){
 			BingTranslate B = new BingTranslate();
 			String text = B.Translation(key);
-			new SendPicture(text,socket,userlist,onlineuserlist);
+			new SendPicture(text,socket,info.getuserlist(),info.getonlineuserlist());
 		}
 		if(textpanel.youdao.isSelected()){
 			YoudaoTranslate Y = new YoudaoTranslate();
 			String text = Y.Translation(key);
-			new SendPicture(text,socket,userlist,onlineuserlist);
+			new SendPicture(text,socket,info.getuserlist(),info.getonlineuserlist());
 		//	textpanel.Out.setText(text);
 		}
 		if(textpanel.jinshan.isSelected()){
 			JinshanTranslate J = new JinshanTranslate();
 			String text = J.Translate(key);
-			new SendPicture(text,socket,userlist,onlineuserlist);
+			new SendPicture(text,socket,info.getuserlist(),info.getonlineuserlist());
 		//	textpanel.Out.setText(text);
 		}	
+	}
+	
+	public void handleLogout(){
+		LoginPanel loginpanel = (LoginPanel)obj[0];
+		TextPanel textpanel = (TextPanel)obj[1];
+		
+		//logout.......
+		
+		loginpanel.Right.remove(loginpanel.message);
+		loginpanel.Right.remove(loginpanel.Logout);
+		loginpanel.Right.revalidate();
+		loginpanel.Right.repaint();
+		textpanel.Above.remove(textpanel.like);
+		textpanel.Above.remove(textpanel.share);
+		textpanel.Above.revalidate();
+		textpanel.Above.repaint();
 	}
 	
 	public void handleColor(){
@@ -254,4 +281,6 @@ public class ButtonListener implements ActionListener{
 		choosepanel.setColor(color);
 		textpanel.setColor(color);
 	}
+	
+	
 }

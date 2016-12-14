@@ -49,62 +49,70 @@ public class CheckBoxListener implements ItemListener{
 	public void handlebookmark(){
 		SearchPanel searchpanel = (SearchPanel)obj[0];
 		TextPanel textpanel = (TextPanel)obj[1];
+		Info info =(Info)obj[2];
 		String key = searchpanel.input.getSelectedItem().toString();
 		//String key=searchpanel.input.getText();
 		if(key==null||key.length()==0)
 			return;
 		if(textpanel.bing.isSelected()){
+			//System.out.println(info.getjudgebing());///////
+			if(info.getjudgebing()==1)
+				textpanel.like.setSelected(true);
+			else if(info.getjudgebing()==-1)
+				textpanel.like.setSelected(false);
 			BingTranslate B = new BingTranslate();
 			String text = B.Translation(key);
 			textpanel.Out.setText(text);
 		}
 		if(textpanel.youdao.isSelected()){
+			if(info.getjudgeyoudao()==1)
+				textpanel.like.setSelected(true);
+			else if(info.getjudgeyoudao()==-1)
+				textpanel.like.setSelected(false);
 			YoudaoTranslate Y = new YoudaoTranslate();
 			String text = Y.Translation(key);
 			textpanel.Out.setText(text);
 		}
 		if(textpanel.jinshan.isSelected()){
+			if(info.getjudgejinshan()==1)
+				textpanel.like.setSelected(true);
+			else if(info.getjudgejinshan()==-1)
+				textpanel.like.setSelected(false);
 			JinshanTranslate J = new JinshanTranslate();
 			String text = J.Translate(key);
 			textpanel.Out.setText(text);
 		}	
+		textpanel.Above.revalidate();
+		textpanel.Above.repaint();
 	
 	}
 	
 	
 	public void handleLike(){
-		//Socket socket = (Socket)obj[0];
+
 		SearchPanel searchpanel = (SearchPanel)obj[0];
 		TextPanel textpanel = (TextPanel) obj[1];
+		Info info = (Info)obj[2];
+		//System.out.println(obj[2]+":"+obj[3]+":"+obj[4]);///////
 		String key = searchpanel.input.getSelectedItem().toString();
 		//String key=searchpanel.input.getText();
 		DataOutputStream toServer;
 		try{
 			//create an output stream to send data to the server
 			toServer=new DataOutputStream(socket.getOutputStream());
-			toServer.writeInt(7);
+			toServer.writeInt(8);
 			toServer.writeUTF(key);
 			if(textpanel.bing.isSelected()){
-				if((int)obj[2]==1)
-					textpanel.like.setSelected(true);
-				else
-					textpanel.like.setSelected(false);
 				toServer.writeUTF("baidu");
 			}
 			else if(textpanel.youdao.isSelected()){
-				if((int)obj[3]==1)
-					textpanel.like.setSelected(true);
-				else
-					textpanel.like.setSelected(false);
 				toServer.writeUTF("youdao");
 			}
 			else if(textpanel.jinshan.isSelected()){
-				if((int)obj[4]==1)
-					textpanel.like.setSelected(true);
-				else
-					textpanel.like.setSelected(false);
 				toServer.writeUTF("jinshan");
 			}
+			textpanel.Center.revalidate();
+			textpanel.Center.repaint();
 		}
 		catch (IOException ex){
 			System.err.println(ex);
@@ -117,11 +125,12 @@ public class CheckBoxListener implements ItemListener{
 	}
 	
 	public void resetBookMark(){
-		TextPanel textpanel = (TextPanel)obj[3];
-		ChoosePanel choosepanel = (ChoosePanel)obj[4];
-		int a = (int)obj[0];
-		int b = (int)obj[1];
-		int c = (int)obj[2];
+		TextPanel textpanel = (TextPanel)obj[1];
+		ChoosePanel choosepanel = (ChoosePanel)obj[2];
+		Info info = (Info)obj[0];
+		int a = info.getbinglikes();
+		int b = info.getyoudaolikes();
+		int c = info.getjinshanlikes();
 		textpanel.Left.removeAll();
 		if(a>=b&&b>=c){
 			textpanel.Left.add(textpanel.bing);  
@@ -177,5 +186,16 @@ public class CheckBoxListener implements ItemListener{
 		textpanel.Left.setLayout(new GridLayout(count,1,5,10));
 		textpanel.Left.revalidate();
 		textpanel.Left.repaint();
+	}
+	
+	public void setlike(Info info,TextPanel panel){
+		if(panel.bing.isSelected()){
+			if(info.getjudgebing()==-1){
+				
+			}
+			if(info.getjudgebing()==1){
+				
+			}
+		}
 	}
 }

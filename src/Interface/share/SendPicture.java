@@ -23,7 +23,9 @@ public class SendPicture extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	Vector<String>list = new Vector<String>();
+	//Vector<String>list = new Vector<String>();
+	String []list = new String[1000];
+	String []onlinelist = new String[1000];
 	
 	JTextField path=new JTextField(20);
 	JButton open=new JButton("open file");
@@ -54,7 +56,14 @@ public class SendPicture extends JFrame{
 	public SendPicture(String content,Socket socket,Vector<String>namelist,Vector<String>onlinenamelist){
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        this.list=namelist;
+       
+        for(int i=0;i<namelist.size();i++){
+        	list[i]=namelist.get(i);
+        }
+        for(int i=0;i<onlinenamelist.size();i++){
+        	onlinelist[i]=onlinenamelist.get(i);
+        }
+        
         this.socket=socket;
 		
         setTitle("Make a word card!");
@@ -72,6 +81,7 @@ public class SendPicture extends JFrame{
         GridLayout gridLayout = new GridLayout(2,1,5,10);  
 		Left.setLayout(gridLayout);
 		userlist=new JList<String>(list);
+		
 		userlist.setFixedCellWidth(100);
 		userlist.setFixedCellHeight(20);
 		userlist.setVisibleRowCount(20);
@@ -135,8 +145,7 @@ public class SendPicture extends JFrame{
 			public void valueChanged(ListSelectionEvent e) {
 				// TODO Auto-generated method stub
 				if(userlist.getSelectedValue()==null) return;
-				int num = userlist.getSelectedIndex();
-				String key = list.elementAt(num);
+				String key = userlist.getSelectedValue();
 				users.setText(key);
 			}
 		});
@@ -148,10 +157,10 @@ public class SendPicture extends JFrame{
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
 				if(online.isSelected()){
-					list=onlinenamelist;
+					userlist=new JList<String>(list);
 				}
 				else
-					list=namelist;
+					userlist=new JList<String>(onlinelist);
 				userlist.revalidate();
 				userlist.repaint();
 				Left.revalidate();

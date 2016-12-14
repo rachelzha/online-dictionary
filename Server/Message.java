@@ -10,4 +10,12 @@ public class Message {
 		this.card=card;
 		this.time=time;
 	}
+	
+	public String getinfo(){
+		String info = sender+"  "+time;
+		return info;
+	}
+	public Card getCard(){
+		return card;
+	}
 }

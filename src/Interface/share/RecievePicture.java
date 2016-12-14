@@ -1,6 +1,8 @@
 package src.Interface.share;
 
 import Server.Card;
+import Server.Message;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -8,6 +10,7 @@ import java.awt.Image;
 import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
+import java.util.Vector;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -21,7 +24,7 @@ public class RecievePicture extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	String [] meList;
+	String [] meList = new String[100];
 	
 	private JTextField path=new JTextField(20);
 	private JButton open=new JButton("open file");
@@ -46,12 +49,15 @@ public class RecievePicture extends JFrame{
 	private Lock lock=new ReentrantLock();
 
 	
-	public RecievePicture(String content,Socket socket,String[] melist){
+	public RecievePicture(Socket socket,Vector<Message> melist){
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
         
         this.socket=socket;
-        this.meList=melist;
+       
+        for(int i=0;i<melist.size();i++){
+        	meList[i]=melist.get(i).getinfo();
+        }
 		
         setTitle("Make a word card!");
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -93,14 +99,14 @@ public class RecievePicture extends JFrame{
                     path.setText(name);
                     
                     //draw
-                    card.draw(content,name,true);
+                 /*   card.draw(content,name,true);
 		            
                     if(card.validable()){
 	                    icon=new ImageIcon(card.image);
 	                    //icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));
 			                
 	                    label.setIcon(icon);
-                    }
+                    }*/
                 }
             }
         });
@@ -126,9 +132,14 @@ public class RecievePicture extends JFrame{
 			public void valueChanged(ListSelectionEvent e) {
 				// TODO Auto-generated method stub
 				if(messagelist.getSelectedValue()==null) return;
-				int num = messagelist.getSelectedIndex();
-				String key = meList[num];
-				//setpicturelabel
+				int num=messagelist.getSelectedIndex();
+				Card card=melist.get(num).getCard();
+                if(card.validable()){
+                    icon=new ImageIcon(card.image);
+                    //icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));
+		                
+                    label.setIcon(icon);
+                }
 			}
 		});
     }

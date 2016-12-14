@@ -219,7 +219,10 @@ public class Testwindow extends JFrame{
 						break;
 					}
 					case 2:{//register
-						if(fromServer.readBoolean())textpanel.Out.append("Register SUCCESS\n");
+						String username=fromServer.readUTF();
+						if(username!=null){
+							user.setUsername(username);
+						}
 						break;
 					}
 					case 3:{//get likes

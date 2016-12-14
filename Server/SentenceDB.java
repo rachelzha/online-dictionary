@@ -25,9 +25,9 @@ public class SentenceDB {
 	    	ResultSet rset=stmt.executeQuery(queryString);
 	    	
 			if(rset.next())sentence=rset.getString(1);
-			System.out.println("stmt"+stmt);
-			System.out.println("sentence"+sentence);
-		    
+			System.out.println("stmt:"+stmt);
+			System.out.println("sentence:"+sentence);
+		    stmt.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 		}

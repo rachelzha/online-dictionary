@@ -1,15 +1,24 @@
 package src.Interface.listener;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
+import javax.swing.*;
+
+import Server.Picture;
 import src.Interface.panel.ChoosePanel;
 import src.Interface.panel.LoginPanel;
 import src.Interface.panel.SearchPanel;
 import src.Interface.panel.TextPanel;
+import src.Translate.BaiduTranslate;
 import src.Translate.BingTranslate;
 import src.Translate.JinshanTranslate;
 import src.Translate.YoudaoTranslate;
@@ -23,6 +32,10 @@ public class ButtonListener implements ActionListener{
 	private Socket socket;
 	private DataOutputStream toServer;
 	Login login;
+	
+	private Lock lock=new ReentrantLock();
+
+	
 	public ButtonListener(int type,UserState user, Socket soct,Object []obj){
 		this.obj=obj;
 		this.type=type;
@@ -46,6 +59,7 @@ public class ButtonListener implements ActionListener{
 		case 2:handlePrev();break;//prev button
 		case 3:handleNext();break;//next button
 		case 5:handleLogin();break;//login button
+		case 6:handleIndividuation();break;//individuation button
 		case 7:handleMessage();break;//message button
 		case 8:handleShare();break;//share button
 		case 10:case 11:case 12:case 13:case 14:case 15:handleColor();break;
@@ -57,9 +71,10 @@ public class ButtonListener implements ActionListener{
 		TextPanel textpanel=(TextPanel)obj[1];
 	//	String key = searchpanel.input.getSelectedItem().toString();
 		String key=searchpanel.input.getText();
+		
+		lock.lock();
 		try{
 			//send
-			
 			toServer.writeInt(3);
 			
 			toServer.writeUTF(key);		
@@ -67,10 +82,13 @@ public class ButtonListener implements ActionListener{
 		catch(IOException ex){
 			System.err.println(ex);
 		}
+		finally{
+			lock.unlock();
+		}
 		
 		if(textpanel.bing.isSelected()){
-			BingTranslate B = new BingTranslate();
-			String text = B.Translate(key);
+			BaiduTranslate B = new BaiduTranslate();
+			String text = B.Translation(key);
 			textpanel.Out.setText(text);
 		}
 		if(textpanel.youdao.isSelected()){
@@ -124,7 +142,26 @@ public class ButtonListener implements ActionListener{
 	}
 	
 	public void handleShare(){
-		
+		SearchPanel searchpanel = (SearchPanel)obj[0];
+		TextPanel textpanel = (TextPanel)obj[1];
+		String key = searchpanel.input.getText();
+		if(textpanel.bing.isSelected()){
+			BingTranslate B = new BingTranslate();
+			String text = B.Translate(key);
+			Picture pic=new Picture(text,socket);
+		}
+		if(textpanel.youdao.isSelected()){
+			YoudaoTranslate Y = new YoudaoTranslate();
+			String text = Y.Translation(key);
+			Picture pic=new Picture(text,socket);
+		//	textpanel.Out.setText(text);
+		}
+		if(textpanel.jinshan.isSelected()){
+			JinshanTranslate J = new JinshanTranslate();
+			String text = J.Translate(key);
+			Picture pic=new Picture(text,socket);
+		//	textpanel.Out.setText(text);
+		}	
 	}
 	
 	public void handleColor(){
@@ -146,6 +183,5 @@ public class ButtonListener implements ActionListener{
 		searchpanel.setColor(color);
 		choosepanel.setColor(color);
 		textpanel.setColor(color);
-		
 	}
 }

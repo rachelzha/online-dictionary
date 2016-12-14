@@ -108,7 +108,7 @@ public class MultiThreadServer extends JFrame{
 		pool.setUrl(dbURL);
 		
 
-		pool.setMaxTotal(10);
+		pool.setMaxTotal(2);
 	
 		System.out.println("Succeed setting pool");
 	}
@@ -336,6 +336,12 @@ public class MultiThreadServer extends JFrame{
 			catch(Exception ex){
 				//ex.printStackTrace();
 				if(username!=null)clients.remove(username);
+				try {
+					dbConn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				jta.append("用户断开连接\n");
 			}
 			finally {

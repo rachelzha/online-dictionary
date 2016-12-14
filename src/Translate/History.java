@@ -20,8 +20,8 @@ public class History {
 	    try {
 	    	reader = new BufferedReader(new FileReader(file));
 	    	String tempString = null;
-	    	tempString = reader.readLine();
-	    	pointer = Integer.parseInt(tempString);
+	    //	tempString = reader.readLine();
+	    //	pointer = Integer.parseInt(tempString);
 	    	while ((tempString = reader.readLine()) != null) {
 	    		if(tempString!=null&&tempString.length()!=0)
 	    			history.add(tempString);
@@ -42,16 +42,14 @@ public class History {
 		return history;
 	}
 	
-	public void Write(Vector<String> history,int add){
-		if(add==1){
-			if(history.size()>10)
-				pointer=10;
-			else
-				pointer=history.size();
-		}
+	public void Write(Vector<String> history){
+		if(history.size()>10)
+			pointer=10-1;
+		else
+			pointer=history.size()-1;
 		 try{
 			StringBuffer sb = new StringBuffer();
-			sb.append(pointer+"\n");
+		//	sb.append(pointer+"\n");
 			int i=0;
 			while(history.size()>10){
 				history.removeElementAt(0);

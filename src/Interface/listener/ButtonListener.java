@@ -76,7 +76,7 @@ public class ButtonListener implements ActionListener{
 	//	String key = searchpanel.input.getSelectedItem().toString();
 		String key=searchpanel.input.getText();
 		
-	/*	lock.lock();
+		lock.lock();
 		try{
 			//send
 			toServer.writeInt(3);
@@ -90,7 +90,7 @@ public class ButtonListener implements ActionListener{
 		}
 		finally{
 			lock.unlock();
-		}*/
+		}
 		
 		if(textpanel.bing.isSelected()){
 			BingTranslate B = new BingTranslate();
@@ -110,7 +110,7 @@ public class ButtonListener implements ActionListener{
 		
 		Vector<String>H=his.Read();
 		H.addElement(key);
-		his.Write(H,1);
+		his.Write(H);
 	}
 	
 	public void handlePrev(){
@@ -121,7 +121,6 @@ public class ButtonListener implements ActionListener{
 		Vector<String>H=his.Read();
 		his.prevpointer();
 		String key = H.elementAt(his.getpointer());
-		his.Write(H, 0);
 		
 		searchpanel.input.setText(key);
 		if(textpanel.bing.isSelected()){
@@ -149,7 +148,7 @@ public class ButtonListener implements ActionListener{
 		Vector<String>H=his.Read();
 		his.nextpointer();
 		String key = H.elementAt(his.getpointer());
-		his.Write(H, 0);
+
 		
 		searchpanel.input.setText(key);
 		if(textpanel.bing.isSelected()){

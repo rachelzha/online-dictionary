@@ -12,13 +12,17 @@ import javax.swing.JOptionPane;
 
 public class Card implements Serializable{
 	
-	transient BufferedImage image=null;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public transient BufferedImage image=null;
 	
-	Card(){
+	public Card(){
 		image=null;
 	}
 	
-	Card(String name){
+	public Card(String name){
 		File picture=new File(name);
 		
 		BufferedImage temp=null;

@@ -9,6 +9,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Vector;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -22,6 +23,7 @@ import src.Interface.panel.TextPanel;
 import src.Interface.share.SendPicture;
 import src.Translate.BaiduTranslate;
 import src.Translate.BingTranslate;
+import src.Translate.History;
 import src.Translate.JinshanTranslate;
 import src.Translate.YoudaoTranslate;
 import src.userLogin.Login;
@@ -43,14 +45,14 @@ public class ButtonListener implements ActionListener{
 		this.type=type;
 		this.user=user;
 		this.socket=soct;
-		try{
+	/*	try{
 			//create an output stream to send data to the server
 			toServer=new DataOutputStream(socket.getOutputStream());
 		}
 		catch (IOException ex){
 			System.err.println(ex);
 			System.err.println("Fail!");
-		}
+		}*/
 	}
 	
 	@Override
@@ -61,7 +63,6 @@ public class ButtonListener implements ActionListener{
 		case 2:handlePrev();break;//prev button
 		case 3:handleNext();break;//next button
 		case 5:handleLogin();break;//login button
-		case 6:handleIndividuation();break;//individuation button
 		case 7:handleMessage();break;//message button
 		case 8:handleShare();break;//share button
 		case 10:case 11:case 12:case 13:case 14:case 15:handleColor();break;
@@ -71,10 +72,11 @@ public class ButtonListener implements ActionListener{
 	public void handleSearch(){
 		SearchPanel searchpanel=(SearchPanel)obj[0];
 		TextPanel textpanel=(TextPanel)obj[1];
+		History his  = (History)obj[2];
 	//	String key = searchpanel.input.getSelectedItem().toString();
 		String key=searchpanel.input.getText();
 		
-		lock.lock();
+	/*	lock.lock();
 		try{
 			//send
 			toServer.writeInt(3);
@@ -88,10 +90,42 @@ public class ButtonListener implements ActionListener{
 		}
 		finally{
 			lock.unlock();
-		}
+		}*/
 		
 		if(textpanel.bing.isSelected()){
-			BaiduTranslate B = new BaiduTranslate();
+			BingTranslate B = new BingTranslate();
+			String text = B.Translation(key);
+			textpanel.Out.setText(text);
+		}
+		if(textpanel.youdao.isSelected()){
+			YoudaoTranslate Y = new YoudaoTranslate();
+			String text = Y.Translation(key);
+			textpanel.Out.setText(text);
+		}
+		if(textpanel.jinshan.isSelected()){
+			JinshanTranslate J = new JinshanTranslate();
+			String text = J.Translate(key);
+			textpanel.Out.setText(text);
+		}	
+		
+		Vector<String>H=his.Read();
+		H.addElement(key);
+		his.Write(H,1);
+	}
+	
+	public void handlePrev(){
+		SearchPanel searchpanel = (SearchPanel)obj[0];
+		TextPanel textpanel = (TextPanel)obj[1];
+		History his = (History)obj[2];
+		
+		Vector<String>H=his.Read();
+		his.prevpointer();
+		String key = H.elementAt(his.getpointer());
+		his.Write(H, 0);
+		
+		searchpanel.input.setText(key);
+		if(textpanel.bing.isSelected()){
+			BingTranslate B = new BingTranslate();
 			String text = B.Translation(key);
 			textpanel.Out.setText(text);
 		}
@@ -107,12 +141,32 @@ public class ButtonListener implements ActionListener{
 		}	
 	}
 	
-	public void handlePrev(){
-		
-	}
-	
 	public void handleNext(){
+		SearchPanel searchpanel = (SearchPanel)obj[0];
+		TextPanel textpanel = (TextPanel)obj[1];
+		History his = (History)obj[2];
 		
+		Vector<String>H=his.Read();
+		his.nextpointer();
+		String key = H.elementAt(his.getpointer());
+		his.Write(H, 0);
+		
+		searchpanel.input.setText(key);
+		if(textpanel.bing.isSelected()){
+			BingTranslate B = new BingTranslate();
+			String text = B.Translation(key);
+			textpanel.Out.setText(text);
+		}
+		if(textpanel.youdao.isSelected()){
+			YoudaoTranslate Y = new YoudaoTranslate();
+			String text = Y.Translation(key);
+			textpanel.Out.setText(text);
+		}
+		if(textpanel.jinshan.isSelected()){
+			JinshanTranslate J = new JinshanTranslate();
+			String text = J.Translate(key);
+			textpanel.Out.setText(text);
+		}	
 	}
 	
 	public void handleLogin(){
@@ -143,9 +197,6 @@ public class ButtonListener implements ActionListener{
 		});
 	}
 	
-	public void handleIndividuation(){
-		
-	}
 	
 	public void handleMessage(){
 		LoginPanel loginpanel = (LoginPanel)obj[0];
@@ -163,7 +214,7 @@ public class ButtonListener implements ActionListener{
 		String key = searchpanel.input.getText();
 		if(textpanel.bing.isSelected()){
 			BingTranslate B = new BingTranslate();
-			String text = B.Translate(key);
+			String text = B.Translation(key);
 			SendPicture pic=new SendPicture(text,socket,userlist,onlineuserlist);
 		}
 		if(textpanel.youdao.isSelected()){

@@ -55,7 +55,7 @@ public class CheckBoxListener implements ItemListener{
 			return;
 		if(textpanel.bing.isSelected()){
 			BingTranslate B = new BingTranslate();
-			String text = B.Translate(key);
+			String text = B.Translation(key);
 			textpanel.Out.setText(text);
 		}
 		if(textpanel.youdao.isSelected()){

@@ -27,6 +27,7 @@ import src.Interface.panel.LoginPanel;
 import src.Interface.panel.SearchPanel;
 import src.Interface.panel.TextPanel;
 import src.Translate.BaiduTranslate;
+import src.Translate.History;
 import src.userLogin.UserState;
 
 
@@ -42,6 +43,7 @@ public class Testwindow extends JFrame{
 	String [] onlineuserlist;
 	
 	Vector<Message>messages=new Vector<Message>();
+	History history= new History();
 	
 	int binglike;
 	int youdaolike;
@@ -51,11 +53,11 @@ public class Testwindow extends JFrame{
 	SearchPanel searchpanel = new SearchPanel();
 	ChoosePanel choosepanel = new ChoosePanel();
 	TextPanel textpanel = new TextPanel();
-	Object obj1[]={searchpanel,textpanel};
+	Object obj1[]={searchpanel,textpanel,history};
     Object obj2[]={loginpanel,textpanel};
     Object obj3[]={loginpanel,searchpanel,choosepanel,textpanel};
     Object obj4[]={searchpanel,textpanel,userlist,onlineuserlist};
-   // Object obj5[]={loginpanel,cards};
+
     Object []BoxObj1={binglike,youdaolike,jinshanlike,textpanel,choosepanel};
     Object []BoxObj2={searchpanel,textpanel};
     Object []BoxObj3={searchpanel,textpanel};
@@ -74,8 +76,8 @@ public class Testwindow extends JFrame{
 	
 	Testwindow(){	
 		
-		this.connect();
-		
+	/*	this.connect();
+	
 		lock.lock();
 		DataOutputStream toServer;
 		try {
@@ -89,7 +91,7 @@ public class Testwindow extends JFrame{
 		finally{
 			lock.unlock();
 		}
-		
+	*/	
 		
 		JPanel panel1=loginpanel.getPanel();
         JPanel panel2=searchpanel.getPanel();
@@ -108,8 +110,8 @@ public class Testwindow extends JFrame{
         
         //buttonlistener
         searchpanel.Search.addActionListener(new ButtonListener(1,user,socket,obj1));
-     //   searchpanel.Prev.addActionListener(new ButtonListener(2,user,socket,obj));
-     //   searchpanel.Next.addActionListener(new ButtonListener(3,user,socket,obj));
+        searchpanel.Prev.addActionListener(new ButtonListener(2,user,socket,obj1));
+        searchpanel.Next.addActionListener(new ButtonListener(3,user,socket,obj1));
         loginpanel.Login.addActionListener(new ButtonListener(5,user,socket,obj2));
         loginpanel.message.addActionListener(new ButtonListener(7,user,socket,obj2));
         textpanel.share.addActionListener(new ButtonListener(8,user,socket,obj4));
@@ -133,11 +135,11 @@ public class Testwindow extends JFrame{
         textpanel.like.addItemListener(new CheckBoxListener(socket,7,user,BoxObj3));
   //      textpanel.takeword.addItemListener(new CheckBoxListener(8,));
 		
-       Thread receiveTask=new Thread(new ReceiveTask());
+  /*     Thread receiveTask=new Thread(new ReceiveTask());
 		receiveTask.start();
 		
 		Thread fetchMessageTask=new Thread(new FetchMessageTask());
-		fetchMessageTask.start();
+		fetchMessageTask.start();*/
 	}
 	
 	

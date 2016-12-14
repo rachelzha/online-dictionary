@@ -6,7 +6,7 @@ import org.jsoup.select.Elements;
 //²Î¿¼£ºhttps://github.com/ilikecyf86/OnlineDictionary/blob/master/src/OnlineSearch.java ///Thank you
 
 public class BingTranslate {
-	 public String Translate(String key) {
+	 public String Translation(String key) {
 	        String url = "http://cn.bing.com/dict/search?q=" + key + "&go=%E6%90%9C%E7%B4%A2&qs=bs&form=Z9LH5";
 	        String result="";
 	        try {
@@ -32,10 +32,5 @@ public class BingTranslate {
 	     return result;
 	 }
 	 
-	 public static void main(String []args){
-		 String key="abstract";
-		 String result=new BingTranslate().Translate(key);
-		 System.out.println(result);
-	 }
-	 
+	
 }

@@ -132,35 +132,4 @@ public class RecievePicture extends JFrame{
 			}
 		});
     }
-	
-	//send the card
-	public void sendCard(String usernames){
-		lock.lock();
-		try {
-			DataOutputStream toServer = new DataOutputStream(socket.getOutputStream());
-			//send
-			toServer.writeInt(9);
-			toServer.writeUTF(usernames);
-
-			toServer.flush();
-				        
-			ObjectOutputStream objectOutputStream=new ObjectOutputStream(socket.getOutputStream());
-
-	        objectOutputStream.writeObject(card);
-	        objectOutputStream.flush();
-
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally{
-			lock.unlock();
-		}
-		
-	}
-	
-	
-    
-    
 }

@@ -84,12 +84,27 @@ public class CheckBoxListener implements ItemListener{
 			toServer=new DataOutputStream(socket.getOutputStream());
 			toServer.writeInt(7);
 			toServer.writeUTF(key);
-			if(textpanel.bing.isSelected())
+			if(textpanel.bing.isSelected()){
+				if((int)obj[2]==1)
+					textpanel.like.setSelected(true);
+				else
+					textpanel.like.setSelected(false);
 				toServer.writeUTF("baidu");
-			else if(textpanel.youdao.isSelected())
+			}
+			else if(textpanel.youdao.isSelected()){
+				if((int)obj[3]==1)
+					textpanel.like.setSelected(true);
+				else
+					textpanel.like.setSelected(false);
 				toServer.writeUTF("youdao");
-			else if(textpanel.jinshan.isSelected())
+			}
+			else if(textpanel.jinshan.isSelected()){
+				if((int)obj[4]==1)
+					textpanel.like.setSelected(true);
+				else
+					textpanel.like.setSelected(false);
 				toServer.writeUTF("jinshan");
+			}
 		}
 		catch (IOException ex){
 			System.err.println(ex);

@@ -48,6 +48,9 @@ public class Testwindow extends JFrame{
 	int binglike;
 	int youdaolike;
 	int jinshanlike;
+	int judgebing;
+	int judgeyoudao;
+	int judgejinshan;
 	
 	LoginPanel loginpanel = new LoginPanel();
 	SearchPanel searchpanel = new SearchPanel();
@@ -60,7 +63,7 @@ public class Testwindow extends JFrame{
 
     Object []BoxObj1={binglike,youdaolike,jinshanlike,textpanel,choosepanel};
     Object []BoxObj2={searchpanel,textpanel};
-    Object []BoxObj3={searchpanel,textpanel};
+    Object []BoxObj3={searchpanel,textpanel,judgebing,judgeyoudao,judgejinshan};
     
     //create a new lock
   	private Lock lock=new ReentrantLock();
@@ -146,7 +149,8 @@ public class Testwindow extends JFrame{
 	public void connect(){
 		try{
 			//create a socket to connect to the server
-			socket = new Socket("172.26.210.33",8080);
+		//	socket = new Socket("172.26.210.33",8080);
+			socket = new Socket("172.26.217.164",8080);
 		}
 		catch (IOException ex){
 			System.err.println(ex);
@@ -205,6 +209,8 @@ public class Testwindow extends JFrame{
 							ImageIcon icon = new ImageIcon(messagefile);  
 					        icon.setImage(icon.getImage().getScaledInstance(20,20,Image.SCALE_DEFAULT));
 							loginpanel.message.setIcon(icon);
+							loginpanel.Right.revalidate();
+							loginpanel.Right.repaint();
 						}
 						for(int i=0;i<temp.size();i++){
 							messages.add(temp.get(i));
@@ -228,7 +234,9 @@ public class Testwindow extends JFrame{
 						jinshanlike=fromServer.readInt();
 						
 						if(user.Logged()){
-							
+							judgebing=fromServer.readInt();
+							judgeyoudao=fromServer.readInt();
+							judgejinshan=fromServer.readInt();
 						}
 						
 						break;

@@ -53,7 +53,7 @@ public class SendPicture extends JFrame{
 	
 	Socket socket=null;
 	
-	private Lock lock=new ReentrantLock();
+	//private Lock lock=new ReentrantLock();
 
 	
 	public SendPicture(Translation t,Socket socket,Vector<String>namelist,Vector<String>onlinenamelist){
@@ -190,7 +190,7 @@ public class SendPicture extends JFrame{
 	
 	//send the card
 	public void sendCard(String usernames){
-		lock.lock();
+		//lock.lock();
 		try {
 			DataOutputStream toServer = new DataOutputStream(socket.getOutputStream());
 			//send
@@ -203,14 +203,11 @@ public class SendPicture extends JFrame{
 
 	        objectOutputStream.writeObject(card);
 	        objectOutputStream.flush();
-
+	        //lock.unlock();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		finally{
-			lock.unlock();
 		}
 		
 	}

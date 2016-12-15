@@ -24,7 +24,7 @@ public class TextPanel {
 	JPanel Right = new JPanel();
 	JLabel Daily = new JLabel("Daily Sentence");//no edit
 	public ImagePanel cartoon = new ImagePanel();
-	public JTextArea sen= new JTextArea("",15,10);
+	public JTextArea sen= new JTextArea("",23,18);
 	//JScrollPane sentence=new JScrollPane(sen);//daily sentence
 	public JCheckBox takeword = new JCheckBox("È¡´Ê");
 	

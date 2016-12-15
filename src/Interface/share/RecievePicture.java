@@ -46,7 +46,7 @@ public class RecievePicture extends JFrame{
 	
 	Socket socket=null;
 	
-	private Lock lock=new ReentrantLock();
+	//private Lock lock=new ReentrantLock();
 
 	
 	public RecievePicture(Socket socket,Vector<Message> melist){

@@ -59,7 +59,7 @@ public class Testwindow extends JFrame{
     Object []BoxObj2={searchpanel,textpanel};
     Object []BoxObj3={searchpanel,textpanel,info};
     //create a new lock
-  	private Lock lock=new ReentrantLock();
+  	//private Lock lock=new ReentrantLock();
    
     
 	public static void main(String[] args){
@@ -73,18 +73,17 @@ public class Testwindow extends JFrame{
 	Testwindow(){	
 		this.connect();
 	
-		lock.lock();
+		//lock.lock();
 		DataOutputStream toServer;
 		try {
 			toServer = new DataOutputStream(socket.getOutputStream());
 			toServer.writeInt(4);//everyday sentences
 			toServer.flush();
+			//lock.unlock();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		finally{
-			lock.unlock();
+			//lock.unlock();
 		}
 		
 		
@@ -162,34 +161,32 @@ public class Testwindow extends JFrame{
 			while(true){
 				try{
 					if(user.Logged()){
-						lock.lock();
+						//lock.lock();
 						DataOutputStream toServer=new DataOutputStream(socket.getOutputStream());
 						toServer.writeInt(0);
 						toServer.flush();
-						lock.unlock();
+						//lock.unlock();
 					}
 					Thread.sleep(10000);
 				}
-				catch (IOException ex){
+				catch (Exception ex){
+					//lock.unlock();
 					ex.printStackTrace();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} 
+				}
 			}
 		}
 		
 	}
 	
 	class ReceiveTask implements Runnable{
-		private Lock lock=new ReentrantLock();
+		//private Lock lock=new ReentrantLock();
 
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			try{			   
 			    while(true){
-			    	lock.lock();
+			    	//lock.lock();
 			    	
 					DataInputStream fromServer=new DataInputStream(socket.getInputStream());
 					
@@ -263,7 +260,7 @@ public class Testwindow extends JFrame{
 					default:break;
 					}
 					
-					lock.unlock();
+					//lock.unlock();
 			    }
 			}
 			catch (IOException ex){

@@ -139,7 +139,7 @@ public class MultiThreadServer extends JFrame{
 		
 		private String username=null;
 		
-		private Lock lock=new ReentrantLock();
+		//private Lock lock=new ReentrantLock();
 
 				
 		//construct a thread
@@ -160,13 +160,12 @@ public class MultiThreadServer extends JFrame{
 			try{		
 				//continuously serve the client
 				while(true){
-					lock.lock();
 					
 					DataInputStream inputFromClient=new DataInputStream(socket.getInputStream());
 					
 					//receive type from the client
 					int type=inputFromClient.readInt();
-						
+					
 					switch(type){
 					case 0:{//message required
 						jta.append(username);
@@ -174,7 +173,9 @@ public class MultiThreadServer extends JFrame{
 
 						Vector<Message> messages=messagedb.getMessages(username);
 						
-						jta.append("send!\n");
+						if(messages.size()==0)break;
+						
+						jta.append("send!\t"+messages.size()+"\n");
 						//output
 						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
 						outputToClient.writeInt(0);
@@ -342,7 +343,7 @@ public class MultiThreadServer extends JFrame{
 					}
 					default:break;
 					}
-					lock.unlock();
+					//lock.unlock();
 				}
 			}
 			catch(Exception ex){

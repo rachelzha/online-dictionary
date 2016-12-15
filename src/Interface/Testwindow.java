@@ -8,6 +8,7 @@ import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Vector;
 import java.util.concurrent.locks.Lock;
@@ -39,6 +40,10 @@ public class Testwindow extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 	public Socket socket=null;
+	public DataInputStream dataFromServer=null;
+	public DataOutputStream dataToServer=null;
+	public ObjectInputStream objectFromServer=null;
+	public ObjectOutputStream objectToServer=null;
 	
 	UserState user=new UserState();
 	
@@ -74,16 +79,14 @@ public class Testwindow extends JFrame{
 		this.connect();
 	
 		//lock.lock();
-		DataOutputStream toServer;
+		//DataOutputStream toServer;
 		try {
-			toServer = new DataOutputStream(socket.getOutputStream());
-			toServer.writeInt(4);//everyday sentences
-			toServer.flush();
-			//lock.unlock();
+			//toServer = new DataOutputStream(socket.getOutputStream());
+			dataToServer.writeInt(4);//everyday sentences
+			dataToServer.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			//lock.unlock();
 		}
 		
 		
@@ -136,16 +139,18 @@ public class Testwindow extends JFrame{
 		receiveTask.start();
 		
 		Thread fetchMessageTask=new Thread(new FetchMessageTask());
-		fetchMessageTask.start();
+		if(user.Logged())fetchMessageTask.start();
 	}
 	
 	
 	public void connect(){
 		try{
 			socket = new Socket("192.168.43.126",8080);
-			//create a socket to connect to the server
-		//	socket = new Socket("192.168.43.195",9999);
-		//	socket = new Socket("172.26.217.164",8080);
+			dataToServer=new DataOutputStream(socket.getOutputStream());
+			dataFromServer=new DataInputStream(socket.getInputStream());
+			objectToServer=new ObjectOutputStream(socket.getOutputStream());//!
+			objectFromServer=new ObjectInputStream(socket.getInputStream());
+			
 		}
 		catch (IOException ex){
 			System.err.println(ex);
@@ -160,18 +165,16 @@ public class Testwindow extends JFrame{
 			// TODO Auto-generated method stub
 			while(true){
 				try{
-					if(user.Logged()){
 						//lock.lock();
-						DataOutputStream toServer=new DataOutputStream(socket.getOutputStream());
-						toServer.writeInt(0);
-						toServer.flush();
+						//DataOutputStream toServer=new DataOutputStream(socket.getOutputStream());
+						dataToServer.writeInt(0);
+						dataToServer.flush();
 						//lock.unlock();
-					}
-					Thread.sleep(10000);
+						Thread.sleep(10000);
 				}
 				catch (Exception ex){
 					//lock.unlock();
-					ex.printStackTrace();
+					System.out.println("cuole!");
 				}
 			}
 		}
@@ -187,15 +190,13 @@ public class Testwindow extends JFrame{
 			try{			   
 			    while(true){
 			    	//lock.lock();
-			    	
-					DataInputStream fromServer=new DataInputStream(socket.getInputStream());
 					
-					int type=fromServer.readInt();
+					int type=dataFromServer.readInt();
 					
 					switch(type){
 					case 0:{//get message
-						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
-						Vector<Message> temp=(Vector<Message>)ois.readObject();
+						
+						Vector<Message> temp=(Vector<Message>)objectFromServer.readObject();
 						
 						if(temp.size()>0){
 							String messagefile="image/message/3.png";
@@ -209,51 +210,49 @@ public class Testwindow extends JFrame{
 						break;
 					}
 					case 1:{//log in
-						String username=fromServer.readUTF();
+						String username=dataFromServer.readUTF();
 						if(username!=null){
 							user.setUsername(username);
 						}
 						break;
 					}
 					case 2:{//register
-						String username=fromServer.readUTF();
+						String username=dataFromServer.readUTF();
 						if(username!=null){
 							user.setUsername(username);
 						}
 						break;
 					}
 					case 3:{//get likes
-						info.setbinglikes(fromServer.readInt());
-						info.setyoudaolikes(fromServer.readInt());
-						info.setjinshanlikes(fromServer.readInt());
+						info.setbinglikes(dataFromServer.readInt());
+						info.setyoudaolikes(dataFromServer.readInt());
+						info.setjinshanlikes(dataFromServer.readInt());
 						
 						if(user.Logged()){
-							info.setjudgebing(fromServer.readInt());
-							info.setjudgeyoudao(fromServer.readInt());
-							info.setjudgejinshan(fromServer.readInt());
+							info.setjudgebing(dataFromServer.readInt());
+							info.setjudgeyoudao(dataFromServer.readInt());
+							info.setjudgejinshan(dataFromServer.readInt());
 							//System.out.println(judgebing+":"+judgeyoudao+":"+judgejinshan);
 						}
 						
 						break;
 					}
 					case 4:{//everyday sentences
-						String sentence=fromServer.readUTF();
+						String sentence=dataFromServer.readUTF();
 						System.out.println(sentence);
 						textpanel.sen.setText(sentence);
 						break;
 					}
 					case 5:{//online users
-						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
 						
-						Vector<String> onlineUsers=(Vector<String>)ois.readObject();
+						Vector<String> onlineUsers=(Vector<String>)objectFromServer.readObject();
 					//	textpanel.Out.append("The online Clients: \n");
 						info.setonlineuserlist(onlineUsers);
 						break;
 					}
 					case 6:{//all users 
-						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
 						
-						Vector<String> allUsers=(Vector<String>)ois.readObject();
+						Vector<String> allUsers=(Vector<String>)objectFromServer.readObject();
 						info.setuserlist(allUsers);
 						break;
 					}

@@ -129,7 +129,11 @@ public class MultiThreadServer extends JFrame{
 	// listen
 	//define the thread class for handling new connection
 	class HandleAClient implements Runnable {
-		private Socket socket;//a connected socket
+		private Socket socket=null;//a connected socket
+		public DataInputStream dataFromClient=null;
+		public DataOutputStream dataToClient=null;
+		public ObjectInputStream objectFromClient=null;
+		public ObjectOutputStream objectToClient=null;
 		
 		private Connection dbConn=null;
 		private UserDB userdb;
@@ -145,6 +149,15 @@ public class MultiThreadServer extends JFrame{
 		//construct a thread
 		public HandleAClient(Socket socket){
 			this.socket=socket;
+			try {
+				dataFromClient=new DataInputStream(socket.getInputStream());
+				dataToClient=new DataOutputStream(socket.getOutputStream());
+				objectFromClient=new ObjectInputStream(socket.getInputStream());
+				objectToClient=new ObjectOutputStream(socket.getOutputStream());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			dbConn=connectUsingPool();
 			//System.out.println(dbConn);
@@ -160,11 +173,9 @@ public class MultiThreadServer extends JFrame{
 			try{		
 				//continuously serve the client
 				while(true){
-					
-					DataInputStream inputFromClient=new DataInputStream(socket.getInputStream());
-					
+										
 					//receive type from the client
-					int type=inputFromClient.readInt();
+					int type=dataFromClient.readInt();
 					
 					switch(type){
 					case 0:{//message required
@@ -177,20 +188,18 @@ public class MultiThreadServer extends JFrame{
 						
 						jta.append("send!\t"+messages.size()+"\n");
 						//output
-						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
-						outputToClient.writeInt(0);
-						outputToClient.flush();
+						dataToClient.writeInt(0);
+						dataToClient.flush();
 						
-						ObjectOutputStream objectOutputStream=new ObjectOutputStream(socket.getOutputStream());
-						objectOutputStream.writeObject(messages);
-						objectOutputStream.flush();
+						objectToClient.writeObject(messages);
+						objectToClient.flush();
 						
 						break;
 					}
 					case 1:{//log in
 						//input
-						String usernametmp=inputFromClient.readUTF();
-						String password=inputFromClient.readUTF();
+						String usernametmp=dataFromClient.readUTF();
+						String password=dataFromClient.readUTF();
 						
 						jta.append(usernametmp+"\t"+password+"\n");
 						
@@ -204,18 +213,17 @@ public class MultiThreadServer extends JFrame{
 						else username=null;
 						
 						//output
-						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
-						outputToClient.writeInt(1);
-						outputToClient.writeUTF(username);
-						outputToClient.flush();
+						dataToClient.writeInt(1);
+						dataToClient.writeUTF(username);
+						dataToClient.flush();
 						
 						break;
 					}
 					case 2:{//register
 						//input
-						String usernametmp=inputFromClient.readUTF();
-						String password=inputFromClient.readUTF();
-						String email=inputFromClient.readUTF();
+						String usernametmp=dataFromClient.readUTF();
+						String password=dataFromClient.readUTF();
+						String email=dataFromClient.readUTF();
 							
 						boolean success=userdb.addUser(usernametmp, password, email);
 						if(success){
@@ -226,16 +234,15 @@ public class MultiThreadServer extends JFrame{
 						else username=null;
 						
 						//output
-						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
-						outputToClient.writeInt(2);
-						outputToClient.writeUTF(username);
-						outputToClient.flush();
+						dataToClient.writeInt(2);
+						dataToClient.writeUTF(username);
+						dataToClient.flush();
 
 						break;
 					}
 					case 3://search words
 					{	//input
-						String word=inputFromClient.readUTF();
+						String word=dataFromClient.readUTF();
 				
 						
 						Vector<Integer>vec=likedb.getLikes(word);
@@ -244,36 +251,34 @@ public class MultiThreadServer extends JFrame{
 						int jinshanLikes=vec.get(2);
 						
 						//output
-						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
-						outputToClient.writeInt(3);
-						outputToClient.writeInt(baiduLikes);
-						outputToClient.writeInt(youdaoLikes);
-						outputToClient.writeInt(jinshanLikes);
+						dataToClient.writeInt(3);
+						dataToClient.writeInt(baiduLikes);
+						dataToClient.writeInt(youdaoLikes);
+						dataToClient.writeInt(jinshanLikes);
 						
 						if(username!=null){
 							likedb.add(username, word);
 							
 							Vector<Integer>vec2=likedb.getPersonalLikes(username, word);
-							outputToClient.writeInt(vec2.get(0));//baidu
-							outputToClient.writeInt(vec2.get(1));//youdao
-							outputToClient.writeInt(vec2.get(2));//jinshan
+							dataToClient.writeInt(vec2.get(0));//baidu
+							dataToClient.writeInt(vec2.get(1));//youdao
+							dataToClient.writeInt(vec2.get(2));//jinshan
 						}
 						
-						outputToClient.flush();
+						dataToClient.flush();
 						
 						break;
 					}
 					case 4:{
 						jta.append("get\n");
 						//get everyday sentence
-						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
 						String sentence=sentencedb.getSentence();
 						System.out.println(sentence+"!!!!");
 						//String sent="happy";
 						
-						outputToClient.writeInt(4);
-						outputToClient.writeUTF(sentence);
-						outputToClient.flush();
+						dataToClient.writeInt(4);
+						dataToClient.writeUTF(sentence);
+						dataToClient.flush();
 						break;
 					}
 					case 5:{//get online users
@@ -285,26 +290,22 @@ public class MultiThreadServer extends JFrame{
 						}
 						
 						//output
-						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
-						outputToClient.writeInt(5);
-						outputToClient.flush();
+						dataToClient.writeInt(5);
+						dataToClient.flush();
 						
-						ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
-						toClient.writeObject(online);
-						toClient.flush();
+						objectToClient.writeObject(online);
+						objectToClient.flush();
 						
 						break;
 					}
 					case 6:{//get all users
 						Vector<String> allUsers=userdb.getAllUsers();
 						
-						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
-						outputToClient.writeInt(6);
-						outputToClient.flush();
+						dataToClient.writeInt(6);
+						dataToClient.flush();
 						
-						ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
-						toClient.writeObject(allUsers);
-						toClient.flush();
+						objectToClient.writeObject(allUsers);
+						objectToClient.flush();
 						
 						break;
 					}
@@ -316,8 +317,8 @@ public class MultiThreadServer extends JFrame{
 					}
 					case 8:{//likes
 						//input
-						String word=inputFromClient.readUTF();
-						String aDict=inputFromClient.readUTF();
+						String word=dataFromClient.readUTF();
+						String aDict=dataFromClient.readUTF();
 						
 						likedb.changeLikes(username, word, aDict);
 						break;
@@ -327,10 +328,9 @@ public class MultiThreadServer extends JFrame{
 						//send message
 						if(username==null)break;
 						
-						String receiver=inputFromClient.readUTF();//the user to send message
+						String receiver=dataFromClient.readUTF();//the user to send message
 						
-						ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());			
-						Card card=(Card)ois.readObject();
+						Card card=(Card)objectFromClient.readObject();
 						
 						//save to server directory
 						String filename=card.saveCard("wordcards");

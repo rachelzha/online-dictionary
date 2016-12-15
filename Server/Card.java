@@ -71,6 +71,33 @@ public class Card implements Serializable{
     	else return true;
     }
     
+    
+    
+    public void draw(Translation t,boolean b){
+    	Graphics g = image.getGraphics();
+
+        if( b == false){
+     	   g.setColor(new Color(102,102,102)); 
+        }
+
+        Font mFont = new Font("Arial",Font.BOLD,30);
+        g.setFont(mFont);
+         
+        g.drawString(t.word, 100, 100); 
+        
+        mFont = new Font("Arial",Font.PLAIN,20);
+        g.setFont(mFont);
+        if(t.trans.size()>0){
+     	   g.drawString(t.trans.get(0).characteristic, 100, 150);
+     	   g.drawString(t.trans.get(0).definitions, 110, 150);
+        }
+        
+        if(t.sen.size()>0){
+     	   g.drawString(t.sen.get(0), 100, 200);
+        }
+    }
+    
+    
     //ÔÚÍ¼Æ¬ÉÏĞ´×Ö
     public void draw(Translation t, String name , boolean b ){
     		File background=new File(name);

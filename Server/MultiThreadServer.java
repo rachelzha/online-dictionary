@@ -169,15 +169,16 @@ public class MultiThreadServer extends JFrame{
 						
 					switch(type){
 					case 0:{//message required
+						jta.append(username);
 						if(username==null)break;
 
 						Vector<Message> messages=messagedb.getMessages(username);
 						
+						jta.append("send!\n");
 						//output
 						DataOutputStream outputToClient=new DataOutputStream(socket.getOutputStream());
 						outputToClient.writeInt(0);
 						outputToClient.flush();
-						
 						
 						ObjectOutputStream objectOutputStream=new ObjectOutputStream(socket.getOutputStream());
 						objectOutputStream.writeObject(messages);

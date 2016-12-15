@@ -102,6 +102,11 @@ public class SendPicture extends JFrame{
         chooser.setCurrentDirectory(new File("."));
         chooserToSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         
+        //default card
+        card.draw(t, false);
+        icon=new ImageIcon(card.image);
+        label.setIcon(icon);
+        
         //open
         open.addActionListener(new ActionListener() {
 			@Override
@@ -116,12 +121,9 @@ public class SendPicture extends JFrame{
 	                    
 	                    //draw
 	                    card.draw(t,name,false);
-			            
-	                    if(card.validable()){
-		                    icon=new ImageIcon(card.image);
-		                    
-		                    label.setIcon(icon);
-	                    }
+
+		                icon=new ImageIcon(card.image);
+		                label.setIcon(icon);
 	                }
 			}
         });
@@ -133,7 +135,6 @@ public class SendPicture extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				if(!card.validable())return;
 				if(users.getText().length()==0)return;
 				
 				sendCard(users.getText());

@@ -71,7 +71,7 @@ public class Testwindow extends JFrame{
 	}
 	
 	Testwindow(){	
-/*		this.connect();
+		this.connect();
 	
 		lock.lock();
 		DataOutputStream toServer;
@@ -86,7 +86,7 @@ public class Testwindow extends JFrame{
 		finally{
 			lock.unlock();
 		}
-		*/
+		
 		
 		JPanel panel1=loginpanel.getPanel();
         JPanel panel2=searchpanel.getPanel();
@@ -133,17 +133,17 @@ public class Testwindow extends JFrame{
   //      searchpanel.input.getComponent(0).addMouseListener(new ComboBoxListener(searchpanel,textpanel) );
   //      textpanel.takeword.addItemListener(new CheckBoxListener(8,));
 		
-   /*    Thread receiveTask=new Thread(new ReceiveTask());
+       Thread receiveTask=new Thread(new ReceiveTask());
 		receiveTask.start();
 		
 		Thread fetchMessageTask=new Thread(new FetchMessageTask());
-		fetchMessageTask.start();*/
+		fetchMessageTask.start();
 	}
 	
 	
 	public void connect(){
 		try{
-			socket = new Socket("192.168.43.126",9999);
+			socket = new Socket("172.26.210.15",8080);
 			//create a socket to connect to the server
 		//	socket = new Socket("192.168.43.195",9999);
 		//	socket = new Socket("172.26.217.164",8080);

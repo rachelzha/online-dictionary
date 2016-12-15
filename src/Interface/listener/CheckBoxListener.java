@@ -13,6 +13,7 @@ import src.Interface.panel.TextPanel;
 import src.Translate.BaiduTranslate;
 import src.Translate.BingTranslate;
 import src.Translate.JinshanTranslate;
+import src.Translate.Translation;
 import src.Translate.YoudaoTranslate;
 import src.userLogin.UserState;
 
@@ -61,8 +62,8 @@ public class CheckBoxListener implements ItemListener{
 			else if(info.getjudgebing()==-1)
 				textpanel.like.setSelected(false);
 			BingTranslate B = new BingTranslate();
-			String text = B.Translation(key);
-			textpanel.Out.setText(text);
+			Translation trans = B.Translation(key);
+			trans.print(textpanel.Out);
 		}
 		if(textpanel.youdao.isSelected()){
 			if(info.getjudgeyoudao()==1)
@@ -70,8 +71,8 @@ public class CheckBoxListener implements ItemListener{
 			else if(info.getjudgeyoudao()==-1)
 				textpanel.like.setSelected(false);
 			YoudaoTranslate Y = new YoudaoTranslate();
-			String text = Y.Translation(key);
-			textpanel.Out.setText(text);
+			Translation trans = Y.Translation(key);
+			trans.print(textpanel.Out);
 		}
 		if(textpanel.jinshan.isSelected()){
 			if(info.getjudgejinshan()==1)
@@ -79,8 +80,8 @@ public class CheckBoxListener implements ItemListener{
 			else if(info.getjudgejinshan()==-1)
 				textpanel.like.setSelected(false);
 			JinshanTranslate J = new JinshanTranslate();
-			String text = J.Translate(key);
-			textpanel.Out.setText(text);
+			Translation trans = J.Translate(key);
+			trans.print(textpanel.Out);
 		}	
 		textpanel.Above.revalidate();
 		textpanel.Above.repaint();

@@ -18,7 +18,11 @@ public class JinshanTranslate {
 	private String url = "http://dict-co.iciba.com/api/dictionary.php";
 	private String key = "DFAD3B39DE20B8E63E050779B91F9F0D";
 	
+	Translation t=new Translation();
+	
 	private String sendGet(String str) {
+		t.word=str;
+		
 	  // 编码成UTF-8
 		try {
 			str = URLEncoder.encode(str, "utf-8");
@@ -57,7 +61,7 @@ public class JinshanTranslate {
 		return null;
 	}
     
-	public static String xmltostring(String protocolXML) {   
+	public String xmltostring(String protocolXML) {   
         SAXBuilder builder=new SAXBuilder(false);   
         try {   
         	String message="";
@@ -69,12 +73,39 @@ public class JinshanTranslate {
 			List<Element> list = eles.getChildren(); // 得到元素的集合   
   
             int flag=0;
-            if( list!=null){   
+            if( list!=null){
+            	boolean en=true;
                 for (int i = 0; i < list.size(); i++) {   
                      Element book = list.get(i);   
                      if(book.getName()=="query"||book.getName()=="key")
                     	 flag=1;
-                     if(flag==1)
+                     if(flag==1){
+                    	 if(book.getName().equals("ps")){
+                    		 if(en){
+                    			 t.enPhonetic=book.getValue();
+                    			 en=false;
+                    		 }
+                    		 else {
+                    			 t.amPhonetic=book.getValue();
+                    			 en=true;
+                    		 }
+                    	 }
+                    	 
+                    	 if(book.getName().equals("pos")){
+                    		 Definition def=new Definition();
+                    		 def.characteristic=book.getValue();
+                    		 
+                    		 i++;
+                    		 book=list.get(i);
+                    		 def.definitions=book.getValue();
+                    		 
+                    		 t.trans.add(def);
+                    	 }
+                    	 
+                    	 if(book.getName().equals("sent")){
+                    		 t.sen.add(book.getValue());
+                    	 }
+                     }
                     	 message += book.getName() + " : "  + book.getValue()+'\n';
                  }   
             }   
@@ -86,15 +117,9 @@ public class JinshanTranslate {
         return null;
      }   
 	
-	public String Translate(String query){
-		String message = xmltostring(sendGet(query));
-		return message;
-	}
-	/*
-	 public static void main(String[] args)throws Exception {
-		 JinshanTranslate test = new JinshanTranslate();
-		 System.out.println(test.Translate("water"));
-		// System.out.println(temp);
-	 }*/ 
+	public Translation Translate(String query){
+		xmltostring(sendGet(query));
+		return t;
+	} 
 
 }

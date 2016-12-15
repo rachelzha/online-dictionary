@@ -12,13 +12,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class YoudaoTranslate {
+public class YoudaoTranslate2 {
 	private String url = "http://fanyi.youdao.com/openapi.do";
-	public Translation t=new Translation();
 	 
 	private String sendGet(String str) {
-		t.word=str;
-		
 	  // 编码成UTF-8
 		try {
 			str = URLEncoder.encode(str, "utf-8");
@@ -51,11 +48,12 @@ public class YoudaoTranslate {
 		return null;
 	}
 	
-	public String JsonToString(String jstring) {  
+	public static String JsonToString(String jstring) {  
         try {  
         	String message="";
             JSONObject obj = new JSONObject(jstring);  
             String errorcode = obj.getString("errorCode");
+            //System.out.println(errorcode);
             
             if(errorcode.equals("20")){
             	message = "要翻译的文本过长";
@@ -78,41 +76,40 @@ public class YoudaoTranslate {
             	JSONObject basic = obj.has("basic") ? obj.getJSONObject("basic") : null;
             	JSONArray web = obj.has("web") ? obj.getJSONArray("web") : null;
             	
+            	String phonetic=null;
+                String uk_phonetic=null;
+                String us_phonetic=null;
                 JSONArray explains=null;
                 if(basic!=null){
-                	t.phonetic=basic.has("phonetic")? basic.getString("phonetic"):null;
-                	t.enPhonetic=basic.has("uk-phonetic")? basic.getString("uk-phonetic"):null;
-                	t.amPhonetic=basic.has("us-phonetic")? basic.getString("us-phonetic"):null;
+                	phonetic=basic.has("phonetic")? basic.getString("phonetic"):null;
+                	uk_phonetic=basic.has("uk-phonetic")? basic.getString("uk-phonetic"):null;
+                	us_phonetic=basic.has("us-phonetic")? basic.getString("us-phonetic"):null;
                     explains=basic.has("explains")? basic.getJSONArray("explains"):null;
                 }
-                
-                if(explains!=null){
-                    for(int i=0;i<explains.length();i++){
-                    	Definition def=new Definition();
-                    	String temp=explains.getString(i);
-                    	
-                    	int j=0;
-                    	for(;j<temp.length();j++){
-                    		if(temp.charAt(j)=='.')break;
-                    	}
-                    	
-                    	if(j==temp.length()){
-                    		def.characteristic="";
-                        	def.definitions=temp;
-                    	}
-                    	else{
-                    		def.characteristic=temp.substring(0, j+1);
-                    		def.definitions=temp.substring(j+1,temp.length());
-                    	}
-                    	
-                    	t.trans.add(def);
+                String translationStr="";
+                if(translation!=null){
+                    translationStr="\n翻译：\n";
+                    for(int i=0;i<translation.length();i++){
+                        translationStr+="\t<"+(i+1)+">"+translation.getString(i)+"\n";
                     }
                 }
+                String phoneticStr=(phonetic!=null? "\n发音："+phonetic:"")
+                        +(uk_phonetic!=null? "\n英式发音："+uk_phonetic:"")
+                        +(us_phonetic!=null? "\n美式发音："+us_phonetic:"");
+                String explainStr="";
+                if(explains!=null){
+                    explainStr="\n\n释义：\n";
+                    for(int i=0;i<explains.length();i++){
+                        explainStr+="\t<"+(i+1)+">"+explains.getString(i)+"\n";
+                    }
+                }
+
+                message="原文："+query+"\n"+translationStr+phoneticStr+explainStr;
                 
                 if (web!=null) {  
-                	JSONArray webString = new JSONArray("[" + web+ "]");  
-                    Definition def=new Definition();
-                    def.characteristic= "网络释义";  
+                    JSONArray webString = new JSONArray("[" + web  
+                            + "]");  
+                    message += "\n网络释义：";  
                     JSONArray webArray = webString.getJSONArray(0);  
                     int count = 0;  
                     while (!webArray.isNull(count)) {  
@@ -121,18 +118,17 @@ public class YoudaoTranslate {
                                 .has("key")) {  
                             String key = webArray.getJSONObject(  
                                     count).getString("key");  
-                            def.definitions += "(" + (count + 1) + ")"  
-                                    + key+"\n";  
+                            message += "\n\t<" + (count + 1) + ">"  
+                                    + key;  
                         }  
                         if (webArray.getJSONObject(count).has(  
                                 "value")) {  
                             String value = webArray.getJSONObject(  
                                     count).getString("value");  
-                            def.definitions += "\t" + value+"\n";  
-                        }
-                        count++; 
-                    } 
-                    t.trans.add(def);
+                            message += "\n\t   " + value;  
+                        }  
+                        count++;  
+                    }  
                 }
 
             }
@@ -145,9 +141,14 @@ public class YoudaoTranslate {
         return null;  
     }   
 	
-	public Translation Translation(String query){
-		JsonToString(sendGet(query));
-		return t;
+	public String Translation(String query){
+		String message = JsonToString(sendGet(query));
+		return message;
 	}
-
+	
+	public static void main(String[] args){
+		YoudaoTranslate2 Y = new YoudaoTranslate2();
+		String m = Y.Translation("water");
+		System.out.println(m);
+	}
 }

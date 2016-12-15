@@ -373,22 +373,22 @@ public class Window extends JFrame {
 					System.err.println(ex);
 				}
 				
-				
+			/*	
 				if(box1.isSelected()){
 					BaiduTranslate B = new BaiduTranslate();
 					String text = B.Translation(key);
 					Out1.setText(text);
 				}
 				if(box2.isSelected()){
-					YoudaoTranslate Y = new YoudaoTranslate();
+					YoudaoTranslate2 Y = new YoudaoTranslate2();
 					String text = Y.Translation(key);
 					Out2.setText(text);
 				}
 				if(box3.isSelected()){
-					JinshanTranslate J = new JinshanTranslate();
+					JinshanTranslate2 J = new JinshanTranslate2();
 					String text = J.Translate(key);
 					Out3.setText(text);
-				}
+				}*/
 			}
 		});
 		

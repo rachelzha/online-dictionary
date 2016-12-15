@@ -25,7 +25,7 @@ public class TextPanel {
 	JLabel Daily = new JLabel("Daily Sentence");//no edit
 	public ImagePanel cartoon = new ImagePanel();
 	public JTextArea sen= new JTextArea("",15,10);
-	JScrollPane sentence=new JScrollPane(sen);//daily sentence
+	//JScrollPane sentence=new JScrollPane(sen);//daily sentence
 	public JCheckBox takeword = new JCheckBox("取词");
 	
 	public JPanel getPanel(){
@@ -90,7 +90,7 @@ public class TextPanel {
 		pan1.add(Daily,BorderLayout.NORTH);
 		pan1.add(cartoon,BorderLayout.CENTER);
 		pan2.setBackground(null);
-		pan2.add(sentence,BorderLayout.CENTER);
+		pan2.add(sen,BorderLayout.CENTER);
 		pan2.add(takeword,BorderLayout.SOUTH);
 		takeword.setBackground(null);
 		Right.add(pan1);
@@ -115,6 +115,8 @@ public class TextPanel {
 	    text.setBackground(Color.WHITE);
 	    text.setBorder(null);
 	    Out.setEditable(false);  
+	    Out.setLineWrap(true);        //激活自动换行功能 
+		Out.setWrapStyleWord(true);   // 激活断行不断字功能
 		Center.setLayout (new BorderLayout(0,0));
 		Center.add(Above,BorderLayout.NORTH);
 		Center.add(text,BorderLayout.CENTER);

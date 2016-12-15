@@ -2,7 +2,7 @@ package src.Translate;
 
 
 public class Definition {
-	String characteristic=null;
-	String definitions=null;
+	public String characteristic=null;
+	public String definitions=null;
 	
 }

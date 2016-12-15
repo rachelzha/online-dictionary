@@ -113,6 +113,7 @@ public class YoudaoTranslate {
                 	JSONArray webString = new JSONArray("[" + web+ "]");  
                     Definition def=new Definition();
                     def.characteristic= "Õ¯¬Á Õ“Â";  
+                    def.definitions="";
                     JSONArray webArray = webString.getJSONArray(0);  
                     int count = 0;  
                     while (!webArray.isNull(count)) {  
@@ -121,14 +122,14 @@ public class YoudaoTranslate {
                                 .has("key")) {  
                             String key = webArray.getJSONObject(  
                                     count).getString("key");  
-                            def.definitions += "(" + (count + 1) + ")"  
+                            def.definitions += "\n(" + (count + 1) + ")"  
                                     + key+"\n";  
                         }  
                         if (webArray.getJSONObject(count).has(  
                                 "value")) {  
                             String value = webArray.getJSONObject(  
                                     count).getString("value");  
-                            def.definitions += "\t" + value+"\n";  
+                            def.definitions += "\t" + value;  
                         }
                         count++; 
                     } 

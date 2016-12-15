@@ -51,8 +51,8 @@ public class CheckBoxListener implements ItemListener{
 		SearchPanel searchpanel = (SearchPanel)obj[0];
 		TextPanel textpanel = (TextPanel)obj[1];
 		Info info =(Info)obj[2];
-		String key = searchpanel.input.getSelectedItem().toString();
-		//String key=searchpanel.input.getText();
+		//String key = searchpanel.input.getSelectedItem().toString();
+		String key=searchpanel.input.getText();
 		if(key==null||key.length()==0)
 			return;
 		if(textpanel.bing.isSelected()){
@@ -95,8 +95,8 @@ public class CheckBoxListener implements ItemListener{
 		TextPanel textpanel = (TextPanel) obj[1];
 		Info info = (Info)obj[2];
 		//System.out.println(obj[2]+":"+obj[3]+":"+obj[4]);///////
-		String key = searchpanel.input.getSelectedItem().toString();
-		//String key=searchpanel.input.getText();
+		//String key = searchpanel.input.getSelectedItem().toString();
+		String key=searchpanel.input.getText();
 		DataOutputStream toServer;
 		try{
 			//create an output stream to send data to the server

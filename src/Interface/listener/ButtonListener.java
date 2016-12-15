@@ -76,8 +76,8 @@ public class ButtonListener implements ActionListener{
 		SearchPanel searchpanel=(SearchPanel)obj[0];
 		TextPanel textpanel=(TextPanel)obj[1];
 		History his  = (History)obj[2];
-		String key = searchpanel.input.getSelectedItem().toString();
-	//	String key=searchpanel.input.getText();
+	//	String key = searchpanel.input.getSelectedItem().toString();
+		String key=searchpanel.input.getText();
 		textpanel.tranword.setText(key);
 		
 		lock.lock();
@@ -128,8 +128,8 @@ public class ButtonListener implements ActionListener{
 		String key = H.elementAt(his.getpointer());
 		textpanel.tranword.setText(key);
 		
-		searchpanel.input.setSelectedItem(key);
-		//searchpanel.input.setText(key);
+		//searchpanel.input.setSelectedItem(key);
+		searchpanel.input.setText(key);
 		if(textpanel.bing.isSelected()){
 			BingTranslate B = new BingTranslate();
 			Translation trans = B.Translation(key);
@@ -157,8 +157,8 @@ public class ButtonListener implements ActionListener{
 		String key = H.elementAt(his.getpointer());
 		textpanel.tranword.setText(key);
 		
-		searchpanel.input.setSelectedItem(key);
-		//searchpanel.input.setText(key);
+		//searchpanel.input.setSelectedItem(key);
+		searchpanel.input.setText(key);
 		if(textpanel.bing.isSelected()){
 			BingTranslate B = new BingTranslate();
 			Translation trans = B.Translation(key);
@@ -224,27 +224,26 @@ public class ButtonListener implements ActionListener{
 		SearchPanel searchpanel = (SearchPanel)obj[0];
 		TextPanel textpanel = (TextPanel)obj[1];
 		Info info = (Info)obj[2];
-		//String key = searchpanel.input.getText();
+		String key = searchpanel.input.getText();
 	//	for(int i=0;i<onlineuserlist.length;i++)
-	//		System.out.println(onlineuserlist[i]);
-		String key = searchpanel.input.getSelectedItem().toString();
-	/*	if(textpanel.bing.isSelected()){
-			BingTranslate2 B = new BingTranslate2();
-			String text = B.Translation(key);
-			new SendPicture(text,socket,info.getuserlist(),info.getonlineuserlist());
+	//		System.out.println(onlineuserlist[i])
+		if(textpanel.bing.isSelected()){
+			BingTranslate B = new BingTranslate();
+			Translation t = B.Translation(key);
+			new SendPicture(t,socket,info.getuserlist(),info.getonlineuserlist());
 		}
 		if(textpanel.youdao.isSelected()){
-			YoudaoTranslate2 Y = new YoudaoTranslate2();
-			String text = Y.Translation(key);
-			new SendPicture(text,socket,info.getuserlist(),info.getonlineuserlist());
+			YoudaoTranslate Y = new YoudaoTranslate();
+			Translation t = Y.Translation(key);
+			new SendPicture(t,socket,info.getuserlist(),info.getonlineuserlist());
 		//	textpanel.Out.setText(text);
 		}
 		if(textpanel.jinshan.isSelected()){
-			JinshanTranslate2 J = new JinshanTranslate2();
-			String text = J.Translate(key);
-			new SendPicture(text,socket,info.getuserlist(),info.getonlineuserlist());
+			JinshanTranslate J = new JinshanTranslate();
+			Translation t = J.Translate(key);
+			new SendPicture(t,socket,info.getuserlist(),info.getonlineuserlist());
 		//	textpanel.Out.setText(text);
-		}*/	
+		}	
 	}
 	
 	public void handleLogout(){

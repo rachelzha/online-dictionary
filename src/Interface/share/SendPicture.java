@@ -1,6 +1,7 @@
 package src.Interface.share;
 
 import Server.Card;
+import src.Translate.Translation;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -38,7 +39,9 @@ public class SendPicture extends JFrame{
     JFileChooser chooser=new JFileChooser();
     JFileChooser chooserToSave = new JFileChooser();
     
-    JList<String> userlist;
+    DefaultListModel<String> model = new DefaultListModel<>();
+    JList<String> userlist=new JList<>(model);
+    
     JCheckBox online = new JCheckBox("online");
     JPanel Left = new JPanel();
     
@@ -53,7 +56,7 @@ public class SendPicture extends JFrame{
 	private Lock lock=new ReentrantLock();
 
 	
-	public SendPicture(String content,Socket socket,Vector<String>namelist,Vector<String>onlinenamelist){
+	public SendPicture(Translation t,Socket socket,Vector<String>namelist,Vector<String>onlinenamelist){
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
        
@@ -80,7 +83,7 @@ public class SendPicture extends JFrame{
        
         GridLayout gridLayout = new GridLayout(2,1,5,10);  
 		Left.setLayout(gridLayout);
-		userlist=new JList<String>(list);
+		userlist=new JList<String>(list);////////
 		
 		userlist.setFixedCellWidth(100);
 		userlist.setFixedCellHeight(20);
@@ -112,12 +115,11 @@ public class SendPicture extends JFrame{
 	                    path.setText(name);
 	                    
 	                    //draw
-	                    card.draw(content,name,true);
+	                    card.draw(t,name,false);
 			            
 	                    if(card.validable()){
 		                    icon=new ImageIcon(card.image);
-		                    //icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));
-				                
+		                    
 		                    label.setIcon(icon);
 	                    }
 	                }
@@ -139,13 +141,14 @@ public class SendPicture extends JFrame{
         	
         });
         
-        userlist.addListSelectionListener(new ListSelectionListener(){    //相应点击联想框
+        userlist.addListSelectionListener(new ListSelectionListener(){    //相应点击
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// TODO Auto-generated method stub
-				if(userlist.getSelectedValue()==null) return;
+			//	if(userlist.getSelectedValue()==null) return;
 				String key = userlist.getSelectedValue();
+				System.out.println(key);/////
 				users.setText(key);
 			}
 		});
@@ -156,11 +159,24 @@ public class SendPicture extends JFrame{
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Auto-generated method stub
-				if(online.isSelected()){
-					userlist=new JList<String>(list);
+				if(!online.isSelected()){
+					userlist.setListData(list);
+			/*		model.clear();
+					for(int i=0;i<list.length;i++){
+						model.addElement(list[i]);
+					}*/
 				}
-				else
-					userlist=new JList<String>(onlinelist);
+				else{
+				/*	model.clear();
+					for(int i=0;i<onlinelist.length;i++){
+						model.addElement(onlinelist[i]);
+					}*/
+					userlist.setListData(onlinelist);
+				}		
+				
+				for(int i=0;i<onlinelist.length;i++){
+					System.out.println(onlinelist[i]);
+				}
 				userlist.revalidate();
 				userlist.repaint();
 				Left.revalidate();

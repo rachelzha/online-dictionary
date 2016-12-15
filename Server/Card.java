@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
+import src.Translate.Translation;
+
 public class Card implements Serializable{
 	
 	/**
@@ -19,7 +21,18 @@ public class Card implements Serializable{
 	public transient BufferedImage image=null;
 	
 	public Card(){
-		image=null;
+		File picture=new File("image/template/wallpaper.jpg");
+		
+		try {
+	     	   image = ImageIO.read(picture);
+	           if (image == null) {  
+	         	   JOptionPane.showMessageDialog(null,"The file could not be opened , it is not an image");
+	                return ;
+	           }
+	        } catch (IOException e1) {
+	     	   JOptionPane.showMessageDialog(null,"The file could not be opened , an error occurred.");
+	            return ;
+	        }
 	}
 	
 	public Card(String name){
@@ -59,7 +72,7 @@ public class Card implements Serializable{
     }
     
     //在图片上写字
-    public void draw(String content, String name , boolean b ){
+    public void draw(Translation t, String name , boolean b ){
     		File background=new File(name);
     		
     		BufferedImage temp=null;
@@ -81,12 +94,23 @@ public class Card implements Serializable{
             	   g.setColor(new Color(102,102,102)); 
                }
 
-               Font mFont = new Font("Arial",Font.PLAIN,20);
+               Font mFont = new Font("Arial",Font.BOLD,30);
                g.setFont(mFont);
                 
-               g.drawString(content, 200, 200); 
+               g.drawString(t.word, 100, 100); 
+               
+               mFont = new Font("Arial",Font.PLAIN,20);
+               g.setFont(mFont);
+               if(t.trans.size()>0){
+            	   g.drawString(t.trans.get(0).characteristic, 100, 150);
+            	   g.drawString(t.trans.get(0).definitions, 110, 150);
+               }
+               
+               if(t.sen.size()>0){
+            	   g.drawString(t.sen.get(0), 100, 200);
+               }
     }
-    
+
     //保存图片到本地
     public String saveCard(String path){
     	SimpleDateFormat tempDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  

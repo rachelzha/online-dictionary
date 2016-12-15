@@ -56,8 +56,8 @@ public class ComboBoxListener implements MouseListener {
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
 		textpanel.Out.setText("lalala");
-		String key = searchpanel.input.getSelectedItem().toString();
-		System.out.println(key);
+		//String key = searchpanel.input.getSelectedItem().toString();
+	//	System.out.println(key);
 	}
 
 }

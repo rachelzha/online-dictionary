@@ -186,15 +186,14 @@ public class Card implements Serializable{
 
     //保存图片到本地
     public String saveCard(String path){
-    	SimpleDateFormat tempDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+    	SimpleDateFormat tempDate = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");  
     	String datetime = tempDate.format(new java.util.Date());
     	
     	//os
-    	String divide;
-    	if(System.getProperty("os.name")=="Windows")divide="\\";
-    	else divide="/";
+    	//String divide="/";
     	
-    	String filename=path+divide+datetime+".jpg";
+    	
+    	String filename=path+"/"+datetime+".jpg";
     	
     	File file = new File(filename);
     	

@@ -13,6 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import javax.swing.*;
 
 import src.Interface.Testwindow;
+import src.Interface.panel.drawComponent;
 import src.Interface.share.ReceivePicture;
 import src.Interface.share.SendPicture;
 import src.Translate.BingTranslate;
@@ -185,6 +186,10 @@ public class ButtonListener implements ActionListener{
 	}
 	
 	public void handleLogin(){///unhandle??????????
+		if(Testwindow.user.Logged()){
+			String S = "Hello,"+Testwindow.user.getUsername();
+			JOptionPane.showMessageDialog(null, S);
+		}
 		if(!Testwindow.user.Logged()){	
 			login = new Login();		
 			login.setLocation(200,100);	
@@ -217,10 +222,10 @@ public class ButtonListener implements ActionListener{
 		//Vector<Message>messages=(Vector<Message>)obj[1];
 		new ReceivePicture();
 		
-		String messagefile="image/message/2.png";
-		ImageIcon icon = new ImageIcon(messagefile);  
-        icon.setImage(icon.getImage().getScaledInstance(20,20,Image.SCALE_DEFAULT));
-        Testwindow.loginpanel.message.setIcon(icon);
+		String messagefile1="image/message/1.png";
+		String messagefile2="image/message/4.png";
+		drawComponent draw=new drawComponent();
+		draw.drawButton(messagefile1, messagefile2, 20, 20,  Testwindow.loginpanel.message);
         Testwindow.loginpanel.Right.revalidate();
         Testwindow.loginpanel.Right.repaint();
 	}

@@ -205,10 +205,8 @@ public class Login extends JFrame{
 			System.err.println(ex);
 		} catch (ClassNotFoundException e1) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		finally{
 			lock.unlock();
+			e1.printStackTrace();
 		}
 	}
 

@@ -29,6 +29,7 @@ import src.Interface.panel.ChoosePanel;
 import src.Interface.panel.LoginPanel;
 import src.Interface.panel.SearchPanel;
 import src.Interface.panel.TextPanel;
+import src.Interface.panel.drawComponent;
 import src.Translate.BaiduTranslate;
 import src.Translate.History;
 import src.userLogin.UserState;
@@ -152,7 +153,7 @@ public class Testwindow extends JFrame{
 	
 	public static void connect(){
 		try{
-			socket = new Socket("192.168.43.126",8080);
+			socket = new Socket("172.26.74.203",8080);
 			//dataToServer=new DataOutputStream(socket.getOutputStream());
 			//dataFromServer=new DataInputStream(socket.getInputStream());
 			
@@ -186,6 +187,14 @@ public class Testwindow extends JFrame{
 						
 						lock.unlock();
 						
+						if(temp.size()>0){
+							String messagefile1="image/message/3.png";
+							String messagefile2="image/message/4.png";
+							drawComponent draw=new drawComponent();
+							draw.drawButton(messagefile1, messagefile2, 20, 20, loginpanel.message);
+							loginpanel.Right.revalidate();
+							loginpanel.Right.repaint();
+						}
 						for(int i=0;i<temp.size();i++){
 							messages.add(temp.get(i));
 						}

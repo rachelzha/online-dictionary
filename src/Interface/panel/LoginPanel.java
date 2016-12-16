@@ -44,8 +44,8 @@ public class LoginPanel {
 		String loginfile2="image/log/login2.png";
 		String logoutfile1="image/log/logout1.png";
 		String logoutfile2="image/log/logout2.png";
-	//	String messagefile1="image/message/1.png";
-		String messagefile2="image/message/2.png";
+		String messagefile1="image/message/1.png";
+	//	String messagefile2="image/message/2.png";
 	//	String messagefile3="image/message/3.png";
 		String messagefile4="image/message/4.png";
 		
@@ -62,7 +62,7 @@ public class LoginPanel {
 		
 		draw.drawButton(loginfile1, loginfile2, 20, 20, Login);
 		draw.drawButton(logoutfile1, logoutfile2, 20, 20, Logout);
-		draw.drawButton(messagefile2, messagefile4, 20, 20, message);
+		draw.drawButton(messagefile1, messagefile4, 20, 20, message);
 		draw.drawButton(green,colorfile, 20, 20, colorgreen);
 		draw.drawButton(yellow,colorfile, 20, 20, coloryellow);
 		draw.drawButton(blue,colorfile, 20, 20, colorblue);

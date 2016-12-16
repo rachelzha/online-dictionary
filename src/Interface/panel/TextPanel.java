@@ -26,7 +26,7 @@ public class TextPanel {
 	public ImagePanel cartoon = new ImagePanel();
 	public JTextArea sen= new JTextArea("",23,18);
 	//JScrollPane sentence=new JScrollPane(sen);//daily sentence
-	public JCheckBox takeword = new JCheckBox("È¡´Ê");
+	//public JCheckBox takeword = new JCheckBox("È¡´Ê");
 	
 	public JPanel getPanel(){
 		return MyPanel;
@@ -91,8 +91,8 @@ public class TextPanel {
 		pan1.add(cartoon,BorderLayout.CENTER);
 		pan2.setBackground(null);
 		pan2.add(sen,BorderLayout.CENTER);
-		pan2.add(takeword,BorderLayout.SOUTH);
-		takeword.setBackground(null);
+	//	pan2.add(takeword,BorderLayout.SOUTH);
+	//	takeword.setBackground(null);
 		Right.add(pan1);
 		Right.add(pan2);
 	}

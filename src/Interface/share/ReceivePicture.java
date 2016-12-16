@@ -75,9 +75,9 @@ public class ReceivePicture extends JFrame{
         add(jsp,BorderLayout.CENTER);
         //add(label,BorderLayout.CENTER);
         
-        chooser.setCurrentDirectory(new File("."));
+       // chooser.setCurrentDirectory(new File("."));
         
-        chooser.setCurrentDirectory(new File("."));
+        //chooser.setCurrentDirectory(new File("."));
         chooserToSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         
         
@@ -102,7 +102,7 @@ public class ReceivePicture extends JFrame{
 				if(messagelist.getSelectedValue()==null) return;
 				int num=messagelist.getSelectedIndex();
 				
-				Card card=Testwindow.messages.get(num).getCard();
+				card=Testwindow.messages.get(num).getCard();
                 
                     icon=new ImageIcon(card.image);
                     //icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));

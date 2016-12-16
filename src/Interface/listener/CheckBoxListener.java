@@ -23,9 +23,11 @@ import src.userLogin.UserState;
 public class CheckBoxListener implements ItemListener{
 	
 	private int type;
+	private int likestate;
 	
 	public CheckBoxListener(int type){
 		this.type=type;
+		this.likestate=0;
 	}
 	
 	@Override
@@ -34,7 +36,7 @@ public class CheckBoxListener implements ItemListener{
 		switch(type){
 		case 1:handleChoose();break;//choosepanel.baidu,youdao,jinshan
 		case 4:handlebookmark();break;//bookmark.baidu
-		case 7:handleLike();break;//textpanel.like
+		//case 7:handleLike();break;//textpanel.like
 		case 8:handleTakeword();break;//textpanel.takeword
 		}
 	}
@@ -46,9 +48,36 @@ public class CheckBoxListener implements ItemListener{
 	public void handlebookmark(){
 
 		//String key = searchpanel.input.getSelectedItem().toString();
+	//	likestate=1;
+		
 		String key=Testwindow.searchpanel.input.getText();
 		if(key==null||key.length()==0)
 			return;
+		
+		try{
+			//send
+			//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
+			Testwindow.toServer.writeObject(3);
+			Testwindow.toServer.writeObject(key);
+			//Testwindow.dataToServer.flush();
+			
+			//ObjectInputStream fromServer=new ObjectInputStream(Testwindow.socket.getInputStream());
+			Testwindow.info.setbinglikes((int)Testwindow.fromServer.readObject());
+			Testwindow.info.setyoudaolikes((int)Testwindow.fromServer.readObject());
+			Testwindow.info.setjinshanlikes((int)Testwindow.fromServer.readObject());
+			
+			if(Testwindow.user.Logged()){
+				Testwindow.info.setjudgebing((int)Testwindow.fromServer.readObject());
+				Testwindow.info.setjudgeyoudao((int)Testwindow.fromServer.readObject());
+				Testwindow.info.setjudgejinshan((int)Testwindow.fromServer.readObject());
+				//System.out.println(judgebing+":"+judgeyoudao+":"+judgejinshan);
+			}
+			
+		}
+		catch(IOException | ClassNotFoundException ex){
+			System.err.println(ex);
+		}
+
 		if(Testwindow.textpanel.bing.isSelected()){
 			//System.out.println(info.getjudgebing());///////
 			if(Testwindow.info.getjudgebing()==1)
@@ -79,41 +108,11 @@ public class CheckBoxListener implements ItemListener{
 		}	
 		Testwindow.textpanel.Above.revalidate();
 		Testwindow.textpanel.Above.repaint();
-	
-	}
-	
-	
-	public void handleLike(){
-
-		//String key = searchpanel.input.getSelectedItem().toString();
-		String key=Testwindow.searchpanel.input.getText();
 		
-		try{
-			//create an output stream to send data to the server
-			ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
-
-			toServer.writeObject(8);
-			toServer.writeObject(key);
-			if(Testwindow.textpanel.bing.isSelected()){
-				toServer.writeObject("baidu");
-			}
-			else if(Testwindow.textpanel.youdao.isSelected()){
-				toServer.writeObject("youdao");
-			}
-			else if(Testwindow.textpanel.jinshan.isSelected()){
-				toServer.writeObject("jinshan");
-			}
-			
-			
-			Testwindow.textpanel.Center.revalidate();
-			Testwindow.textpanel.Center.repaint();
-		}
-		catch (IOException ex){
-			System.err.println(ex);
-			System.err.println("Fail!");
-		}
+	//	likestate=0;
 	}
 	
+
 	public void handleTakeword(){
 		
 	}

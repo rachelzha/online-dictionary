@@ -121,7 +121,9 @@ public class Testwindow extends JFrame{
         loginpanel.message.addActionListener(new ButtonListener(7));
         textpanel.share.addActionListener(new ButtonListener(8));
         loginpanel.Logout.addActionListener(new ButtonListener(9));
-       
+        textpanel.like.addActionListener(new ButtonListener(4));
+
+        
         //change color
         loginpanel.colorgreen.addActionListener(new ButtonListener(10));
         loginpanel.coloryellow.addActionListener(new ButtonListener(11));
@@ -138,7 +140,7 @@ public class Testwindow extends JFrame{
         textpanel.bing.addItemListener(new CheckBoxListener(4));
         textpanel.youdao.addItemListener(new CheckBoxListener(4));
         textpanel.jinshan.addItemListener(new CheckBoxListener(4));
-        textpanel.like.addItemListener(new CheckBoxListener(7));
+     //   textpanel.like.addItemListener(new CheckBoxListener(7));
         
   //      searchpanel.input.getComponent(0).addMouseListener(new ComboBoxListener(searchpanel,textpanel) );
   //      textpanel.takeword.addItemListener(new CheckBoxListener(8,));
@@ -170,6 +172,7 @@ public class Testwindow extends JFrame{
 	}
 	
 	class FetchMessageTask implements Runnable{
+		
 		
 		@Override
 		public void run() {

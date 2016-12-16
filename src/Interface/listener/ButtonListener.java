@@ -42,9 +42,40 @@ public class ButtonListener implements ActionListener{
 		case 8:handleShare();break;//share button
 		case 9:handleLogout();break;//logout
 		case 10:case 11:case 12:case 13:case 14:case 15:handleColor();break;
+		case 4:handleLike();break;
 		}
 	}
 
+	public void handleLike(){
+		String key=Testwindow.searchpanel.input.getText();
+		
+		try{
+			//create an output stream to send data to the server
+			//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
+
+			Testwindow.toServer.writeObject(8);
+			Testwindow.toServer.writeObject(key);
+			if(Testwindow.textpanel.bing.isSelected()){
+				Testwindow.toServer.writeObject("baidu");
+			}
+			else if(Testwindow.textpanel.youdao.isSelected()){
+				Testwindow.toServer.writeObject("youdao");
+			}
+			else if(Testwindow.textpanel.jinshan.isSelected()){
+				Testwindow.toServer.writeObject("jinshan");
+			}
+			
+			
+			Testwindow.textpanel.Center.revalidate();
+			Testwindow.textpanel.Center.repaint();
+		}
+		catch (IOException ex){
+			System.err.println(ex);
+			System.err.println("Fail!");
+		}
+
+	}
+	
 	public void handleSearch(){
 		String key=null;
 		if(type==2){
@@ -100,16 +131,36 @@ public class ButtonListener implements ActionListener{
 		CheckBoxListener.resetBookMark();//sort
 		
 		if(Testwindow.textpanel.bing.isSelected()){
+			if(Testwindow.user.Logged()){
+				if(Testwindow.info.getjudgebing()==1)
+					Testwindow.textpanel.like.setSelected(true);
+				else if(Testwindow.info.getjudgebing()==-1)
+					Testwindow.textpanel.like.setSelected(false);
+			}
 			BingTranslate B = new BingTranslate();
 			Translation trans = B.Translation(key);
 			trans.print(Testwindow.textpanel.Out);
 		}
 		if(Testwindow.textpanel.youdao.isSelected()){//////////////////
+			if(Testwindow.user.Logged()){
+				if(Testwindow.info.getjudgeyoudao()==1)
+					Testwindow.textpanel.like.setSelected(true);
+				else if(Testwindow.info.getjudgeyoudao()==-1)
+					Testwindow.textpanel.like.setSelected(false);
+			}
+
 			YoudaoTranslate Y = new YoudaoTranslate();
 			Translation trans = Y.Translation(key);
 			trans.print(Testwindow.textpanel.Out);
 		}
 		if(Testwindow.textpanel.jinshan.isSelected()){//////////////////
+			if(Testwindow.user.Logged()){
+				if(Testwindow.info.getjudgejinshan()==1)
+					Testwindow.textpanel.like.setSelected(true);
+				else if(Testwindow.info.getjudgejinshan()==-1)
+					Testwindow.textpanel.like.setSelected(false);
+			}
+
 			JinshanTranslate J = new JinshanTranslate();
 			Translation trans = J.Translate(key);
 			trans.print(Testwindow.textpanel.Out);

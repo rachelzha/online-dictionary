@@ -5,6 +5,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 import src.Interface.Testwindow;
@@ -89,16 +90,18 @@ public class CheckBoxListener implements ItemListener{
 		
 		try{
 			//create an output stream to send data to the server
-			Testwindow.dataToServer.writeInt(8);
-			Testwindow.dataToServer.writeUTF(key);
+			ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
+
+			toServer.writeObject(8);
+			toServer.writeObject(key);
 			if(Testwindow.textpanel.bing.isSelected()){
-				Testwindow.dataToServer.writeUTF("baidu");
+				toServer.writeObject("baidu");
 			}
 			else if(Testwindow.textpanel.youdao.isSelected()){
-				Testwindow.dataToServer.writeUTF("youdao");
+				toServer.writeObject("youdao");
 			}
 			else if(Testwindow.textpanel.jinshan.isSelected()){
-				Testwindow.dataToServer.writeUTF("jinshan");
+				toServer.writeObject("jinshan");
 			}
 			
 			

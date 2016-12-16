@@ -35,16 +35,13 @@ import src.userLogin.UserState;
 
 
 public class Testwindow extends JFrame{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	public static Socket socket=null;
-	public static DataInputStream dataFromServer=null;
-	public static DataOutputStream dataToServer=null;
-	public static ObjectInputStream objectFromServer=null;
-	public static ObjectOutputStream objectToServer=null;
+	//public static DataInputStream dataFromServer=null;
+	//public static DataOutputStream dataToServer=null;
+	public static ObjectInputStream fromServer=null;
+	public static ObjectOutputStream toServer=null;
+
 	
 	public static UserState user=new UserState();
 	
@@ -56,33 +53,45 @@ public class Testwindow extends JFrame{
 	public static ChoosePanel choosepanel = new ChoosePanel();
 	public static TextPanel textpanel = new TextPanel();
 	
+	public static Vector<Message> messages=new Vector<Message>();
+	
     //create a new lock
   	//private Lock lock=new ReentrantLock();
    
     
 	public static void main(String[] args){
-		Testwindow win=new Testwindow();
-		win.setLocation(200,100);
-		win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		win.setSize(700, 500);
-		win.setVisible(true);
+		Testwindow tw=new Testwindow();
+		tw.setLocation(200,100);
+		tw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		tw.setSize(700, 500);
+		tw.setVisible(true);
 	}
 	
-	Testwindow(){	
-		this.connect();
-	
+	Testwindow(){
+		connect();
+		
 		//lock.lock();
 		//DataOutputStream toServer;
+		
 		try {
-			//toServer = new DataOutputStream(socket.getOutputStream());
-			dataToServer.writeInt(4);//everyday sentences
-			dataToServer.flush();
 			
-			String sentence=dataFromServer.readUTF();
+			//System.out.println("0");
+
+			
+			toServer.writeObject((int)4);//everyday sentences
+		
+			
+			String sentence=(String)fromServer.readObject();
+			//System.out.println("4");
+
+			
 			System.out.println(sentence);
 			textpanel.sen.setText(sentence);
 			
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -102,6 +111,7 @@ public class Testwindow extends JFrame{
 
         add(panel4,BorderLayout.CENTER);
         add(Pan1,BorderLayout.NORTH);
+
         
         //buttonlistener
         searchpanel.Search.addActionListener(new ButtonListener(1));
@@ -133,21 +143,24 @@ public class Testwindow extends JFrame{
   //      searchpanel.input.getComponent(0).addMouseListener(new ComboBoxListener(searchpanel,textpanel) );
   //      textpanel.takeword.addItemListener(new CheckBoxListener(8,));
 		
-        Thread receiveTask=new Thread(new ReceiveTask());
-		receiveTask.start();
+        //Thread receiveTask=new Thread(new ReceiveTask());
+		//receiveTask.start();
 		
 		Thread fetchMessageTask=new Thread(new FetchMessageTask());
-		if(user.Logged())fetchMessageTask.start();
+		fetchMessageTask.start();
 	}
 	
 	
-	public void connect(){
+	public static void connect(){
 		try{
 			socket = new Socket("192.168.43.126",8080);
-			dataToServer=new DataOutputStream(socket.getOutputStream());
-			dataFromServer=new DataInputStream(socket.getInputStream());
-			objectToServer=new ObjectOutputStream(socket.getOutputStream());//!
-			objectFromServer=new ObjectInputStream(socket.getInputStream());
+			//dataToServer=new DataOutputStream(socket.getOutputStream());
+			//dataFromServer=new DataInputStream(socket.getInputStream());
+			
+			//objectFromServer=new ObjectInputStream(socket.getInputStream());
+			toServer=new ObjectOutputStream(socket.getOutputStream());
+			fromServer=new ObjectInputStream(socket.getInputStream());
+			
 			
 		}
 		catch (IOException ex){
@@ -163,109 +176,39 @@ public class Testwindow extends JFrame{
 			// TODO Auto-generated method stub
 			while(true){
 				try{
+						if(user.Logged()){
 						//lock.lock();
 						//DataOutputStream toServer=new DataOutputStream(socket.getOutputStream());
-						dataToServer.writeInt(0);
-						dataToServer.flush();
+					//ObjectOutputStream toServer=new ObjectOutputStream(socket.getOutputStream());
+						toServer.writeObject((int)0);
+						//dataToServer.flush();
+						
+						//int n=(int)fromServer.readObject();
+						
+						//for(int i=0;i<n;i++){
+							//Message m=(Message)fromServer.readObject();
+							//messages.add(m);
+						//}
+						
+						Vector<Message>temp=(Vector<Message>)fromServer.readObject();
+						for(int i=0;i<temp.size();i++){
+							messages.add(temp.get(i));
+						}
+						
+						System.out.println("messages: "+messages.size());
 						//lock.unlock();
+						}
 						Thread.sleep(10000);
 				}
 				catch (Exception ex){
 					//lock.unlock();
-					System.out.println("cuole!");
+					//System.out.println("cuole!");
+					ex.printStackTrace();
+					System.exit(0);
 				}
 			}
 		}
 		
 	}
 	
-	class ReceiveTask implements Runnable{
-		//private Lock lock=new ReentrantLock();
-
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			try{			   
-			    while(true){
-			    	//lock.lock();
-					
-					int type=dataFromServer.readInt();
-					
-					switch(type){
-					case 0:{//get message
-						
-						Vector<Message> temp=(Vector<Message>)objectFromServer.readObject();
-						
-						if(temp.size()>0){
-							String messagefile="image/message/3.png";
-							ImageIcon icon = new ImageIcon(messagefile);  
-					        icon.setImage(icon.getImage().getScaledInstance(20,20,Image.SCALE_DEFAULT));
-							loginpanel.message.setIcon(icon);
-							loginpanel.Right.revalidate();
-							loginpanel.Right.repaint();
-						}
-						info.setmessage(temp);
-						break;
-					}
-					case 1:{//log in
-						String username=dataFromServer.readUTF();
-						if(username!=null){
-							user.setUsername(username);
-						}
-						break;
-					}
-					case 2:{//register
-						String username=dataFromServer.readUTF();
-						if(username!=null){
-							user.setUsername(username);
-						}
-						break;
-					}
-					case 3:{//get likes
-						info.setbinglikes(dataFromServer.readInt());
-						info.setyoudaolikes(dataFromServer.readInt());
-						info.setjinshanlikes(dataFromServer.readInt());
-						
-						if(user.Logged()){
-							info.setjudgebing(dataFromServer.readInt());
-							info.setjudgeyoudao(dataFromServer.readInt());
-							info.setjudgejinshan(dataFromServer.readInt());
-							//System.out.println(judgebing+":"+judgeyoudao+":"+judgejinshan);
-						}
-						
-						break;
-					}
-					case 4:{//everyday sentences
-						String sentence=dataFromServer.readUTF();
-						System.out.println(sentence);
-						textpanel.sen.setText(sentence);
-						break;
-					}
-					case 5:{//online users
-						
-						Vector<String> onlineUsers=(Vector<String>)objectFromServer.readObject();
-					//	textpanel.Out.append("The online Clients: \n");
-						info.setonlineuserlist(onlineUsers);
-						break;
-					}
-					case 6:{//all users 
-						
-						Vector<String> allUsers=(Vector<String>)objectFromServer.readObject();
-						info.setuserlist(allUsers);
-						break;
-					}
-					default:break;
-					}
-					
-					//lock.unlock();
-			    }
-			}
-			catch (IOException ex){
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}	
-		
-	}
 }

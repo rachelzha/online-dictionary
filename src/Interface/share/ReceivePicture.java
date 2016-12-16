@@ -19,16 +19,13 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class RecievePicture extends JFrame{
+public class ReceivePicture extends JFrame{
     /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	String [] meList = new String[100];
-	
-	private JTextField path=new JTextField(20);
-	private JButton open=new JButton("open file");
 	
 	private JButton save=new JButton("save");
 	JList<String>messagelist;
@@ -38,9 +35,12 @@ public class RecievePicture extends JFrame{
     private JFileChooser chooser=new JFileChooser();
     private JFileChooser chooserToSave = new JFileChooser();
     
+   // JPanel panel1=new JPanel();
+    JScrollPane jsp=new JScrollPane();
     
-    private static final int DEFAULT_WIDTH = 700;
-    private static final int DEFAULT_HEIGHT = 600;
+    
+    private static final int DEFAULT_WIDTH = 600;
+    private static final int DEFAULT_HEIGHT = 400;
     
 	ImageIcon icon=null;
 	Card card=new Card();
@@ -50,73 +50,42 @@ public class RecievePicture extends JFrame{
 	//private Lock lock=new ReentrantLock();
 
 	
-	public RecievePicture(){
+	public ReceivePicture(){
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
        
-        for(int i=0;i<Testwindow.info.getmessage().size();i++){
-        	meList[i]=Testwindow.info.getmessage().get(i).getinfo();
+        for(int i=0;i<Testwindow.messages.size();i++){
+        	meList[i]=Testwindow.messages.get(i).getinfo();
         }
 		
-        setTitle("Make a word card!");
+        setTitle("Message Box~");
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-       
-        JPanel panel1=new JPanel();
-        panel1.add(path,FlowLayout.LEFT);
-        panel1.add(open,FlowLayout.CENTER);
         
         JPanel panel2=new JPanel();
-        GridLayout gridLayout = new GridLayout(2,1,5,10);  
-		panel2.setLayout(gridLayout);
+        panel2.setLayout(new BorderLayout(10,20));
+		
 		messagelist=new JList<String>(meList);
 		messagelist.setFixedCellWidth(100);
 		messagelist.setFixedCellHeight(20);
 		messagelist.setVisibleRowCount(20);
-		panel2.add(messagelist);
-        panel2.add(save);
+		panel2.add(messagelist,BorderLayout.CENTER);
+        panel2.add(save,BorderLayout.SOUTH);
         
-        add(panel1,BorderLayout.NORTH);
-        add(label,BorderLayout.CENTER);
-        add(panel2,BorderLayout.EAST);
+        add(panel2,BorderLayout.WEST);
+        add(jsp,BorderLayout.CENTER);
+        //add(label,BorderLayout.CENTER);
         
         chooser.setCurrentDirectory(new File("."));
         
         chooser.setCurrentDirectory(new File("."));
         chooserToSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         
-        //open
-        open.addActionListener(new ActionListener() {
-            
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                // TODO Auto-generated method stub
-                int result = chooser.showOpenDialog(null);
-                if(result == JFileChooser.APPROVE_OPTION){
-                	//get file name
-                    String name = chooser.getSelectedFile().getPath();
-                    //print the file path
-                    path.setText(name);
-                    
-                    //draw
-                 /*   card.draw(content,name,true);
-		            
-                    if(card.validable()){
-	                    icon=new ImageIcon(card.image);
-	                    //icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));
-			                
-	                    label.setIcon(icon);
-                    }*/
-                }
-            }
-        });
         
         //save
         save.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-            	if(!card.validable())return;
-            	
+				// TODO Auto-generated method stub            	
             	int result = chooserToSave.showOpenDialog(null);
                 if(result == JFileChooser.APPROVE_OPTION){
                 	String path = chooserToSave.getSelectedFile().getPath();
@@ -132,13 +101,18 @@ public class RecievePicture extends JFrame{
 				// TODO Auto-generated method stub
 				if(messagelist.getSelectedValue()==null) return;
 				int num=messagelist.getSelectedIndex();
-				Card card=Testwindow.info.getmessage().get(num).getCard();
-                if(card.validable()){
+				
+				Card card=Testwindow.messages.get(num).getCard();
+                
                     icon=new ImageIcon(card.image);
                     //icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));
 		                
                     label.setIcon(icon);
-                }
+                    
+                    //panel1.add(icon);
+                    jsp.add(label);
+                    jsp.setViewportView(label);
+        
 			}
 		});
     }

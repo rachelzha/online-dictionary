@@ -52,6 +52,8 @@ public class SendPicture extends JFrame{
 	ImageIcon icon=null;
 	Card card=new Card();
 	
+	JScrollPane jsp=new JScrollPane();
+	
 	Socket socket=null;
 	
 	//private Lock lock=new ReentrantLock();
@@ -93,7 +95,8 @@ public class SendPicture extends JFrame{
 	
         
         add(panel1,BorderLayout.NORTH);
-        add(label,BorderLayout.CENTER);
+        //add(label,BorderLayout.CENTER);
+        add(jsp,BorderLayout.CENTER);
         add(panel2,BorderLayout.SOUTH);
         add(Left,BorderLayout.WEST);
         
@@ -106,6 +109,8 @@ public class SendPicture extends JFrame{
         card.draw(t, false);
         icon=new ImageIcon(card.image);
         label.setIcon(icon);
+        jsp.add(label);
+        jsp.setViewportView(label);
         
         //open
         open.addActionListener(new ActionListener() {
@@ -124,6 +129,8 @@ public class SendPicture extends JFrame{
 
 		                icon=new ImageIcon(card.image);
 		                label.setIcon(icon);
+		                jsp.add(label);
+	                    jsp.setViewportView(label);
 	                }
 			}
         });
@@ -185,15 +192,16 @@ public class SendPicture extends JFrame{
 		//lock.lock();
 		try {
 			//send
-			Testwindow.dataToServer.writeInt(9);
-			Testwindow.dataToServer.writeUTF(usernames);
+			//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
+			Testwindow.toServer.writeObject(9);
+			Testwindow.toServer.writeObject(usernames);
 
-			Testwindow.dataToServer.flush();
+			//Testwindow.toServer.flush();
 				        
-			ObjectOutputStream objectOutputStream=new ObjectOutputStream(socket.getOutputStream());
+			//ObjectOutputStream objectOutputStream=new ObjectOutputStream(socket.getOutputStream());
 
-	        objectOutputStream.writeObject(card);
-	        objectOutputStream.flush();
+			Testwindow.toServer.writeObject(card);
+	        //objectOutputStream.flush();
 	        //lock.unlock();
 			
 		} catch (IOException e) {

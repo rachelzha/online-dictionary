@@ -85,13 +85,16 @@ public class Login extends JFrame{
 	//	lock.lock();
 		try{
 			//send
-			Testwindow.dataToServer.writeInt(2);
-			Testwindow.dataToServer.writeUTF(username);
-			Testwindow.dataToServer.writeUTF(password);
-			Testwindow.dataToServer.writeUTF(email);
+			ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
+
+			toServer.writeObject(2);
+			toServer.writeObject(username);
+			toServer.writeObject(password);
+			//Testwindow.dataToServer.writeObject(email);
 			
 			//receive
-			String name=Testwindow.dataFromServer.readUTF();
+			ObjectInputStream fromServer=new ObjectInputStream(Testwindow.socket.getInputStream());
+			String name=(String)fromServer.readObject();
 			if(name!=null&&name.length()!=0){
 				Testwindow.user.setUsername(username);
 				JOptionPane.showMessageDialog(null, "注册成功！");
@@ -106,6 +109,10 @@ public class Login extends JFrame{
 	//	finally{
 		//	lock.unlock();
 	//	}
+ catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 	}
 	
 	private void jbtLogin_actionPerformed(ActionEvent e){
@@ -115,12 +122,15 @@ public class Login extends JFrame{
 		lock.lock();
 		try{
 			//send
-			Testwindow.dataToServer.writeInt(1);
-			Testwindow.dataToServer.writeUTF(username);
-			Testwindow.dataToServer.writeUTF(password);
+			//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
+
+			Testwindow.toServer.writeObject(1);
+			Testwindow.toServer.writeObject(username);
+			Testwindow.toServer.writeObject(password);
 			
 			//receive
-			String name=Testwindow.dataFromServer.readUTF();
+			//ObjectInputStream fromServer=new ObjectInputStream(Testwindow.socket.getInputStream());
+			String name=(String)Testwindow.fromServer.readObject();
 			if(name!=null&&name.length()!=0){
 				Testwindow.user.setUsername(username);
 				JOptionPane.showMessageDialog(null, "登陆成功！");
@@ -131,6 +141,9 @@ public class Login extends JFrame{
 		}
 		catch(IOException ex){
 			System.err.println(ex);
+		} catch (ClassNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 		finally{
 			lock.unlock();

@@ -130,16 +130,8 @@ public class MultiThreadServer extends JFrame{
 	//define the thread class for handling new connection
 	class HandleAClient implements Runnable {
 		private Socket socket=null;//a connected socket
-		public DataInputStream dataFromClient=null;
-		public DataOutputStream dataToClient=null;
-		public ObjectInputStream objectFromClient=null;
-		public ObjectOutputStream objectToClient=null;
-		
-		private Connection dbConn=null;
-		private UserDB userdb;
-		private LikeDB likedb;
-		private MessageDB messagedb;
-		private SentenceDB sentencedb;
+		private ObjectInputStream fromClient=null;
+		private ObjectOutputStream toClient=null;
 		
 		private String username=null;
 		
@@ -148,23 +140,15 @@ public class MultiThreadServer extends JFrame{
 				
 		//construct a thread
 		public HandleAClient(Socket socket){
-			this.socket=socket;
+			this.socket=socket;	
 			try {
-				dataFromClient=new DataInputStream(socket.getInputStream());
-				dataToClient=new DataOutputStream(socket.getOutputStream());
-				objectFromClient=new ObjectInputStream(socket.getInputStream());
-				objectToClient=new ObjectOutputStream(socket.getOutputStream());
+				fromClient=new ObjectInputStream(socket.getInputStream());
+				toClient=new ObjectOutputStream(socket.getOutputStream());
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			dbConn=connectUsingPool();
-			//System.out.println(dbConn);
-			userdb=new UserDB(dbConn);
-			likedb=new LikeDB(dbConn);
-			messagedb=new MessageDB(dbConn);
-			sentencedb=new SentenceDB(dbConn);
 		}
 
 		@Override
@@ -172,38 +156,51 @@ public class MultiThreadServer extends JFrame{
 			// TODO Auto-generated method stub
 			try{		
 				//continuously serve the client
-				while(true){
-										
+				while(true){			
 					//receive type from the client
-					int type=dataFromClient.readInt();
+					
+					int type=(int)fromClient.readObject();
 					
 					switch(type){
 					case 0:{//message required
 						jta.append(username);
 						if(username==null)break;
 
+						Connection dbConn=connectUsingPool();
+						MessageDB messagedb=new MessageDB(dbConn);
 						Vector<Message> messages=messagedb.getMessages(username);
-						
-						if(messages.size()==0)break;
+						dbConn.close();
 						
 						jta.append("send!\t"+messages.size()+"\n");
 						//output
-						dataToClient.writeInt(0);
-						dataToClient.flush();
+						//datatoClient.writeObject(0);
+						//dataToClient.flush();
 						
-						objectToClient.writeObject(messages);
-						objectToClient.flush();
+						//objectToClient.writeObject(messages);
+						//objectToClient.flush();
+						//ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
+						/*toClient.writeObject(messages.size());
+						for(int i=0;i<messages.size();i++){
+							toClient.writeObject(messages.get(i));
+						}*/
+						toClient.writeObject(messages);
 						
 						break;
 					}
 					case 1:{//log in
 						//input
-						String usernametmp=dataFromClient.readUTF();
-						String password=dataFromClient.readUTF();
+						//String usernametmp=data(String)fromClient.readObject();
+						//String password=data(String)fromClient.readObject();
+						String usernametmp=(String)fromClient.readObject();
+						String password=(String)fromClient.readObject();
 						
 						jta.append(usernametmp+"\t"+password+"\n");
 						
+						Connection dbConn=connectUsingPool();
+						UserDB userdb=new UserDB(dbConn);
 						boolean found=userdb.findUser(usernametmp, password);
+						dbConn.close();
+						
 						if(found){
 							username=usernametmp;
 							jta.append("Login: " + username + '\n');
@@ -213,19 +210,27 @@ public class MultiThreadServer extends JFrame{
 						else username=null;
 						
 						//output
-						dataToClient.writeInt(1);
-						dataToClient.writeUTF(username);
-						dataToClient.flush();
+						//datatoClient.writeObject(1);
+						//datatoClient.wirteObject(username);
+						//dataToClient.flush();
+						//ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
+						toClient.writeObject(username);
 						
 						break;
 					}
 					case 2:{//register
 						//input
-						String usernametmp=dataFromClient.readUTF();
-						String password=dataFromClient.readUTF();
-						String email=dataFromClient.readUTF();
-							
-						boolean success=userdb.addUser(usernametmp, password, email);
+						//String usernametmp=data(String)fromClient.readObject();
+						//String password=data(String)fromClient.readObject();
+						//String email=data(String)fromClient.readObject();
+						String usernametmp=(String)fromClient.readObject();
+						String password=(String)fromClient.readObject();
+						
+						Connection dbConn=connectUsingPool();
+						UserDB userdb=new UserDB(dbConn);
+						boolean success=userdb.addUser(usernametmp, password, "a");
+						dbConn.close();
+						
 						if(success){
 							username=usernametmp;
 							jta.append("Register: "+username+'\n');
@@ -234,51 +239,62 @@ public class MultiThreadServer extends JFrame{
 						else username=null;
 						
 						//output
-						dataToClient.writeInt(2);
-						dataToClient.writeUTF(username);
-						dataToClient.flush();
+						//datatoClient.writeObject(2);
+						//datatoClient.wirteObject(username);
+						//dataToClient.flush();
+						//ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
+						toClient.writeObject(username);
 
 						break;
 					}
 					case 3://search words
 					{	//input
-						String word=dataFromClient.readUTF();
-				
+						//String word=data(String)fromClient.readObject();
+						String word=(String)fromClient.readObject();
 						
+						Connection dbConn=connectUsingPool();
+						LikeDB likedb=new LikeDB(dbConn);
 						Vector<Integer>vec=likedb.getLikes(word);
+						
+						
 						int baiduLikes=vec.get(0);
 						int youdaoLikes=vec.get(1);
 						int jinshanLikes=vec.get(2);
 						
 						//output
-						dataToClient.writeInt(3);
-						dataToClient.writeInt(baiduLikes);
-						dataToClient.writeInt(youdaoLikes);
-						dataToClient.writeInt(jinshanLikes);
+						//ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
+						//datatoClient.writeObject(baiduLikes);
+						//datatoClient.writeObject(youdaoLikes);
+						//datatoClient.writeObject(jinshanLikes);
+						toClient.writeObject(baiduLikes);
+						toClient.writeObject(youdaoLikes);
+						toClient.writeObject(jinshanLikes);
 						
 						if(username!=null){
 							likedb.add(username, word);
 							
 							Vector<Integer>vec2=likedb.getPersonalLikes(username, word);
-							dataToClient.writeInt(vec2.get(0));//baidu
-							dataToClient.writeInt(vec2.get(1));//youdao
-							dataToClient.writeInt(vec2.get(2));//jinshan
+							toClient.writeObject(vec2.get(0));//baidu
+							toClient.writeObject(vec2.get(1));//youdao
+							toClient.writeObject(vec2.get(2));//jinshan
 						}
 						
-						dataToClient.flush();
-						
+						dbConn.close();
 						break;
 					}
 					case 4:{
 						jta.append("get\n");
 						//get everyday sentence
+						Connection dbConn=connectUsingPool();
+						SentenceDB sentencedb=new SentenceDB(dbConn);
 						String sentence=sentencedb.getSentence();
+						dbConn.close();
+						
 						System.out.println(sentence+"!!!!");
 						//String sent="happy";
 						
-						dataToClient.writeInt(4);
-						dataToClient.writeUTF(sentence);
-						dataToClient.flush();
+						//ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
+						toClient.writeObject(sentence);
 						break;
 					}
 					case 5:{//get online users
@@ -290,22 +306,21 @@ public class MultiThreadServer extends JFrame{
 						}
 						
 						//output
-						dataToClient.writeInt(5);
-						dataToClient.flush();
+						//ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
 						
-						objectToClient.writeObject(online);
-						objectToClient.flush();
+						toClient.writeObject(online);
 						
 						break;
 					}
 					case 6:{//get all users
+						Connection dbConn=connectUsingPool();
+						UserDB userdb=new UserDB(dbConn);
 						Vector<String> allUsers=userdb.getAllUsers();
+						dbConn.close();
 						
-						dataToClient.writeInt(6);
-						dataToClient.flush();
+						//ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
 						
-						objectToClient.writeObject(allUsers);
-						objectToClient.flush();
+						toClient.writeObject(allUsers);
 						
 						break;
 					}
@@ -317,10 +332,14 @@ public class MultiThreadServer extends JFrame{
 					}
 					case 8:{//likes
 						//input
-						String word=dataFromClient.readUTF();
-						String aDict=dataFromClient.readUTF();
+						String word=(String)fromClient.readObject();
+						String aDict=(String)fromClient.readObject();
 						
+						Connection dbConn=connectUsingPool();
+						LikeDB likedb=new LikeDB(dbConn);
 						likedb.changeLikes(username, word, aDict);
+						dbConn.close();
+						
 						break;
 					}
 					
@@ -328,41 +347,40 @@ public class MultiThreadServer extends JFrame{
 						//send message
 						if(username==null)break;
 						
-						String receiver=dataFromClient.readUTF();//the user to send message
+						String receiver=(String)fromClient.readObject();//the user to send message
 						
-						Card card=(Card)objectFromClient.readObject();
+						Card card=(Card)fromClient.readObject();
 						
 						//save to server directory
 						String filename=card.saveCard("wordcards");
 						
 						System.out.println(filename);
 						
+						Connection dbConn=connectUsingPool();
+						MessageDB messagedb=new MessageDB(dbConn);
 						messagedb.add(receiver, username, filename);
+						dbConn.close();
+						
 						
 						break;
 					}
 					default:break;
 					}
-					//lock.unlock();
 				}
 			}
 			catch(Exception ex){
 				//ex.printStackTrace();
 				if(username!=null)clients.remove(username);
 				jta.append("用户断开连接\n");
-				
+				ex.printStackTrace();
 				try {
-					dbConn.close();
-					dbConn=null;
+					
 					socket.close();
 					socket=null;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				} 
 			}
 		}
 	

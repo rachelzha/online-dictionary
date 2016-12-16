@@ -2,6 +2,7 @@ package Server;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.image.*;
 import java.io.*;
@@ -80,20 +81,66 @@ public class Card implements Serializable{
      	   g.setColor(new Color(102,102,102)); 
         }
 
+        //word
         Font mFont = new Font("Arial",Font.BOLD,30);
         g.setFont(mFont);
-         
-        g.drawString(t.word, 100, 100); 
+        int wordX=50;
+        int wordY=50;
+        g.drawString(t.word, wordX, wordY); 
         
-        mFont = new Font("Arial",Font.PLAIN,20);
+        
+        int width=image.getWidth();//图片宽度
+        int height=image.getHeight();
+    	int textWidth=width-50;
+    	
+        //definition
+        mFont = new Font("宋体",Font.PLAIN,20);
         g.setFont(mFont);
+        int defX=50;
+        int defY=90;
+        if(height<=defY)return;
+        
+        FontMetrics fm = g.getFontMetrics(mFont);  
+        int fontHeight=fm.getHeight();
+        
+        int offset=defX;
+       
         if(t.trans.size()>0){
-     	   g.drawString(t.trans.get(0).characteristic, 100, 150);
-     	   g.drawString(t.trans.get(0).definitions, 110, 150);
+     	   g.drawString(t.trans.get(0).characteristic, defX, defY);
+     	   offset+=40;
+     	   
+     	   String text=t.trans.get(0).definitions;
+     	   for(int i=0;i<text.length();i++){
+     		   char c=text.charAt(i);
+     		   int charWidth=fm.charWidth(c);
+     		   
+     		   if(Character.isISOControl(c)||offset>=textWidth-charWidth){
+     			   offset=defX;
+     			   defY+=fontHeight;
+     		   }
+     		   g.drawString(String.valueOf(c), offset, defY);
+     		   offset+=charWidth;
+     	   }     	   
         }
         
+        //sentence
+        int senX=defX;
+        int senY=defY+30;
+        if(height<=senY)return;
+        offset=senX;
         if(t.sen.size()>0){
-     	   g.drawString(t.sen.get(0), 100, 200);
+        	String text=t.sen.get(0);
+      	   	for(int i=0;i<text.length();i++){
+      		   char c=text.charAt(i);
+      		   int charWidth=fm.charWidth(c);
+      		   
+      		   if(Character.isISOControl(c)||offset>=textWidth-charWidth){
+      			   offset=senX;
+      			   senY+=fontHeight;
+      		   }
+      		   g.drawString(String.valueOf(c), offset, senY);
+      		   offset+=charWidth;
+      	   }   
         }
     }
     
@@ -115,27 +162,8 @@ public class Card implements Serializable{
                }
                 
                image=temp;
-               Graphics g = image.getGraphics();
-
-               if( b == false){
-            	   g.setColor(new Color(102,102,102)); 
-               }
-
-               Font mFont = new Font("Arial",Font.BOLD,30);
-               g.setFont(mFont);
-                
-               g.drawString(t.word, 100, 100); 
                
-               mFont = new Font("Arial",Font.PLAIN,20);
-               g.setFont(mFont);
-               if(t.trans.size()>0){
-            	   g.drawString(t.trans.get(0).characteristic, 100, 150);
-            	   g.drawString(t.trans.get(0).definitions, 110, 150);
-               }
-               
-               if(t.sen.size()>0){
-            	   g.drawString(t.sen.get(0), 100, 200);
-               }
+               draw(t,b);
     }
 
     //保存图片到本地

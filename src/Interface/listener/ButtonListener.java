@@ -4,12 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Vector;
 
 import javax.swing.*;
 
 import src.Interface.Testwindow;
-import src.Interface.share.RecievePicture;
+import src.Interface.share.ReceivePicture;
 import src.Interface.share.SendPicture;
 import src.Translate.BingTranslate;
 import src.Translate.JinshanTranslate;
@@ -66,18 +68,20 @@ public class ButtonListener implements ActionListener{
 	//	lock.lock();
 		try{
 			//send
-			Testwindow.dataToServer.writeInt(3);
-			Testwindow.dataToServer.writeUTF(key);
-			Testwindow.dataToServer.flush();
+			//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
+			Testwindow.toServer.writeObject(3);
+			Testwindow.toServer.writeObject(key);
+			//Testwindow.dataToServer.flush();
 			
-			Testwindow.info.setbinglikes(Testwindow.dataFromServer.readInt());
-			Testwindow.info.setyoudaolikes(Testwindow.dataFromServer.readInt());
-			Testwindow.info.setjinshanlikes(Testwindow.dataFromServer.readInt());
+			//ObjectInputStream fromServer=new ObjectInputStream(Testwindow.socket.getInputStream());
+			Testwindow.info.setbinglikes((int)Testwindow.fromServer.readObject());
+			Testwindow.info.setyoudaolikes((int)Testwindow.fromServer.readObject());
+			Testwindow.info.setjinshanlikes((int)Testwindow.fromServer.readObject());
 			
 			if(Testwindow.user.Logged()){
-				Testwindow.info.setjudgebing(Testwindow.dataFromServer.readInt());
-				Testwindow.info.setjudgeyoudao(Testwindow.dataFromServer.readInt());
-				Testwindow.info.setjudgejinshan(Testwindow.dataFromServer.readInt());
+				Testwindow.info.setjudgebing((int)Testwindow.fromServer.readObject());
+				Testwindow.info.setjudgeyoudao((int)Testwindow.fromServer.readObject());
+				Testwindow.info.setjudgejinshan((int)Testwindow.fromServer.readObject());
 				//System.out.println(judgebing+":"+judgeyoudao+":"+judgejinshan);
 			}
 			
@@ -88,6 +92,10 @@ public class ButtonListener implements ActionListener{
 	//	finally{
 	//		lock.unlock();
 	//	}
+ catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		CheckBoxListener.resetBookMark();//sort
 		
@@ -145,7 +153,7 @@ public class ButtonListener implements ActionListener{
 	public void handleMessage(){
 		
 		//Vector<Message>messages=(Vector<Message>)obj[1];
-		new RecievePicture();
+		new ReceivePicture();
 		
 		String messagefile="image/message/2.png";
 		ImageIcon icon = new ImageIcon(messagefile);  
@@ -159,18 +167,21 @@ public class ButtonListener implements ActionListener{
 //		lock.lock();
 			try{
 				//send
-				Testwindow.dataToServer.writeInt(5);
-				Testwindow.dataToServer.flush();
+				//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
+
+				Testwindow.toServer.writeObject(5);
+				//Testwindow.dataToServer.flush();
 				//get onlineusers
-				Vector<String> onlineUsers=(Vector<String>)Testwindow.objectFromServer.readObject();
+				//ObjectInputStream fromServer=new ObjectInputStream(Testwindow.socket.getInputStream());
+				Vector<String> onlineUsers=(Vector<String>)Testwindow.fromServer.readObject();
 				//	textpanel.Out.append("The online Clients: \n");
 				Testwindow.info.setonlineuserlist(onlineUsers);	
 					
 				//send
-				Testwindow.dataToServer.writeInt(6);
-				Testwindow.dataToServer.flush();
+				Testwindow.toServer.writeObject(6);
+				//Testwindow.dataToServer.flush();
 				//get allusers
-				Vector<String> allUsers=(Vector<String>)Testwindow.objectFromServer.readObject();
+				Vector<String> allUsers=(Vector<String>)Testwindow.fromServer.readObject();
 				Testwindow.info.setuserlist(allUsers);
 				
 			}
@@ -214,8 +225,10 @@ public class ButtonListener implements ActionListener{
 //		lock.lock();
 			try{
 				//send
-				Testwindow.dataToServer.writeInt(7);
-				Testwindow.dataToServer.flush();
+				//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
+
+				Testwindow.toServer.writeObject(7);
+				//Testwindow.dataToServer.flush();
 			}
 			catch(IOException ex){
 				System.err.println(ex);

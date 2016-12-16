@@ -10,7 +10,7 @@ public class TextPanel {
 	public JCheckBox bing = new JCheckBox();//click to see baidu translation
 	public JCheckBox youdao = new JCheckBox();//click to see youdao translation
 	public JCheckBox jinshan = new JCheckBox();//click to see jinshan translation
-	ButtonGroup bookmark = new ButtonGroup(); 
+	public ButtonGroup bookmark = new ButtonGroup(); 
 	
 	public JPanel Center =new JPanel();
 	public JPanel Above = new JPanel();
@@ -21,8 +21,8 @@ public class TextPanel {
 	public JTextArea Out= new JTextArea("",12,35);
 	public JScrollPane text=new JScrollPane(Out);//translation
 	
-	JPanel Right = new JPanel();
-	JLabel Daily = new JLabel("Daily Sentence");//no edit
+	public JPanel Right = new JPanel();
+	public JLabel Daily = new JLabel("Daily Sentence");//no edit
 	public ImagePanel cartoon = new ImagePanel();
 	public JTextArea sen= new JTextArea("",23,18);
 	//JScrollPane sentence=new JScrollPane(sen);//daily sentence
@@ -79,9 +79,9 @@ public class TextPanel {
 		pan1.setLayout(new BorderLayout(5,5));
 		pan2.setLayout(new BorderLayout(5,5));
 		
-		String cartoonfile="image/green/color.png";
+	//	String cartoonfile="image/green/color.png";
 		//draw.drawLabel(cartoonfile, 200, 200, cartoon);
-		
+		sen.setBackground(null);
 		sen.setBorder(null);
 		sen.setEditable(false);
 		sen.setLineWrap(true);        //激活自动换行功能 

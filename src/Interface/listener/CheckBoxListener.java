@@ -7,6 +7,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import src.Interface.Testwindow;
 import src.Interface.panel.ChoosePanel;
 import src.Interface.panel.SearchPanel;
 import src.Interface.panel.TextPanel;
@@ -19,17 +20,11 @@ import src.userLogin.UserState;
 
 
 public class CheckBoxListener implements ItemListener{
-	Object []obj;
-	private int type;
-	private UserState user;
-	private Socket socket;
 	
-	public CheckBoxListener(Socket socket,int type,UserState user,Object []obj){
-		this.obj=obj;
+	private int type;
+	
+	public CheckBoxListener(int type){
 		this.type=type;
-		this.user=user;
-		
-		this.socket=socket;
 	}
 	
 	@Override
@@ -48,72 +43,67 @@ public class CheckBoxListener implements ItemListener{
 	}
 	
 	public void handlebookmark(){
-		SearchPanel searchpanel = (SearchPanel)obj[0];
-		TextPanel textpanel = (TextPanel)obj[1];
-		Info info =(Info)obj[2];
+
 		//String key = searchpanel.input.getSelectedItem().toString();
-		String key=searchpanel.input.getText();
+		String key=Testwindow.searchpanel.input.getText();
 		if(key==null||key.length()==0)
 			return;
-		if(textpanel.bing.isSelected()){
+		if(Testwindow.textpanel.bing.isSelected()){
 			//System.out.println(info.getjudgebing());///////
-			if(info.getjudgebing()==1)
-				textpanel.like.setSelected(true);
-			else if(info.getjudgebing()==-1)
-				textpanel.like.setSelected(false);
+			if(Testwindow.info.getjudgebing()==1)
+				Testwindow.textpanel.like.setSelected(true);
+			else if(Testwindow.info.getjudgebing()==-1)
+				Testwindow.textpanel.like.setSelected(false);
 			BingTranslate B = new BingTranslate();
 			Translation trans = B.Translation(key);
-			trans.print(textpanel.Out);
+			trans.print(Testwindow.textpanel.Out);
 		}
-		if(textpanel.youdao.isSelected()){
-			if(info.getjudgeyoudao()==1)
-				textpanel.like.setSelected(true);
-			else if(info.getjudgeyoudao()==-1)
-				textpanel.like.setSelected(false);
+		if(Testwindow.textpanel.youdao.isSelected()){
+			if(Testwindow.info.getjudgeyoudao()==1)
+				Testwindow.textpanel.like.setSelected(true);
+			else if(Testwindow.info.getjudgeyoudao()==-1)
+				Testwindow.textpanel.like.setSelected(false);
 			YoudaoTranslate Y = new YoudaoTranslate();
 			Translation trans = Y.Translation(key);
-			trans.print(textpanel.Out);
+			trans.print(Testwindow.textpanel.Out);
 		}
-		if(textpanel.jinshan.isSelected()){
-			if(info.getjudgejinshan()==1)
-				textpanel.like.setSelected(true);
-			else if(info.getjudgejinshan()==-1)
-				textpanel.like.setSelected(false);
+		if(Testwindow.textpanel.jinshan.isSelected()){
+			if(Testwindow.info.getjudgejinshan()==1)
+				Testwindow.textpanel.like.setSelected(true);
+			else if(Testwindow.info.getjudgejinshan()==-1)
+				Testwindow.textpanel.like.setSelected(false);
 			JinshanTranslate J = new JinshanTranslate();
 			Translation trans = J.Translate(key);
-			trans.print(textpanel.Out);
+			trans.print(Testwindow.textpanel.Out);
 		}	
-		textpanel.Above.revalidate();
-		textpanel.Above.repaint();
+		Testwindow.textpanel.Above.revalidate();
+		Testwindow.textpanel.Above.repaint();
 	
 	}
 	
 	
 	public void handleLike(){
 
-		SearchPanel searchpanel = (SearchPanel)obj[0];
-		TextPanel textpanel = (TextPanel) obj[1];
-		Info info = (Info)obj[2];
-		//System.out.println(obj[2]+":"+obj[3]+":"+obj[4]);///////
 		//String key = searchpanel.input.getSelectedItem().toString();
-		String key=searchpanel.input.getText();
-		DataOutputStream toServer;
+		String key=Testwindow.searchpanel.input.getText();
+		
 		try{
 			//create an output stream to send data to the server
-			toServer=new DataOutputStream(socket.getOutputStream());
-			toServer.writeInt(8);
-			toServer.writeUTF(key);
-			if(textpanel.bing.isSelected()){
-				toServer.writeUTF("baidu");
+			Testwindow.dataToServer.writeInt(8);
+			Testwindow.dataToServer.writeUTF(key);
+			if(Testwindow.textpanel.bing.isSelected()){
+				Testwindow.dataToServer.writeUTF("baidu");
 			}
-			else if(textpanel.youdao.isSelected()){
-				toServer.writeUTF("youdao");
+			else if(Testwindow.textpanel.youdao.isSelected()){
+				Testwindow.dataToServer.writeUTF("youdao");
 			}
-			else if(textpanel.jinshan.isSelected()){
-				toServer.writeUTF("jinshan");
+			else if(Testwindow.textpanel.jinshan.isSelected()){
+				Testwindow.dataToServer.writeUTF("jinshan");
 			}
-			textpanel.Center.revalidate();
-			textpanel.Center.repaint();
+			
+			
+			Testwindow.textpanel.Center.revalidate();
+			Testwindow.textpanel.Center.repaint();
 		}
 		catch (IOException ex){
 			System.err.println(ex);
@@ -125,78 +115,65 @@ public class CheckBoxListener implements ItemListener{
 		
 	}
 	
-	public void resetBookMark(){
-		TextPanel textpanel = (TextPanel)obj[1];
-		ChoosePanel choosepanel = (ChoosePanel)obj[2];
-		Info info = (Info)obj[0];
-		int a = info.getbinglikes();
-		int b = info.getyoudaolikes();
-		int c = info.getjinshanlikes();
-		textpanel.Left.removeAll();
+	public static void resetBookMark(){
+		
+		int a = Testwindow.info.getbinglikes();
+		int b = Testwindow.info.getyoudaolikes();
+		int c = Testwindow.info.getjinshanlikes();
+		Testwindow.textpanel.Left.removeAll();
 		if(a>=b&&b>=c){
-			textpanel.Left.add(textpanel.bing);  
-			textpanel.Left.add(textpanel.youdao);  
-			textpanel.Left.add(textpanel.jinshan);
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.bing);  
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.youdao);  
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.jinshan);
 		}
 		else if(a>=c&&c>=b){
-			textpanel.Left.add(textpanel.bing);  
-			textpanel.Left.add(textpanel.jinshan);  
-			textpanel.Left.add(textpanel.youdao);
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.bing);  
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.jinshan);  
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.youdao);
 		}
 		else if(b>=a&&a>=c){
-			textpanel.Left.add(textpanel.youdao);  
-			textpanel.Left.add(textpanel.bing);  
-			textpanel.Left.add(textpanel.jinshan);
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.youdao);  
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.bing);  
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.jinshan);
 		}
 		else if(b>=c&&c>=a){
-			textpanel.Left.add(textpanel.youdao);  
-			textpanel.Left.add(textpanel.jinshan);  
-			textpanel.Left.add(textpanel.bing);
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.youdao);  
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.jinshan);  
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.bing);
 		}
 		else if(c>=a&&a>=b){
-			textpanel.Left.add(textpanel.jinshan);  
-			textpanel.Left.add(textpanel.bing);  
-			textpanel.Left.add(textpanel.youdao);
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.jinshan);  
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.bing);  
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.youdao);
 		}
 		else{//c>=b>=a
-			textpanel.Left.add(textpanel.jinshan);  
-			textpanel.Left.add(textpanel.youdao);  
-			textpanel.Left.add(textpanel.bing);
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.jinshan);  
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.youdao);  
+			Testwindow.textpanel.Left.add(Testwindow.textpanel.bing);
 		}
 
 		int count = 3;
-		if(!choosepanel.bing.isSelected()){
-			textpanel.Left.remove(textpanel.bing);
+		if(!Testwindow.choosepanel.bing.isSelected()){
+			Testwindow.textpanel.Left.remove(Testwindow.textpanel.bing);
 			count--;
 		}
-		if(!choosepanel.youdao.isSelected()){
-			textpanel.Left.remove(textpanel.youdao);
+		if(!Testwindow.choosepanel.youdao.isSelected()){
+			Testwindow.textpanel.Left.remove(Testwindow.textpanel.youdao);
 			count--;
 		}
-		if(!choosepanel.jinshan.isSelected()){
-			textpanel.Left.remove(textpanel.jinshan);
+		if(!Testwindow.choosepanel.jinshan.isSelected()){
+			Testwindow.textpanel.Left.remove(Testwindow.textpanel.jinshan);
 			count--;
 		}
-		if(choosepanel.bing.isSelected())
-			textpanel.bing.setSelected(true);
-		else if(choosepanel.youdao.isSelected())
-			textpanel.youdao.setSelected(true);
-		else if(choosepanel.jinshan.isSelected())
-			textpanel.jinshan.setSelected(true);
+		if(Testwindow.choosepanel.bing.isSelected())
+			Testwindow.textpanel.bing.setSelected(true);
+		else if(Testwindow.choosepanel.youdao.isSelected())
+			Testwindow.textpanel.youdao.setSelected(true);
+		else if(Testwindow.choosepanel.jinshan.isSelected())
+			Testwindow.textpanel.jinshan.setSelected(true);
 		
-		textpanel.Left.setLayout(new GridLayout(count,1,5,10));
-		textpanel.Left.revalidate();
-		textpanel.Left.repaint();
-	}
-	
-	public void setlike(Info info,TextPanel panel){
-		if(panel.bing.isSelected()){
-			if(info.getjudgebing()==-1){
-				
-			}
-			if(info.getjudgebing()==1){
-				
-			}
-		}
+		Testwindow.textpanel.Left.setLayout(new GridLayout(count,1,5,10));
+		Testwindow.textpanel.Left.revalidate();
+		Testwindow.textpanel.Left.repaint();
 	}
 }

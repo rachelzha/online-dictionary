@@ -1,6 +1,7 @@
 package src.Interface.share;
 
 import Server.Card;
+import src.Interface.Testwindow;
 import src.Translate.Translation;
 
 import java.awt.*;
@@ -56,18 +57,17 @@ public class SendPicture extends JFrame{
 	//private Lock lock=new ReentrantLock();
 
 	
-	public SendPicture(Translation t,Socket socket,Vector<String>namelist,Vector<String>onlinenamelist){
+	public SendPicture(Translation t){
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
        
-        for(int i=0;i<namelist.size();i++){
-        	list[i]=namelist.get(i);
+        for(int i=0;i<Testwindow.info.getuserlist().size();i++){
+        	list[i]=Testwindow.info.getuserlist().get(i);
         }
-        for(int i=0;i<onlinenamelist.size();i++){
-        	onlinelist[i]=onlinenamelist.get(i);
+        for(int i=0;i<Testwindow.info.getonlineuserlist().size();i++){
+        	onlinelist[i]=Testwindow.info.getonlineuserlist().get(i);
         }
         
-        this.socket=socket;
 		
         setTitle("Make a word card!");
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -162,16 +162,8 @@ public class SendPicture extends JFrame{
 				// TODO Auto-generated method stub
 				if(!online.isSelected()){
 					userlist.setListData(list);
-			/*		model.clear();
-					for(int i=0;i<list.length;i++){
-						model.addElement(list[i]);
-					}*/
 				}
 				else{
-				/*	model.clear();
-					for(int i=0;i<onlinelist.length;i++){
-						model.addElement(onlinelist[i]);
-					}*/
 					userlist.setListData(onlinelist);
 				}		
 				
@@ -192,12 +184,11 @@ public class SendPicture extends JFrame{
 	public void sendCard(String usernames){
 		//lock.lock();
 		try {
-			DataOutputStream toServer = new DataOutputStream(socket.getOutputStream());
 			//send
-			toServer.writeInt(9);
-			toServer.writeUTF(usernames);
+			Testwindow.dataToServer.writeInt(9);
+			Testwindow.dataToServer.writeUTF(usernames);
 
-			toServer.flush();
+			Testwindow.dataToServer.flush();
 				        
 			ObjectOutputStream objectOutputStream=new ObjectOutputStream(socket.getOutputStream());
 

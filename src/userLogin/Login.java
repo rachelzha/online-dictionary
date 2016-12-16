@@ -2,6 +2,8 @@ package src.userLogin;
 
 import javax.swing.*;
 
+import src.Interface.Testwindow;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -19,8 +21,7 @@ public class Login extends JFrame{
 	private JButton jbtLogin=new JButton("Log in");
 	private JButton Register= new JButton("Register");
 	//io streams
-	private DataOutputStream toServer;
-	private DataInputStream fromServer;
+
 	
 	private Lock lock=new ReentrantLock();
 
@@ -58,7 +59,7 @@ public class Login extends JFrame{
 			}
 		});	
 		
-		try{
+	/*	try{
 			//Create an input stream to receive data from the server
 		//	fromServer = new DataInputStream(socket.getInputStream());
 			
@@ -67,45 +68,44 @@ public class Login extends JFrame{
 		}
 		catch (IOException ex){
 			System.err.println(ex);
-		}
+		}*/
 		
 	}
 	
 	private void Register_actionPerformed(ActionEvent e){
 		String username=jtfUsername.getText();
 		String password=jtfPassword.getText();
-	//	String email=jtfEmail.getText();
+		String email=null;//jtfEmail.getText();
 		
 		if(username.length()==0||password.length()==0){
 			JOptionPane.showMessageDialog(null, "用户名或密码不能为空！");
 			return;
 		}
 		
-		lock.lock();
+	//	lock.lock();
 		try{
 			//send
-			toServer.writeInt(2);
-			toServer.writeUTF(username);
-			toServer.writeUTF(password);
-		//	toServer.writeUTF(email);
+			Testwindow.dataToServer.writeInt(2);
+			Testwindow.dataToServer.writeUTF(username);
+			Testwindow.dataToServer.writeUTF(password);
+			Testwindow.dataToServer.writeUTF(email);
 			
 			//receive
-		/*	boolean success=fromServer.readBoolean();
-			
-			if(success==true){
+			String name=Testwindow.dataFromServer.readUTF();
+			if(name!=null&&name.length()!=0){
+				Testwindow.user.setUsername(username);
 				JOptionPane.showMessageDialog(null, "注册成功！");
-			//	user.setUsername("username");
 			}
 			else {
 				JOptionPane.showMessageDialog(null,"用户名已被占用！");
-			}*/
+			}
 		}
 		catch(IOException ex){
 			System.err.println(ex);
 		}
-		finally{
-			lock.unlock();
-		}
+	//	finally{
+		//	lock.unlock();
+	//	}
 	}
 	
 	private void jbtLogin_actionPerformed(ActionEvent e){
@@ -115,9 +115,19 @@ public class Login extends JFrame{
 		lock.lock();
 		try{
 			//send
-			toServer.writeInt(1);
-			toServer.writeUTF(username);
-			toServer.writeUTF(password);
+			Testwindow.dataToServer.writeInt(1);
+			Testwindow.dataToServer.writeUTF(username);
+			Testwindow.dataToServer.writeUTF(password);
+			
+			//receive
+			String name=Testwindow.dataFromServer.readUTF();
+			if(name!=null&&name.length()!=0){
+				Testwindow.user.setUsername(username);
+				JOptionPane.showMessageDialog(null, "登陆成功！");
+			}
+			else {
+				JOptionPane.showMessageDialog(null,"请重新登陆！");
+			}
 		}
 		catch(IOException ex){
 			System.err.println(ex);

@@ -11,10 +11,20 @@ class ImagePanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 
+private String num;
+	
+	ImagePanel(){
+		int n=0;
+		while(n>0||n<12){
+			n=(int) (Math.random()*12);
+		}
+		num=String.valueOf(n);
+	}
+	
 	public void paint(Graphics g) {
 		super.paint(g);
-// ImageIcon icon = new ImageIcon("D:\\1.jpg");
-		ImageIcon icon = new ImageIcon("image/GIF/3.gif");
-		g.drawImage(icon.getImage(), 0, 0, 120, 120, this);
+		String file = "image/GIF/"+num+".png";
+		ImageIcon icon = new ImageIcon(file);
+		g.drawImage(icon.getImage(), 0, 0, 200, 150, this);
 	}
 }

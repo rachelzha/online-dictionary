@@ -2,6 +2,7 @@ package src.Interface.share;
 
 import Server.Card;
 import Server.Message;
+import src.Interface.Testwindow;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -49,14 +50,12 @@ public class RecievePicture extends JFrame{
 	//private Lock lock=new ReentrantLock();
 
 	
-	public RecievePicture(Socket socket,Vector<Message> melist){
+	public RecievePicture(){
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
-        
-        this.socket=socket;
        
-        for(int i=0;i<melist.size();i++){
-        	meList[i]=melist.get(i).getinfo();
+        for(int i=0;i<Testwindow.info.getmessage().size();i++){
+        	meList[i]=Testwindow.info.getmessage().get(i).getinfo();
         }
 		
         setTitle("Make a word card!");
@@ -133,7 +132,7 @@ public class RecievePicture extends JFrame{
 				// TODO Auto-generated method stub
 				if(messagelist.getSelectedValue()==null) return;
 				int num=messagelist.getSelectedIndex();
-				Card card=melist.get(num).getCard();
+				Card card=Testwindow.info.getmessage().get(num).getCard();
                 if(card.validable()){
                     icon=new ImageIcon(card.image);
                     //icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));

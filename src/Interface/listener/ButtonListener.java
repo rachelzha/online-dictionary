@@ -1,60 +1,31 @@
 package src.Interface.listener;
 import java.awt.Image;
-import java.awt.MouseInfo;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.Socket;
 import java.util.Vector;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.*;
 
-import Server.Message;
-import src.Interface.panel.ChoosePanel;
-import src.Interface.panel.LoginPanel;
-import src.Interface.panel.SearchPanel;
-import src.Interface.panel.TextPanel;
+import src.Interface.Testwindow;
 import src.Interface.share.RecievePicture;
 import src.Interface.share.SendPicture;
-import src.Translate.BaiduTranslate;
 import src.Translate.BingTranslate;
-import src.Translate.History;
 import src.Translate.JinshanTranslate;
 import src.Translate.Translation;
 import src.Translate.YoudaoTranslate;
 import src.userLogin.Login;
-import src.userLogin.UserState;
 
 public class ButtonListener implements ActionListener{
-	Object []obj;
-	private int type;
-	private UserState user=new UserState();
-	private Socket socket;
-	private DataOutputStream toServer;
+
+	int type;
 	Login login;
 	
-	private Lock lock=new ReentrantLock();
-
+	//private Lock lock=new ReentrantLock();
 	
-	public ButtonListener(int type,UserState user, Socket soct,Object []obj){
-		this.obj=obj;
+	public ButtonListener(int type){
 		this.type=type;
-		this.user=user;
-		this.socket=soct;
-		try{
-			//create an output stream to send data to the server
-			toServer=new DataOutputStream(socket.getOutputStream());
-		}
-		catch (IOException ex){
-			System.err.println(ex);
-			System.err.println("Fail!");
-		}
 	}
 	
 	@Override
@@ -62,8 +33,8 @@ public class ButtonListener implements ActionListener{
 		// TODO Auto-generated method stub
 		switch (type){
 		case 1:handleSearch();break;//search button
-		case 2:handlePrev();break;//prev button
-		case 3:handleNext();break;//next button
+		case 2:handleSearch();break;//prev button
+		case 3:handleSearch();break;//next button
 		case 5:handleLogin();break;//login button
 		case 7:handleMessage();break;//message button
 		case 8:handleShare();break;//share button
@@ -73,114 +44,79 @@ public class ButtonListener implements ActionListener{
 	}
 
 	public void handleSearch(){
-		SearchPanel searchpanel=(SearchPanel)obj[0];
-		TextPanel textpanel=(TextPanel)obj[1];
-		History his  = (History)obj[2];
-	//	String key = searchpanel.input.getSelectedItem().toString();
-		String key=searchpanel.input.getText();
-		textpanel.tranword.setText(key);
+		String key=null;
+		if(type==2){
+			Vector<String>H=Testwindow.history.Read();
+			Testwindow.history.prevpointer();
+			key = H.elementAt(Testwindow.history.getpointer());
+			Testwindow.searchpanel.input.setText(key);
+		}
+		if(type==3){
+			Vector<String>H=Testwindow.history.Read();
+			Testwindow.history.prevpointer();
+			key = H.elementAt(Testwindow.history.getpointer());
+			Testwindow.searchpanel.input.setText(key);
+		}
+		if(type==1)
+			key=Testwindow.searchpanel.input.getText();
+		//	String key = searchpanel.input.getSelectedItem().toString();
 		
-		lock.lock();
+		Testwindow.textpanel.tranword.setText(key);
+		
+	//	lock.lock();
 		try{
 			//send
-			toServer.writeInt(3);
-			toServer.writeUTF(key);
+			Testwindow.dataToServer.writeInt(3);
+			Testwindow.dataToServer.writeUTF(key);
+			Testwindow.dataToServer.flush();
 			
-			toServer.writeInt(5);
-			toServer.writeInt(6);
-			toServer.flush();
+			Testwindow.info.setbinglikes(Testwindow.dataFromServer.readInt());
+			Testwindow.info.setyoudaolikes(Testwindow.dataFromServer.readInt());
+			Testwindow.info.setjinshanlikes(Testwindow.dataFromServer.readInt());
+			
+			if(Testwindow.user.Logged()){
+				Testwindow.info.setjudgebing(Testwindow.dataFromServer.readInt());
+				Testwindow.info.setjudgeyoudao(Testwindow.dataFromServer.readInt());
+				Testwindow.info.setjudgejinshan(Testwindow.dataFromServer.readInt());
+				//System.out.println(judgebing+":"+judgeyoudao+":"+judgejinshan);
+			}
+			
 		}
 		catch(IOException ex){
 			System.err.println(ex);
 		}
-		finally{
-			lock.unlock();
-		}
+	//	finally{
+	//		lock.unlock();
+	//	}
 		
-		if(textpanel.bing.isSelected()){
+		CheckBoxListener.resetBookMark();//sort
+		
+		if(Testwindow.textpanel.bing.isSelected()){
 			BingTranslate B = new BingTranslate();
 			Translation trans = B.Translation(key);
-			trans.print(textpanel.Out);
+			trans.print(Testwindow.textpanel.Out);
 		}
-		if(textpanel.youdao.isSelected()){//////////////////
+		if(Testwindow.textpanel.youdao.isSelected()){//////////////////
 			YoudaoTranslate Y = new YoudaoTranslate();
 			Translation trans = Y.Translation(key);
-			trans.print(textpanel.Out);
+			trans.print(Testwindow.textpanel.Out);
 		}
-		if(textpanel.jinshan.isSelected()){//////////////////
+		if(Testwindow.textpanel.jinshan.isSelected()){//////////////////
 			JinshanTranslate J = new JinshanTranslate();
 			Translation trans = J.Translate(key);
-			trans.print(textpanel.Out);
+			trans.print(Testwindow.textpanel.Out);
 		}	
 		
-		Vector<String>H=his.Read();
-		H.addElement(key);
-		his.Write(H);
+		if(type==1){
+			Vector<String>H=Testwindow.history.Read();
+			H.addElement(key);
+			Testwindow.history.Write(H);
+		}
 	}
 	
-	public void handlePrev(){
-		SearchPanel searchpanel = (SearchPanel)obj[0];
-		TextPanel textpanel = (TextPanel)obj[1];
-		History his = (History)obj[2];
-		
-		Vector<String>H=his.Read();
-		his.prevpointer();
-		String key = H.elementAt(his.getpointer());
-		textpanel.tranword.setText(key);
-		
-		//searchpanel.input.setSelectedItem(key);
-		searchpanel.input.setText(key);
-		if(textpanel.bing.isSelected()){
-			BingTranslate B = new BingTranslate();
-			Translation trans = B.Translation(key);
-			trans.print(textpanel.Out);
-		}
-		if(textpanel.youdao.isSelected()){
-			YoudaoTranslate Y = new YoudaoTranslate();
-			Translation trans = Y.Translation(key);
-			trans.print(textpanel.Out);
-		}
-		if(textpanel.jinshan.isSelected()){
-			JinshanTranslate J = new JinshanTranslate();
-			Translation trans = J.Translate(key);
-			trans.print(textpanel.Out);
-		}		
-	}
-	
-	public void handleNext(){
-		SearchPanel searchpanel = (SearchPanel)obj[0];
-		TextPanel textpanel = (TextPanel)obj[1];
-		History his = (History)obj[2];
-		
-		Vector<String>H=his.Read();
-		his.nextpointer();
-		String key = H.elementAt(his.getpointer());
-		textpanel.tranword.setText(key);
-		
-		//searchpanel.input.setSelectedItem(key);
-		searchpanel.input.setText(key);
-		if(textpanel.bing.isSelected()){
-			BingTranslate B = new BingTranslate();
-			Translation trans = B.Translation(key);
-			trans.print(textpanel.Out);
-		}
-		if(textpanel.youdao.isSelected()){
-			YoudaoTranslate Y = new YoudaoTranslate();
-			Translation trans = Y.Translation(key);
-			trans.print(textpanel.Out);
-		}
-		if(textpanel.jinshan.isSelected()){
-			JinshanTranslate J = new JinshanTranslate();
-			Translation trans = J.Translate(key);
-			trans.print(textpanel.Out);
-		}	
-	}
-	
-	public void handleLogin(){
-		LoginPanel loginpanel = (LoginPanel)obj[0];
-		TextPanel textpanel = (TextPanel)obj[1];
-		if(!user.Logged()){	
-			login = new Login(socket);		
+	public void handleLogin(){///unhandle??????????
+		if(!Testwindow.user.Logged()){	
+			login = new Login(Testwindow.socket);		
 			login.setLocation(200,100);	
 			login.setVisible(true);
 		}
@@ -189,15 +125,15 @@ public class ButtonListener implements ActionListener{
 				super.windowClosing(e);
 				System.out.println("closed");
 				//user=login.getUser();
-				if(user.Logged()){	
-					loginpanel.Right.add(loginpanel.message);
-					loginpanel.Right.add(loginpanel.Logout);
-					loginpanel.Right.revalidate();
-					loginpanel.Right.repaint();
-					textpanel.Above.add(textpanel.like);
-					textpanel.Above.add(textpanel.share);
-					textpanel.Above.revalidate();
-					textpanel.Above.repaint();
+				if(Testwindow.user.Logged()){	
+					Testwindow.loginpanel.Right.add(Testwindow.loginpanel.message);
+					Testwindow.loginpanel.Right.add(Testwindow.loginpanel.Logout);
+					Testwindow.loginpanel.Right.revalidate();
+					Testwindow.loginpanel.Right.repaint();
+					Testwindow.textpanel.Above.add(Testwindow.textpanel.like);
+					Testwindow.textpanel.Above.add(Testwindow.textpanel.share);
+					Testwindow.textpanel.Above.revalidate();
+					Testwindow.textpanel.Above.repaint();
 					
 				}
 			}
@@ -207,59 +143,95 @@ public class ButtonListener implements ActionListener{
 	
 	
 	public void handleMessage(){
-		LoginPanel loginpanel = (LoginPanel)obj[0];
-		Info info = (Info)obj[1];
+		
 		//Vector<Message>messages=(Vector<Message>)obj[1];
-		new RecievePicture(socket,info.getmessage());
+		new RecievePicture();
 		
 		String messagefile="image/message/2.png";
 		ImageIcon icon = new ImageIcon(messagefile);  
         icon.setImage(icon.getImage().getScaledInstance(20,20,Image.SCALE_DEFAULT));
-		loginpanel.message.setIcon(icon);
-		loginpanel.Right.revalidate();
-		loginpanel.Right.repaint();
+        Testwindow.loginpanel.message.setIcon(icon);
+        Testwindow.loginpanel.Right.revalidate();
+        Testwindow.loginpanel.Right.repaint();
 	}
 	
 	public void handleShare(){
-		SearchPanel searchpanel = (SearchPanel)obj[0];
-		TextPanel textpanel = (TextPanel)obj[1];
-		Info info = (Info)obj[2];
-		String key = searchpanel.input.getText();
+//		lock.lock();
+			try{
+				//send
+				Testwindow.dataToServer.writeInt(5);
+				Testwindow.dataToServer.flush();
+				//get onlineusers
+				Vector<String> onlineUsers=(Vector<String>)Testwindow.objectFromServer.readObject();
+				//	textpanel.Out.append("The online Clients: \n");
+				Testwindow.info.setonlineuserlist(onlineUsers);	
+					
+				//send
+				Testwindow.dataToServer.writeInt(6);
+				Testwindow.dataToServer.flush();
+				//get allusers
+				Vector<String> allUsers=(Vector<String>)Testwindow.objectFromServer.readObject();
+				Testwindow.info.setuserlist(allUsers);
+				
+			}
+			catch(IOException ex){
+				System.err.println(ex);
+			}
+			catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		//	finally{
+		//		lock.unlock();
+		//	}
+
+			
+		String key = Testwindow.searchpanel.input.getText();
 	//	for(int i=0;i<onlineuserlist.length;i++)
 	//		System.out.println(onlineuserlist[i])
-		if(textpanel.bing.isSelected()){
+		if(Testwindow.textpanel.bing.isSelected()){
 			BingTranslate B = new BingTranslate();
 			Translation t = B.Translation(key);
-			new SendPicture(t,socket,info.getuserlist(),info.getonlineuserlist());
+			new SendPicture(t);
 		}
-		if(textpanel.youdao.isSelected()){
+		if(Testwindow.textpanel.youdao.isSelected()){
 			YoudaoTranslate Y = new YoudaoTranslate();
 			Translation t = Y.Translation(key);
-			new SendPicture(t,socket,info.getuserlist(),info.getonlineuserlist());
+			new SendPicture(t);
 		//	textpanel.Out.setText(text);
 		}
-		if(textpanel.jinshan.isSelected()){
+		if(Testwindow.textpanel.jinshan.isSelected()){
 			JinshanTranslate J = new JinshanTranslate();
 			Translation t = J.Translate(key);
-			new SendPicture(t,socket,info.getuserlist(),info.getonlineuserlist());
+			new SendPicture(t);
 		//	textpanel.Out.setText(text);
 		}	
 	}
 	
 	public void handleLogout(){
-		LoginPanel loginpanel = (LoginPanel)obj[0];
-		TextPanel textpanel = (TextPanel)obj[1];
 		
 		//logout.......
+//		lock.lock();
+			try{
+				//send
+				Testwindow.dataToServer.writeInt(7);
+				Testwindow.dataToServer.flush();
+			}
+			catch(IOException ex){
+				System.err.println(ex);
+			}
+		//	finally{
+		//		lock.unlock();
+		//	}
 		
-		loginpanel.Right.remove(loginpanel.message);
-		loginpanel.Right.remove(loginpanel.Logout);
-		loginpanel.Right.revalidate();
-		loginpanel.Right.repaint();
-		textpanel.Above.remove(textpanel.like);
-		textpanel.Above.remove(textpanel.share);
-		textpanel.Above.revalidate();
-		textpanel.Above.repaint();
+		Testwindow.loginpanel.Right.remove(Testwindow.loginpanel.message);
+		Testwindow.loginpanel.Right.remove(Testwindow.loginpanel.Logout);
+		Testwindow.loginpanel.Right.revalidate();
+		Testwindow.loginpanel.Right.repaint();
+		Testwindow.textpanel.Above.remove(Testwindow.textpanel.like);
+		Testwindow.textpanel.Above.remove(Testwindow.textpanel.share);
+		Testwindow.textpanel.Above.revalidate();
+		Testwindow.textpanel.Above.repaint();
 	}
 	
 	public void handleColor(){
@@ -272,15 +244,11 @@ public class ButtonListener implements ActionListener{
 		case 14:color="pink";break;
 		case 15:color="black";break;
 		}
-		LoginPanel loginpanel = (LoginPanel)obj[0];
-		SearchPanel searchpanel = (SearchPanel)obj[1];
-		ChoosePanel choosepanel= (ChoosePanel)obj[2];
-		TextPanel textpanel = (TextPanel)obj[3];
 		
-		loginpanel.setColor(color);
-		searchpanel.setColor(color);
-		choosepanel.setColor(color);
-		textpanel.setColor(color);
+		Testwindow.loginpanel.setColor(color);
+		Testwindow.searchpanel.setColor(color);
+		Testwindow.choosepanel.setColor(color);
+		Testwindow.textpanel.setColor(color);
 	}
 	
 	

@@ -39,30 +39,23 @@ public class Testwindow extends JFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public Socket socket=null;
-	public DataInputStream dataFromServer=null;
-	public DataOutputStream dataToServer=null;
-	public ObjectInputStream objectFromServer=null;
-	public ObjectOutputStream objectToServer=null;
 	
-	UserState user=new UserState();
+	public static Socket socket=null;
+	public static DataInputStream dataFromServer=null;
+	public static DataOutputStream dataToServer=null;
+	public static ObjectInputStream objectFromServer=null;
+	public static ObjectOutputStream objectToServer=null;
 	
-	Info info = new Info();
-	History history= new History();
+	public static UserState user=new UserState();
 	
-	LoginPanel loginpanel = new LoginPanel();
-	SearchPanel searchpanel = new SearchPanel();
-	ChoosePanel choosepanel = new ChoosePanel();
-	TextPanel textpanel = new TextPanel();
-	Object obj1[]={searchpanel,textpanel,history};
-    Object obj2[]={loginpanel,textpanel};
-    Object obj3[]={loginpanel,searchpanel,choosepanel,textpanel};
-    Object obj4[]={searchpanel,textpanel,info};
-    Object obj5[]={loginpanel,info};
-
-    Object []BoxObj1={info,textpanel,choosepanel};
-    Object []BoxObj2={searchpanel,textpanel};
-    Object []BoxObj3={searchpanel,textpanel,info};
+	public static Info info = new Info();
+	public static History history= new History();
+	
+	public static LoginPanel loginpanel = new LoginPanel();
+	public static SearchPanel searchpanel = new SearchPanel();
+	public static ChoosePanel choosepanel = new ChoosePanel();
+	public static TextPanel textpanel = new TextPanel();
+	
     //create a new lock
   	//private Lock lock=new ReentrantLock();
    
@@ -84,6 +77,11 @@ public class Testwindow extends JFrame{
 			//toServer = new DataOutputStream(socket.getOutputStream());
 			dataToServer.writeInt(4);//everyday sentences
 			dataToServer.flush();
+			
+			String sentence=dataFromServer.readUTF();
+			System.out.println(sentence);
+			textpanel.sen.setText(sentence);
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -106,36 +104,36 @@ public class Testwindow extends JFrame{
         add(Pan1,BorderLayout.NORTH);
         
         //buttonlistener
-        searchpanel.Search.addActionListener(new ButtonListener(1,user,socket,obj1));
-        searchpanel.Prev.addActionListener(new ButtonListener(2,user,socket,obj1));
-        searchpanel.Next.addActionListener(new ButtonListener(3,user,socket,obj1));
-        loginpanel.Login.addActionListener(new ButtonListener(5,user,socket,obj2));
-        loginpanel.message.addActionListener(new ButtonListener(7,user,socket,obj5));
-        textpanel.share.addActionListener(new ButtonListener(8,user,socket,obj4));
-        loginpanel.Logout.addActionListener(new ButtonListener(9,user,socket,obj2));
+        searchpanel.Search.addActionListener(new ButtonListener(1));
+        searchpanel.Prev.addActionListener(new ButtonListener(2));
+        searchpanel.Next.addActionListener(new ButtonListener(3));
+        loginpanel.Login.addActionListener(new ButtonListener(5));
+        loginpanel.message.addActionListener(new ButtonListener(7));
+        textpanel.share.addActionListener(new ButtonListener(8));
+        loginpanel.Logout.addActionListener(new ButtonListener(9));
        
         //change color
-        loginpanel.colorgreen.addActionListener(new ButtonListener(10,user,socket,obj3));
-        loginpanel.coloryellow.addActionListener(new ButtonListener(11,user,socket,obj3));
-        loginpanel.colorblue.addActionListener(new ButtonListener(12,user,socket,obj3));
-        loginpanel.colordarkblue.addActionListener(new ButtonListener(13,user,socket,obj3));
-        loginpanel.colorpink.addActionListener(new ButtonListener(14,user,socket,obj3));
-        loginpanel.colorblack.addActionListener(new ButtonListener(15,user,socket,obj3));
+        loginpanel.colorgreen.addActionListener(new ButtonListener(10));
+        loginpanel.coloryellow.addActionListener(new ButtonListener(11));
+        loginpanel.colorblue.addActionListener(new ButtonListener(12));
+        loginpanel.colordarkblue.addActionListener(new ButtonListener(13));
+        loginpanel.colorpink.addActionListener(new ButtonListener(14));
+        loginpanel.colorblack.addActionListener(new ButtonListener(15));
        
 
         //checkboxlistener
-        choosepanel.bing.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
-        choosepanel.youdao.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
-        choosepanel.jinshan.addItemListener(new CheckBoxListener(socket,1,user,BoxObj1));
-        textpanel.bing.addItemListener(new CheckBoxListener(socket,4,user,BoxObj3));
-        textpanel.youdao.addItemListener(new CheckBoxListener(socket,4,user,BoxObj3));
-        textpanel.jinshan.addItemListener(new CheckBoxListener(socket,4,user,BoxObj3));
-        textpanel.like.addItemListener(new CheckBoxListener(socket,7,user,BoxObj3));
+        choosepanel.bing.addItemListener(new CheckBoxListener(1));
+        choosepanel.youdao.addItemListener(new CheckBoxListener(1));
+        choosepanel.jinshan.addItemListener(new CheckBoxListener(1));
+        textpanel.bing.addItemListener(new CheckBoxListener(4));
+        textpanel.youdao.addItemListener(new CheckBoxListener(4));
+        textpanel.jinshan.addItemListener(new CheckBoxListener(4));
+        textpanel.like.addItemListener(new CheckBoxListener(7));
         
   //      searchpanel.input.getComponent(0).addMouseListener(new ComboBoxListener(searchpanel,textpanel) );
   //      textpanel.takeword.addItemListener(new CheckBoxListener(8,));
 		
-       Thread receiveTask=new Thread(new ReceiveTask());
+        Thread receiveTask=new Thread(new ReceiveTask());
 		receiveTask.start();
 		
 		Thread fetchMessageTask=new Thread(new FetchMessageTask());

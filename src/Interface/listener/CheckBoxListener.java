@@ -7,6 +7,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import src.Interface.Testwindow;
 import src.Interface.panel.ChoosePanel;
@@ -24,6 +26,8 @@ public class CheckBoxListener implements ItemListener{
 	
 	private int type;
 	private int likestate;
+	private Lock lock=new ReentrantLock();
+
 	
 	public CheckBoxListener(int type){
 		this.type=type;
@@ -56,7 +60,7 @@ public class CheckBoxListener implements ItemListener{
 		
 		try{
 			//send
-			//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
+			lock.lock();
 			Testwindow.toServer.writeObject(3);
 			Testwindow.toServer.writeObject(key);
 			//Testwindow.dataToServer.flush();
@@ -72,9 +76,10 @@ public class CheckBoxListener implements ItemListener{
 				Testwindow.info.setjudgejinshan((int)Testwindow.fromServer.readObject());
 				//System.out.println(judgebing+":"+judgeyoudao+":"+judgejinshan);
 			}
-			
+			lock.unlock();
 		}
 		catch(IOException | ClassNotFoundException ex){
+			lock.unlock();
 			System.err.println(ex);
 		}
 

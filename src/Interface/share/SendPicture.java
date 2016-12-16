@@ -32,6 +32,7 @@ public class SendPicture extends JFrame{
 	JTextField path=new JTextField(20);
 	JButton open=new JButton("open file");
 	
+	
 	JTextField users=new JTextField(20);
 	JButton send=new JButton("send");
 	//JButton save=new JButton("save");
@@ -50,6 +51,7 @@ public class SendPicture extends JFrame{
     private static final int DEFAULT_HEIGHT = 400;
     
 	ImageIcon icon=null;
+	
 	Card card=new Card();
 	
 	JScrollPane jsp=new JScrollPane();

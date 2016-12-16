@@ -75,9 +75,6 @@ public class Testwindow extends JFrame{
 		
 		try {
 			
-			//System.out.println("0");
-
-			
 			toServer.writeObject((int)4);//everyday sentences
 		
 			
@@ -172,7 +169,7 @@ public class Testwindow extends JFrame{
 	}
 	
 	class FetchMessageTask implements Runnable{
-		
+		private Lock lock=new ReentrantLock();
 		
 		@Override
 		public void run() {
@@ -180,20 +177,15 @@ public class Testwindow extends JFrame{
 			while(true){
 				try{
 						if(user.Logged()){
-						//lock.lock();
+						lock.lock();
 						//DataOutputStream toServer=new DataOutputStream(socket.getOutputStream());
 					//ObjectOutputStream toServer=new ObjectOutputStream(socket.getOutputStream());
 						toServer.writeObject((int)0);
-						//dataToServer.flush();
-						
-						//int n=(int)fromServer.readObject();
-						
-						//for(int i=0;i<n;i++){
-							//Message m=(Message)fromServer.readObject();
-							//messages.add(m);
-						//}
 						
 						Vector<Message>temp=(Vector<Message>)fromServer.readObject();
+						
+						lock.unlock();
+						
 						for(int i=0;i<temp.size();i++){
 							messages.add(temp.get(i));
 						}
@@ -204,8 +196,7 @@ public class Testwindow extends JFrame{
 						Thread.sleep(10000);
 				}
 				catch (Exception ex){
-					//lock.unlock();
-					//System.out.println("cuole!");
+					lock.unlock();
 					ex.printStackTrace();
 					System.exit(0);
 				}

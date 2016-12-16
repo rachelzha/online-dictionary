@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Vector;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.*;
 
@@ -23,6 +25,9 @@ public class ButtonListener implements ActionListener{
 
 	int type;
 	Login login;
+	
+	private Lock lock=new ReentrantLock();
+
 	
 	//private Lock lock=new ReentrantLock();
 	
@@ -52,7 +57,7 @@ public class ButtonListener implements ActionListener{
 		try{
 			//create an output stream to send data to the server
 			//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
-
+			lock.lock();
 			Testwindow.toServer.writeObject(8);
 			Testwindow.toServer.writeObject(key);
 			if(Testwindow.textpanel.bing.isSelected()){
@@ -64,12 +69,13 @@ public class ButtonListener implements ActionListener{
 			else if(Testwindow.textpanel.jinshan.isSelected()){
 				Testwindow.toServer.writeObject("jinshan");
 			}
-			
+			lock.unlock();
 			
 			Testwindow.textpanel.Center.revalidate();
 			Testwindow.textpanel.Center.repaint();
 		}
 		catch (IOException ex){
+			lock.unlock();
 			System.err.println(ex);
 			System.err.println("Fail!");
 		}
@@ -100,6 +106,7 @@ public class ButtonListener implements ActionListener{
 		try{
 			//send
 			//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
+			lock.lock();
 			Testwindow.toServer.writeObject(3);
 			Testwindow.toServer.writeObject(key);
 			//Testwindow.dataToServer.flush();
@@ -115,9 +122,10 @@ public class ButtonListener implements ActionListener{
 				Testwindow.info.setjudgejinshan((int)Testwindow.fromServer.readObject());
 				//System.out.println(judgebing+":"+judgeyoudao+":"+judgejinshan);
 			}
-			
+			lock.unlock();
 		}
 		catch(IOException ex){
+			lock.unlock();
 			System.err.println(ex);
 		}
 	//	finally{
@@ -175,7 +183,7 @@ public class ButtonListener implements ActionListener{
 	
 	public void handleLogin(){///unhandle??????????
 		if(!Testwindow.user.Logged()){	
-			login = new Login(Testwindow.socket);		
+			login = new Login();		
 			login.setLocation(200,100);	
 			login.setVisible(true);
 		}
@@ -218,29 +226,30 @@ public class ButtonListener implements ActionListener{
 //		lock.lock();
 			try{
 				//send
-				//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
-
+				lock.lock();
 				Testwindow.toServer.writeObject(5);
-				//Testwindow.dataToServer.flush();
 				//get onlineusers
-				//ObjectInputStream fromServer=new ObjectInputStream(Testwindow.socket.getInputStream());
 				Vector<String> onlineUsers=(Vector<String>)Testwindow.fromServer.readObject();
-				//	textpanel.Out.append("The online Clients: \n");
+				lock.unlock();
 				Testwindow.info.setonlineuserlist(onlineUsers);	
 					
 				//send
+				lock.lock();
 				Testwindow.toServer.writeObject(6);
 				//Testwindow.dataToServer.flush();
 				//get allusers
 				Vector<String> allUsers=(Vector<String>)Testwindow.fromServer.readObject();
+				lock.unlock();
 				Testwindow.info.setuserlist(allUsers);
 				
 			}
 			catch(IOException ex){
+				lock.unlock();
 				System.err.println(ex);
 			}
 			catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
+				lock.unlock();
 				e.printStackTrace();
 			}
 		//	finally{

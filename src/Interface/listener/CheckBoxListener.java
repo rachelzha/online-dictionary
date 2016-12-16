@@ -179,6 +179,7 @@ public class CheckBoxListener implements ItemListener{
 		else if(Testwindow.choosepanel.jinshan.isSelected())
 			Testwindow.textpanel.jinshan.setSelected(true);
 		
+		
 		Testwindow.textpanel.Left.setLayout(new GridLayout(count,1,5,10));
 		Testwindow.textpanel.Left.revalidate();
 		Testwindow.textpanel.Left.repaint();

@@ -85,7 +85,28 @@ public class YoudaoTranslate {
                 	t.amPhonetic=basic.has("us-phonetic")? basic.getString("us-phonetic"):null;
                     explains=basic.has("explains")? basic.getJSONArray("explains"):null;
                 }
-                
+                if(translation!=null){
+                    for(int i=0;i<translation.length();i++){
+                    	Definition def=new Definition();
+                    	String temp=translation.getString(i);
+                    	
+                    	int j=0;
+                    	for(;j<temp.length();j++){
+                    		if(temp.charAt(j)=='.')break;
+                    	}
+                    	
+                    	if(j==temp.length()){
+                    		def.characteristic="trans";
+                        	def.definitions=temp;
+                    	}
+                    	else{
+                    		def.characteristic=temp.substring(0, j+1);
+                    		def.definitions=temp.substring(j+1,temp.length());
+                    	}
+                    	
+                    	t.trans.add(def);
+                    }
+                }
                 if(explains!=null){
                     for(int i=0;i<explains.length();i++){
                     	Definition def=new Definition();

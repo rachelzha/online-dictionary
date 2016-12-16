@@ -348,8 +348,10 @@ public class MultiThreadServer extends JFrame{
 						if(username==null)break;
 						
 						String receiver=(String)fromClient.readObject();//the user to send message
-						
 						Card card=(Card)fromClient.readObject();
+						
+						//get receivers
+						String[] receivers=receiver.split(";");
 						
 						//save to server directory
 						String filename=card.saveCard("wordcards");
@@ -358,7 +360,9 @@ public class MultiThreadServer extends JFrame{
 						
 						Connection dbConn=connectUsingPool();
 						MessageDB messagedb=new MessageDB(dbConn);
-						messagedb.add(receiver, username, filename);
+						for(int i=0;i<receivers.length;i++){
+							messagedb.add(receivers[i], username, filename);
+						}
 						dbConn.close();
 						
 						

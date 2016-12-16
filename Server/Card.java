@@ -74,12 +74,10 @@ public class Card implements Serializable{
     
     
     
-    public void draw(Translation t,boolean b){
+    public void draw(Translation t,Color color){
     	Graphics g = image.getGraphics();
 
-        if( b == false){
-     	   g.setColor(new Color(102,102,102)); 
-        }
+     	g.setColor(color); 
 
         //word
         Font mFont = new Font("Arial",Font.BOLD,30);
@@ -98,7 +96,6 @@ public class Card implements Serializable{
         g.setFont(mFont);
         int defX=50;
         int defY=90;
-        if(height<=defY)return;
         
         FontMetrics fm = g.getFontMetrics(mFont);  
         int fontHeight=fm.getHeight();
@@ -106,47 +103,68 @@ public class Card implements Serializable{
         int offset=defX;
        
         if(t.trans.size()>0){
-     	   g.drawString(t.trans.get(0).characteristic, defX, defY);
-     	   offset+=40;
-     	   
-     	   String text=t.trans.get(0).definitions;
-     	   for(int i=0;i<text.length();i++){
-     		   char c=text.charAt(i);
-     		   int charWidth=fm.charWidth(c);
-     		   
-     		   if(Character.isISOControl(c)||offset>=textWidth-charWidth){
-     			   offset=defX;
-     			   defY+=fontHeight;
-     		   }
-     		   g.drawString(String.valueOf(c), offset, defY);
-     		   offset+=charWidth;
-     	   }     	   
+        	for(int j=0;j<t.trans.size();j++){
+        		if(height<=defY)return;
+        	
+        		//characteristic
+	     	   g.drawString(t.trans.get(j).characteristic, defX, defY);
+	     	   int cw=0;
+	     	   for(int i=0;i<t.trans.get(j).characteristic.length();i++){
+	     		   cw+=fm.charWidth(t.trans.get(j).characteristic.charAt(i));
+	     	   }
+	     	   offset+=cw;
+	     	   
+	     	   //definitions
+	     	   String text=t.trans.get(j).definitions;
+	     	   for(int i=0;i<text.length();i++){
+	     		   char c=text.charAt(i);
+	     		   int charWidth=fm.charWidth(c);
+	     		   
+	     		   //另起一行
+	     		   if(Character.isISOControl(c)||offset>=textWidth-charWidth){
+	     			   offset=defX;
+	     			   defY+=fontHeight;
+	     		   }
+	     		   g.drawString(String.valueOf(c), offset, defY);
+	     		   offset+=charWidth;
+	     	   }
+	     	   //另起一行
+	     	   offset=defX;
+	     	   defY+=fontHeight;
+        	}
         }
         
         //sentence
         int senX=defX;
         int senY=defY+30;
-        if(height<=senY)return;
         offset=senX;
         if(t.sen.size()>0){
-        	String text=t.sen.get(0);
-      	   	for(int i=0;i<text.length();i++){
-      		   char c=text.charAt(i);
-      		   int charWidth=fm.charWidth(c);
-      		   
-      		   if(Character.isISOControl(c)||offset>=textWidth-charWidth){
-      			   offset=senX;
-      			   senY+=fontHeight;
-      		   }
-      		   g.drawString(String.valueOf(c), offset, senY);
-      		   offset+=charWidth;
-      	   }   
+        	for(int j=0;j<t.sen.size();j++){
+        		if(height<=senY)return;
+        		
+	        	String text=t.sen.get(j);
+	      	   	for(int i=0;i<text.length();i++){
+	      		   char c=text.charAt(i);
+	      		   int charWidth=fm.charWidth(c);
+	      		   
+	      		   //另起一行
+	      		   if(Character.isISOControl(c)||offset>=textWidth-charWidth){
+	      			   offset=senX;
+	      			   senY+=fontHeight;
+	      		   }
+	      		   g.drawString(String.valueOf(c), offset, senY);
+	      		   offset+=charWidth;
+	      	   }
+	      	   //另起一行
+	      	   offset=senX;
+	      	   senY+=fontHeight;
+        	}
         }
     }
     
     
     //在图片上写字
-    public void draw(Translation t, String name , boolean b ){
+    public void draw(Translation t, String name , Color color){
     		File background=new File(name);
     		
     		BufferedImage temp=null;
@@ -163,7 +181,7 @@ public class Card implements Serializable{
                 
                image=temp;
                
-               draw(t,b);
+               draw(t,color);
     }
 
     //保存图片到本地

@@ -21,7 +21,10 @@ public class SentenceDB {
     }
     
 	public String getSentence(){
-	    int n=(int) (Math.random()*7);
+	    int n=(int) (Math.random()*6)+1;
+	    while(n<=0||n>7){
+	    	n=(int) (Math.random()*6)+1;
+	    }
 	    String queryString="select sentence from sentences where id="+n+";";
 	    String sentence=null;
 	    

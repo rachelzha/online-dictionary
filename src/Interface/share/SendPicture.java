@@ -11,7 +11,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.*;
 import java.net.Socket;
-import java.util.Vector;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -26,11 +25,15 @@ public class SendPicture extends JFrame{
 	private static final long serialVersionUID = 1L;
 
 	//Vector<String>list = new Vector<String>();
+	
+	String usernames;
+	
 	String []list = new String[1000];
 	String []onlinelist = new String[1000];
 	
 	JTextField path=new JTextField(20);
 	JButton open=new JButton("open file");
+	JButton colorchooser=new JButton("choose color");
 	
 	
 	JTextField users=new JTextField(20);
@@ -45,6 +48,8 @@ public class SendPicture extends JFrame{
     JList<String> userlist=new JList<>(model);
     
     JCheckBox online = new JCheckBox("online");
+    JCheckBox sendall = new JCheckBox("SendAll"); 
+    
     JPanel Left = new JPanel();
     
     private static final int DEFAULT_WIDTH = 600;
@@ -58,7 +63,11 @@ public class SendPicture extends JFrame{
 	
 	Socket socket=null;
 	
-	//private Lock lock=new ReentrantLock();
+	private Lock lock=new ReentrantLock();
+	
+	int flag=1;
+	
+	Color color=new Color(102,102,102);
 
 	
 	public SendPicture(Translation t){
@@ -79,6 +88,7 @@ public class SendPicture extends JFrame{
         JPanel panel1=new JPanel();
         panel1.add(path,FlowLayout.LEFT);
         panel1.add(open,FlowLayout.CENTER);
+        panel1.add(colorchooser,FlowLayout.RIGHT);
         
         JPanel panel2=new JPanel();
         panel2.add(users, FlowLayout.LEFT);
@@ -92,8 +102,13 @@ public class SendPicture extends JFrame{
 		userlist.setFixedCellWidth(100);
 		userlist.setFixedCellHeight(20);
 		userlist.setVisibleRowCount(20);
+		GridLayout grid = new GridLayout(2,1,5,5);
+		JPanel down = new JPanel();
+		down.setLayout(grid);
+		down.add(online);
+		down.add(sendall);
 		Left.add(userlist);
-		Left.add(online);
+		Left.add(down);
 	
         
         add(panel1,BorderLayout.NORTH);
@@ -108,7 +123,7 @@ public class SendPicture extends JFrame{
         chooserToSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         
         //default card
-        card.draw(t, false);
+        card.draw(t, color);
         icon=new ImageIcon(card.image);
         label.setIcon(icon);
         jsp.add(label);
@@ -127,7 +142,7 @@ public class SendPicture extends JFrame{
 	                    path.setText(name);
 	                    
 	                    //draw
-	                    card.draw(t,name,false);
+	                    card.draw(t,name,color);
 
 		                icon=new ImageIcon(card.image);
 		                label.setIcon(icon);
@@ -151,18 +166,59 @@ public class SendPicture extends JFrame{
         	
         });
         
-        userlist.addListSelectionListener(new ListSelectionListener(){    //ÏàÓ¦µã»÷
+        userlist.addListSelectionListener(new ListSelectionListener(){
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
 				// TODO Auto-generated method stub
 			//	if(userlist.getSelectedValue()==null) return;
-				String key = userlist.getSelectedValue();
-				System.out.println(key);/////
-				users.setText(key);
+				if(flag==1){
+					usernames=users.getText();
+					if(usernames==null||usernames.length()==0){
+						usernames=userlist.getSelectedValue();
+						System.out.println("1 "+usernames);
+					}
+					else{
+						usernames+=";";
+						usernames+=userlist.getSelectedValue();
+						System.out.println("2 "+usernames);
+					}
+					//System.out.println(usernames);/////
+					users.setText(usernames);
+					
+				}
+				flag=1-flag;
 			}
 		});
         
+        sendall.addItemListener(new ItemListener(){
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Auto-generated method stub
+				if(!sendall.isSelected()){
+					users.setText("");
+					return;
+				}
+				if(!online.isSelected()){
+					usernames=list[0];
+					for(int i=1;i<Testwindow.info.getuserlist().size();i++){
+						usernames+=";";
+						usernames+=list[i];
+					}
+				}
+				else{
+					usernames=onlinelist[0];
+					for(int i=1;i<Testwindow.info.getonlineuserlist().size();i++){
+						usernames+=";";
+						usernames+=onlinelist[i];
+					}
+					
+				}
+				users.setText(usernames);
+			}
+        	
+        });
         
         online.addItemListener(new ItemListener(){
 
@@ -187,27 +243,43 @@ public class SendPicture extends JFrame{
         	
         });
         
+        //color chooser
+        colorchooser.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				color = JColorChooser.showDialog(null,"Choose Color",color);
+				
+				//draw
+				//card.draw(t, new Color(255,255,255));
+                card.draw(t,color);
+
+                icon=new ImageIcon(card.image);
+                label.setIcon(icon);
+                jsp.add(label);
+                jsp.setViewportView(label);
+			}
+        	
+        });
     }
 	
 	//send the card
 	public void sendCard(String usernames){
-		//lock.lock();
+		
 		try {
 			//send
-			//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
-			Testwindow.toServer.writeObject(9);
+			lock.lock();
+			Testwindow.toServer.writeObject((int)9);
 			Testwindow.toServer.writeObject(usernames);
 
-			//Testwindow.toServer.flush();
-				        
-			//ObjectOutputStream objectOutputStream=new ObjectOutputStream(socket.getOutputStream());
-
 			Testwindow.toServer.writeObject(card);
-	        //objectOutputStream.flush();
-	        //lock.unlock();
+
+			lock.unlock();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			lock.unlock();
 			e.printStackTrace();
 		}
 		

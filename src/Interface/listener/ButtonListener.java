@@ -100,6 +100,9 @@ public class ButtonListener implements ActionListener{
 			key=Testwindow.searchpanel.input.getText();
 		//	String key = searchpanel.input.getSelectedItem().toString();
 		
+		if(key==null||key.length()==0)
+			return;
+		
 		Testwindow.textpanel.tranword.setText(key);
 		
 	//	lock.lock();
@@ -297,6 +300,7 @@ public class ButtonListener implements ActionListener{
 		//		lock.unlock();
 		//	}
 		
+		Testwindow.user.setUsername(null);
 		Testwindow.loginpanel.Right.remove(Testwindow.loginpanel.message);
 		Testwindow.loginpanel.Right.remove(Testwindow.loginpanel.Logout);
 		Testwindow.loginpanel.Right.revalidate();

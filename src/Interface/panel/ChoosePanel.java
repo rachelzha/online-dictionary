@@ -30,12 +30,12 @@ public class ChoosePanel {
 	public void setColor(String color){
 		Color bg=null;
 		switch(color){
-		case "green":bg=Color.green;break;
-		case "yellow":bg=Color.yellow;break;
+		case "green":bg=new Color(173,255,47,255);break;
+		case "yellow":bg=new Color(255,255,100,255);break;
 		case "blue":bg=new Color(135,206,235,255);break;
-		case "darkblue":bg=new Color(0,0,139,255);break;
+		case "darkblue":bg=new Color(0,100,139,255);break;
 		case "pink":bg=new Color(218,112,214,255);break;
-		case "black":bg=Color.darkGray;break;
+		case "black":bg=new Color(130,130,130,255);break;
 		}
 		bing.setBackground(bg);
 		youdao.setBackground(bg);

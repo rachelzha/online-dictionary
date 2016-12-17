@@ -23,7 +23,7 @@ public class History {
 	    //	tempString = reader.readLine();
 	    //	pointer = Integer.parseInt(tempString);
 	    	while ((tempString = reader.readLine()) != null) {
-	    		if(tempString!=null&&tempString.length()!=0)
+	    		if(tempString!=null||tempString.length()!=0)
 	    			history.add(tempString);
 	    		//System.out.println(tempString);
 	    	}
@@ -56,7 +56,7 @@ public class History {
 			}
 			while(i<history.size()){
 				String s1 =history.elementAt(i);
-				if(s1.length()!=0&&s1!=null){
+				if(s1.length()!=0||s1!=null){
 					sb.append(s1+"\n" );
 					i++;
 				}

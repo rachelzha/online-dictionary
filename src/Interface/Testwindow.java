@@ -153,7 +153,7 @@ public class Testwindow extends JFrame{
 	
 	public static void connect(){
 		try{
-			socket = new Socket("172.26.74.203",8080);
+			socket = new Socket("172.28.148.205",8080);
 			//dataToServer=new DataOutputStream(socket.getOutputStream());
 			//dataFromServer=new DataInputStream(socket.getInputStream());
 			

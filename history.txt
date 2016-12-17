@@ -1,10 +1,5 @@
-record
 hh
 happy
-E
-e
-T
-S
-s
 play
-play
+hello
+youdao

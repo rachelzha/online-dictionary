@@ -93,11 +93,11 @@ public class ButtonListener implements ActionListener{
 		}
 		if(type==3){
 			Vector<String>H=Testwindow.history.Read();
-			Testwindow.history.prevpointer();
+			Testwindow.history.nextpointer();
 			key = H.elementAt(Testwindow.history.getpointer());
 			Testwindow.searchpanel.input.setText(key);
 		}
-		if(type==1)
+	//	if(type==1)
 			key=Testwindow.searchpanel.input.getText();
 		//	String key = searchpanel.input.getSelectedItem().toString();
 		

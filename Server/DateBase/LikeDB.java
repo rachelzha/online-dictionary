@@ -13,6 +13,7 @@ public class LikeDB {
     	connection=con;
     }
     
+    //用户点赞处理
 	public void changeLikes(String username, String word,String aDict){
 		String sql1,sql2;
 
@@ -94,6 +95,7 @@ public class LikeDB {
 		}
 	}
 	
+	//获得所有点赞数
 	public Vector<Integer> getLikes(String word){
 		String queryString="select baidu,youdao,jinshan from likes where word=?";
 		Vector<Integer> vec=new Vector<Integer>();
@@ -125,6 +127,7 @@ public class LikeDB {
 		return vec;
 	}
 	
+	//获得个人是否点赞
 	public Vector<Integer> getPersonalLikes(String username,String word){
 		String queryString="select baidu,youdao,jinshan from personal_likes where pusername=? and pword=?";
 		Vector<Integer> vec=new Vector<Integer>();

@@ -1,5 +1,4 @@
 package src.information;
-
 import java.util.Vector;
 
 public class Info {
@@ -36,7 +35,11 @@ public class Info {
 	public void setjudgejinshan(int value){ judgejinshan=value;}
 	public void setuserlist(Vector<String>list){userlist=list;}
 	public void setonlineuserlist(Vector<String>list){onlineuserlist=list;}
-	public void setmessage(Vector<Message>list){messages=list;}
+	public void setmessage(Vector<Message>list){
+		for(int i=0;i<list.size();i++){
+			messages.add(list.get(i));
+		}
+	}
 	
 	//init
 	public void init(){

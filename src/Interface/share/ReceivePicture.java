@@ -18,7 +18,7 @@ public class ReceivePicture extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	String [] meList = new String[100];
+	String [] meList = new String[1000];
 	
 	private JButton save=new JButton("save");
 	JList<String>messagelist;
@@ -47,7 +47,7 @@ public class ReceivePicture extends JFrame{
         setVisible(true);
        
         //get messages
-        meList = new String[MainWindow.info.getmessage().size()];
+        meList = new String[MainWindow.info.getmessage().size()+5];
         for(int i=0;i<MainWindow.info.getmessage().size();i++){
         	meList[i]=MainWindow.info.getmessage().get(i).getinfo();
         }
@@ -59,7 +59,7 @@ public class ReceivePicture extends JFrame{
         panel2.setLayout(new BorderLayout(10,20));
 		
 		messagelist=new JList<String>(meList);
-		messagelist.setFixedCellWidth(100);
+		messagelist.setFixedCellWidth(150);
 		messagelist.setFixedCellHeight(20);
 		messagelist.setVisibleRowCount(20);
 		panel2.add(new JScrollPane(messagelist),BorderLayout.CENTER);

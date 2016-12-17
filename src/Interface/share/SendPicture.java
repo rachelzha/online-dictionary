@@ -73,8 +73,8 @@ public class SendPicture extends JFrame{
 		
         setVisible(true);
        
-        list = new String[MainWindow.info.getuserlist().size()];
-        onlinelist = new String[MainWindow.info.getonlineuserlist().size()];
+        list = new String[MainWindow.info.getuserlist().size()+5];
+        onlinelist = new String[MainWindow.info.getonlineuserlist().size()+5];
         for(int i=0;i<MainWindow.info.getuserlist().size();i++){
         	list[i]=MainWindow.info.getuserlist().get(i);
         }

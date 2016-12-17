@@ -167,8 +167,9 @@ public class MainWindow extends JFrame{
 							drawComponent.drawButton(messagefile1, messagefile2, 20, 20, loginpanel.message);
 							loginpanel.Right.revalidate();
 							loginpanel.Right.repaint();
+							info.setmessage(temp);
 						}
-						info.setmessage(temp);
+					
 						
 					}
 					Thread.sleep(10000);

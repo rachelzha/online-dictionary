@@ -222,8 +222,7 @@ public class ButtonListener implements ActionListener{
 		//refresh message button
 		String messagefile1="image/message/1.png";
 		String messagefile2="image/message/4.png";
-		drawComponent draw=new drawComponent();
-		draw.drawButton(messagefile1, messagefile2, 20, 20,  MainWindow.loginpanel.message);
+		drawComponent.drawButton(messagefile1, messagefile2, 20, 20,  MainWindow.loginpanel.message);
         MainWindow.loginpanel.Right.revalidate();
         MainWindow.loginpanel.Right.repaint();
 	}

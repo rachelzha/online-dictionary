@@ -172,13 +172,13 @@ public class CheckBoxListener implements ItemListener{
 			Testwindow.textpanel.Left.remove(Testwindow.textpanel.jinshan);
 			count--;
 		}
-		if(Testwindow.choosepanel.bing.isSelected())
-			Testwindow.textpanel.bing.setSelected(true);
-		else if(Testwindow.choosepanel.youdao.isSelected())
+		
+		if(Testwindow.choosepanel.youdao.isSelected())
 			Testwindow.textpanel.youdao.setSelected(true);
 		else if(Testwindow.choosepanel.jinshan.isSelected())
 			Testwindow.textpanel.jinshan.setSelected(true);
-		
+		else if(Testwindow.choosepanel.bing.isSelected())
+			Testwindow.textpanel.bing.setSelected(true);
 		
 		Testwindow.textpanel.Left.setLayout(new GridLayout(count,1,5,10));
 		Testwindow.textpanel.Left.revalidate();

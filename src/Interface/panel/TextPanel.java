@@ -62,10 +62,10 @@ public class TextPanel {
 		draw.drawCheckBox(bingfile1, bingfile2, 82, 40, bing);
 	    draw.drawCheckBox(youdaofile1, youdaofile2, 82, 40, youdao);
 	    draw.drawCheckBox(jinshanfile1, jinshanfile2, 82, 40, jinshan);
-	    bookmark.add(bing);
 	    bookmark.add(youdao);
 	    bookmark.add(jinshan);
-	    bing.setSelected(true);
+	    bookmark.add(bing);
+	    youdao.setSelected(true);
 		Left.add(bing);
 		Left.add(youdao);
 		Left.add(jinshan);

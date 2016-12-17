@@ -100,6 +100,12 @@ public class ButtonListener implements ActionListener{
 		key=deleteExtraSpace(temp);
 		if(key.length()==0)return;
 		
+		//判断输入是否为中文，如果含有中文，取消bing翻译
+		for(int i =0 ;i < key.length() ; i ++){
+			if(key.substring(i, i+1).matches("[\\u4e00-\\u9fa5]+"))
+				MainWindow.choosepanel.bing.setSelected(false);
+		}
+		
 		MainWindow.textpanel.tranword.setText(key);
 		
 		try{

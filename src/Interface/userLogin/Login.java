@@ -1,13 +1,12 @@
-package src.userLogin;
+package src.Interface.userLogin;
 
 import javax.swing.*;
 
-import src.Interface.Testwindow;
+import src.Interface.MainWindow;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.net.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -36,15 +35,6 @@ public class Login extends JFrame{
 
 	
 	private Lock lock=new ReentrantLock();
-
-	/*
-	public static void main(String[] args){
-		Login win=new Login();
-		win.setLocation(200,100);
-		win.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		win.setVisible(true);
-	}*/
-	
 	
 	public Login(){
 	
@@ -126,28 +116,30 @@ public class Login extends JFrame{
 		try{
 			//send
 			lock.lock();
-			Testwindow.toServer.writeObject((int)2);
-			Testwindow.toServer.writeObject(username);
-			Testwindow.toServer.writeObject(password);
+			MainWindow.toServer.writeObject((int)2);
+			MainWindow.toServer.writeObject(username);
+			MainWindow.toServer.writeObject(password);
 		//	Testwindow.toServer.writeObject(email);
 			
 			//receive
-			String name=(String)Testwindow.fromServer.readObject();
+			String name=(String)MainWindow.fromServer.readObject();
 			lock.unlock();
 			
 			if(name!=null&&name.length()!=0){
-				Testwindow.user.setUsername(username);
+				MainWindow.user.setUsername(username);
 				JOptionPane.showMessageDialog(null, "注册成功！");
-				Testwindow.loginpanel.Right.add(Testwindow.loginpanel.message);
-				Testwindow.loginpanel.Right.add(Testwindow.loginpanel.Logout);
-				Testwindow.loginpanel.Right.revalidate();
-				Testwindow.loginpanel.Right.repaint();
-				Testwindow.textpanel.Above.add(Testwindow.textpanel.like);
-				Testwindow.textpanel.Above.add(Testwindow.textpanel.share);
-				Testwindow.textpanel.Above.revalidate();
-				Testwindow.textpanel.Above.repaint();
+				
+				//refresh mainwindow
+				MainWindow.loginpanel.Right.add(MainWindow.loginpanel.message);
+				MainWindow.loginpanel.Right.add(MainWindow.loginpanel.Logout);
+				MainWindow.loginpanel.Right.revalidate();
+				MainWindow.loginpanel.Right.repaint();
+				MainWindow.textpanel.Above.add(MainWindow.textpanel.like);
+				MainWindow.textpanel.Above.add(MainWindow.textpanel.share);
+				MainWindow.textpanel.Above.revalidate();
+				MainWindow.textpanel.Above.repaint();
 
-				dispose();///
+				dispose();///close Register window
 			}
 			else {
 				JOptionPane.showMessageDialog(null,"用户名已被占用！");
@@ -174,27 +166,29 @@ public class Login extends JFrame{
 		try{
 			//send
 			lock.lock();
-			Testwindow.toServer.writeObject((int)1);
-			Testwindow.toServer.writeObject(username);
-			Testwindow.toServer.writeObject(password);
+			MainWindow.toServer.writeObject((int)1);
+			MainWindow.toServer.writeObject(username);
+			MainWindow.toServer.writeObject(password);
 			
 			//receive
-			String name=(String)Testwindow.fromServer.readObject();
+			String name=(String)MainWindow.fromServer.readObject();
 			lock.unlock();
 			
 			if(name!=null&&name.length()!=0){
-				Testwindow.user.setUsername(username);
+				MainWindow.user.setUsername(username);
 				JOptionPane.showMessageDialog(null, "登陆成功！");
-				Testwindow.loginpanel.Right.add(Testwindow.loginpanel.message);
-				Testwindow.loginpanel.Right.add(Testwindow.loginpanel.Logout);
-				Testwindow.loginpanel.Right.revalidate();
-				Testwindow.loginpanel.Right.repaint();
-				Testwindow.textpanel.Above.add(Testwindow.textpanel.like);
-				Testwindow.textpanel.Above.add(Testwindow.textpanel.share);
-				Testwindow.textpanel.Above.revalidate();
-				Testwindow.textpanel.Above.repaint();
+				
+				//refresh mainwindow
+				MainWindow.loginpanel.Right.add(MainWindow.loginpanel.message);
+				MainWindow.loginpanel.Right.add(MainWindow.loginpanel.Logout);
+				MainWindow.loginpanel.Right.revalidate();
+				MainWindow.loginpanel.Right.repaint();
+				MainWindow.textpanel.Above.add(MainWindow.textpanel.like);
+				MainWindow.textpanel.Above.add(MainWindow.textpanel.share);
+				MainWindow.textpanel.Above.revalidate();
+				MainWindow.textpanel.Above.repaint();
 
-				dispose();///
+				dispose();///close login window
 			}
 			else {
 				JOptionPane.showMessageDialog(null,"请重新登陆！");

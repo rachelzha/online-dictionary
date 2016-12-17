@@ -1,4 +1,4 @@
-package Server;
+package Server.DateBase;
 
 import java.sql.*;
 import java.util.Vector;
@@ -9,7 +9,7 @@ public class LikeDB {
     private PreparedStatement pstmt1;
     private PreparedStatement pstmt2;
 	
-    LikeDB(Connection con){
+    public LikeDB(Connection con){
     	connection=con;
     }
     

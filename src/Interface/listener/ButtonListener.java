@@ -1,36 +1,30 @@
 package src.Interface.listener;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.Vector;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.*;
 
-import src.Interface.Testwindow;
-import src.Interface.panel.drawComponent;
+import src.Interface.MainWindow;
 import src.Interface.share.ReceivePicture;
 import src.Interface.share.SendPicture;
+import src.Interface.tool.drawComponent;
+import src.Interface.userLogin.Login;
 import src.Translate.BingTranslate;
 import src.Translate.JinshanTranslate;
 import src.Translate.Translation;
 import src.Translate.YoudaoTranslate;
-import src.userLogin.Login;
 
 public class ButtonListener implements ActionListener{
 
-	int type;
+	int type;//处理类型
 	Login login;
 	
 	private Lock lock=new ReentrantLock();
-
-	
-	//private Lock lock=new ReentrantLock();
 	
 	public ButtonListener(int type){
 		this.type=type;
@@ -47,33 +41,36 @@ public class ButtonListener implements ActionListener{
 		case 7:handleMessage();break;//message button
 		case 8:handleShare();break;//share button
 		case 9:handleLogout();break;//logout
-		case 10:case 11:case 12:case 13:case 14:case 15:handleColor();break;
-		case 4:handleLike();break;
+		case 10:case 11:case 12:case 13:case 14:case 15:handleColor();break; //change color
+		case 4:handleLike();break;//like checkbox
 		}
 	}
 
+	//like checkbox in textpanel
 	public void handleLike(){
-		String key=Testwindow.searchpanel.input.getText();
+		//getword
+		String key=MainWindow.searchpanel.input.getText();
 		
 		try{
-			//create an output stream to send data to the server
-			//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
 			lock.lock();
-			Testwindow.toServer.writeObject(8);
-			Testwindow.toServer.writeObject(key);
-			if(Testwindow.textpanel.bing.isSelected()){
-				Testwindow.toServer.writeObject("baidu");
+			//send
+			MainWindow.toServer.writeObject(8);
+			MainWindow.toServer.writeObject(key);
+			
+			if(MainWindow.textpanel.bing.isSelected()){
+				MainWindow.toServer.writeObject("baidu");
 			}
-			else if(Testwindow.textpanel.youdao.isSelected()){
-				Testwindow.toServer.writeObject("youdao");
+			else if(MainWindow.textpanel.youdao.isSelected()){
+				MainWindow.toServer.writeObject("youdao");
 			}
-			else if(Testwindow.textpanel.jinshan.isSelected()){
-				Testwindow.toServer.writeObject("jinshan");
+			else if(MainWindow.textpanel.jinshan.isSelected()){
+				MainWindow.toServer.writeObject("jinshan");
 			}
 			lock.unlock();
 			
-			Testwindow.textpanel.Center.revalidate();
-			Testwindow.textpanel.Center.repaint();
+			//refresh
+			MainWindow.textpanel.Center.revalidate();
+			MainWindow.textpanel.Center.repaint();
 		}
 		catch (IOException ex){
 			lock.unlock();
@@ -83,73 +80,43 @@ public class ButtonListener implements ActionListener{
 
 	}
 	
-	//删除单词多余的空格
-	public static String deleteExtraSpace(String word){
-		if(word==null||word.length()==0)return "";
-		
-		String[] subWords=word.split("\\s+");
-		if(subWords.length==0)return "";
-	/*
-		for(int i=0;i<subWords.length;i++){
-			subWords[i]=subWords[i].trim();
-			while (subWords[i].endsWith(" ")) {
-				subWords[i] = subWords[i].substring(0, subWords[i].length() - 1).trim();
-			}
-			while(subWords[i].startsWith(" ")){
-				subWords[i]=subWords[i].substring(1,subWords[i].length()-1).trim();
-			}
-		}*/
-		
-		word=subWords[0];
-		for(int i=1;i<subWords.length;i++){
-			word=word+" "+subWords[i];
-		}
-		
-		return word;
-	}
-	
+	//search button in searchpanel
 	public void handleSearch(){
 		String key=null;
-		if(type==2){
-			Vector<String>H=Testwindow.history.Read();
-			Testwindow.history.prevpointer();
-			key = H.elementAt(Testwindow.history.getpointer());
-			Testwindow.searchpanel.input.setText(key);
+		if(type==2){//get prev word
+			Vector<String>H=MainWindow.history.Read();
+			MainWindow.history.prevpointer();
+			key = H.elementAt(MainWindow.history.getpointer());
+			MainWindow.searchpanel.input.setText(key);
 		}
-		if(type==3){
-			Vector<String>H=Testwindow.history.Read();
-			Testwindow.history.nextpointer();
-			key = H.elementAt(Testwindow.history.getpointer());
-			Testwindow.searchpanel.input.setText(key);
+		if(type==3){//get next word
+			Vector<String>H=MainWindow.history.Read();
+			MainWindow.history.nextpointer();
+			key = H.elementAt(MainWindow.history.getpointer());
+			MainWindow.searchpanel.input.setText(key);
 		}
 
-		String temp=Testwindow.searchpanel.input.getText();
-		//	String key = searchpanel.input.getSelectedItem().toString();
-		/////////
+		String temp=MainWindow.searchpanel.input.getText();
 		key=deleteExtraSpace(temp);
 		if(key.length()==0)return;
 		
-		Testwindow.textpanel.tranword.setText(key);
+		MainWindow.textpanel.tranword.setText(key);
 		
-	//	lock.lock();
 		try{
 			//send
-			//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
 			lock.lock();
-			Testwindow.toServer.writeObject((int)3);
-			Testwindow.toServer.writeObject(key);
-			//Testwindow.dataToServer.flush();
+			MainWindow.toServer.writeObject((int)3);
+			MainWindow.toServer.writeObject(key);
 			
-			//ObjectInputStream fromServer=new ObjectInputStream(Testwindow.socket.getInputStream());
-			Testwindow.info.setbinglikes((int)Testwindow.fromServer.readObject());
-			Testwindow.info.setyoudaolikes((int)Testwindow.fromServer.readObject());
-			Testwindow.info.setjinshanlikes((int)Testwindow.fromServer.readObject());
+			//receive
+			MainWindow.info.setbinglikes((int)MainWindow.fromServer.readObject());
+			MainWindow.info.setyoudaolikes((int)MainWindow.fromServer.readObject());
+			MainWindow.info.setjinshanlikes((int)MainWindow.fromServer.readObject());
 			
-			if(Testwindow.user.Logged()){
-				Testwindow.info.setjudgebing((int)Testwindow.fromServer.readObject());
-				Testwindow.info.setjudgeyoudao((int)Testwindow.fromServer.readObject());
-				Testwindow.info.setjudgejinshan((int)Testwindow.fromServer.readObject());
-				//System.out.println(judgebing+":"+judgeyoudao+":"+judgejinshan);
+			if(MainWindow.user.Logged()){
+				MainWindow.info.setjudgebing((int)MainWindow.fromServer.readObject());
+				MainWindow.info.setjudgeyoudao((int)MainWindow.fromServer.readObject());
+				MainWindow.info.setjudgejinshan((int)MainWindow.fromServer.readObject());
 			}
 			lock.unlock();
 		}
@@ -157,83 +124,89 @@ public class ButtonListener implements ActionListener{
 			lock.unlock();
 			System.err.println(ex);
 		}
-	//	finally{
-	//		lock.unlock();
-	//	}
- catch (ClassNotFoundException e) {
+		catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		CheckBoxListener.resetBookMark();//sort
+		CheckBoxListener.resetBookMark();//sort bookmark by likes
 		
-		if(Testwindow.textpanel.bing.isSelected()){
-			if(Testwindow.user.Logged()){
-				if(Testwindow.info.getjudgebing()==1)
-					Testwindow.textpanel.like.setSelected(true);
-				else if(Testwindow.info.getjudgebing()==-1)
-					Testwindow.textpanel.like.setSelected(false);
+		if(MainWindow.textpanel.bing.isSelected()){
+			//show whether like
+			if(MainWindow.user.Logged()){
+				if(MainWindow.info.getjudgebing()==1)
+					MainWindow.textpanel.like.setSelected(true);
+				else if(MainWindow.info.getjudgebing()==-1)
+					MainWindow.textpanel.like.setSelected(false);
 			}
+			//show translation
 			BingTranslate B = new BingTranslate();
 			Translation trans = B.Translation(key);
-			trans.print(Testwindow.textpanel.Out);
+			trans.print(MainWindow.textpanel.Out);
 		}
-		if(Testwindow.textpanel.youdao.isSelected()){//////////////////
-			if(Testwindow.user.Logged()){
-				if(Testwindow.info.getjudgeyoudao()==1)
-					Testwindow.textpanel.like.setSelected(true);
-				else if(Testwindow.info.getjudgeyoudao()==-1)
-					Testwindow.textpanel.like.setSelected(false);
+		if(MainWindow.textpanel.youdao.isSelected()){
+			//show whether like
+			if(MainWindow.user.Logged()){
+				if(MainWindow.info.getjudgeyoudao()==1)
+					MainWindow.textpanel.like.setSelected(true);
+				else if(MainWindow.info.getjudgeyoudao()==-1)
+					MainWindow.textpanel.like.setSelected(false);
 			}
-
+			//show translation
 			YoudaoTranslate Y = new YoudaoTranslate();
 			Translation trans = Y.Translate(key);
-			trans.print(Testwindow.textpanel.Out);
+			trans.print(MainWindow.textpanel.Out);
 		}
-		if(Testwindow.textpanel.jinshan.isSelected()){//////////////////
-			if(Testwindow.user.Logged()){
-				if(Testwindow.info.getjudgejinshan()==1)
-					Testwindow.textpanel.like.setSelected(true);
-				else if(Testwindow.info.getjudgejinshan()==-1)
-					Testwindow.textpanel.like.setSelected(false);
+		if(MainWindow.textpanel.jinshan.isSelected()){
+			//show whether like
+			if(MainWindow.user.Logged()){
+				if(MainWindow.info.getjudgejinshan()==1)
+					MainWindow.textpanel.like.setSelected(true);
+				else if(MainWindow.info.getjudgejinshan()==-1)
+					MainWindow.textpanel.like.setSelected(false);
 			}
-
+			//show translation
 			JinshanTranslate J = new JinshanTranslate();
 			Translation trans = J.Translate(key);
-			trans.print(Testwindow.textpanel.Out);
+			trans.print(MainWindow.textpanel.Out);
 		}	
 		
-		if(type==1){
-			Vector<String>H=Testwindow.history.Read();
+		if(type==1){//add history word
+			Vector<String>H=MainWindow.history.Read();
 			H.addElement(key);
-			Testwindow.history.Write(H);
+			MainWindow.history.Write(H);
 		}
 	}
 	
-	public void handleLogin(){///unhandle??????????
-		if(Testwindow.user.Logged()){
-			String S = "Hello,"+Testwindow.user.getUsername();
+	//login button in loginpanel
+	public void handleLogin(){
+		//logged
+		if(MainWindow.user.Logged()){
+			String S = "Hello,"+MainWindow.user.getUsername();
 			JOptionPane.showMessageDialog(null, S);
 		}
-		if(!Testwindow.user.Logged()){	
+		//unlogin
+		if(!MainWindow.user.Logged()){	
 			login = new Login();		
 			login.setLocation(200,100);	
 			login.setVisible(true);
 		}
+		
+		//refresh mainwindow
 		login.addWindowListener(new WindowAdapter(){
 			public void windowClosing(java.awt.event.WindowEvent e){
 				super.windowClosing(e);
 				System.out.println("closed");
 				//user=login.getUser();
-				if(Testwindow.user.Logged()){	
-					Testwindow.loginpanel.Right.add(Testwindow.loginpanel.message);
-					Testwindow.loginpanel.Right.add(Testwindow.loginpanel.Logout);
-					Testwindow.loginpanel.Right.revalidate();
-					Testwindow.loginpanel.Right.repaint();
-					Testwindow.textpanel.Above.add(Testwindow.textpanel.like);
-					Testwindow.textpanel.Above.add(Testwindow.textpanel.share);
-					Testwindow.textpanel.Above.revalidate();
-					Testwindow.textpanel.Above.repaint();
+				if(MainWindow.user.Logged()){	
+					MainWindow.loginpanel.Right.add(MainWindow.loginpanel.message);
+					MainWindow.loginpanel.Right.add(MainWindow.loginpanel.Logout);
+					MainWindow.loginpanel.Right.revalidate();
+					MainWindow.loginpanel.Right.repaint();
+					MainWindow.textpanel.Above.add(MainWindow.textpanel.like);
+					MainWindow.textpanel.Above.add(MainWindow.textpanel.share);
+					MainWindow.textpanel.Above.revalidate();
+					MainWindow.textpanel.Above.repaint();
 					
 				}
 			}
@@ -241,110 +214,97 @@ public class ButtonListener implements ActionListener{
 	
 	}
 	
-	
+	//message button in textpanel
 	public void handleMessage(){
-		
-		//Vector<Message>messages=(Vector<Message>)obj[1];
+		//open receivepicture window
 		new ReceivePicture();
 		
+		//refresh message button
 		String messagefile1="image/message/1.png";
 		String messagefile2="image/message/4.png";
 		drawComponent draw=new drawComponent();
-		draw.drawButton(messagefile1, messagefile2, 20, 20,  Testwindow.loginpanel.message);
-        Testwindow.loginpanel.Right.revalidate();
-        Testwindow.loginpanel.Right.repaint();
+		draw.drawButton(messagefile1, messagefile2, 20, 20,  MainWindow.loginpanel.message);
+        MainWindow.loginpanel.Right.revalidate();
+        MainWindow.loginpanel.Right.repaint();
 	}
 	
+	//share button in textpanel
 	public void handleShare(){
-//		lock.lock();
-			try{
-				//send
-				lock.lock();
-				Testwindow.toServer.writeObject(5);
-				//get onlineusers
-				Vector<String> onlineUsers=(Vector<String>)Testwindow.fromServer.readObject();
-				lock.unlock();
-				Testwindow.info.setonlineuserlist(onlineUsers);	
+		try{
+			lock.lock();
+			//send 
+			MainWindow.toServer.writeObject(5);
+			//get onlineusers
+			Vector<String> onlineUsers=(Vector<String>)MainWindow.fromServer.readObject();
+			lock.unlock();
+			MainWindow.info.setonlineuserlist(onlineUsers);	
+						
+			//send
+			lock.lock();
+			MainWindow.toServer.writeObject(6);
+			//get allusers
+			Vector<String> allUsers=(Vector<String>)MainWindow.fromServer.readObject();
+			lock.unlock();
+			MainWindow.info.setuserlist(allUsers);
 					
-				//send
-				lock.lock();
-				Testwindow.toServer.writeObject(6);
-				//Testwindow.dataToServer.flush();
-				//get allusers
-				Vector<String> allUsers=(Vector<String>)Testwindow.fromServer.readObject();
-				lock.unlock();
-				Testwindow.info.setuserlist(allUsers);
-				
-			}
-			catch(IOException ex){
-				lock.unlock();
-				System.err.println(ex);
-			}
-			catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				lock.unlock();
-				e.printStackTrace();
-			}
-		//	finally{
-		//		lock.unlock();
-		//	}
-
+		}
+		catch(IOException ex){
+			lock.unlock();
+			System.err.println(ex);
+		}
+		catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			lock.unlock();
+			e.printStackTrace();
+		}
 			
-		String temp = Testwindow.searchpanel.input.getText();
+		String temp = MainWindow.searchpanel.input.getText();
 		String key=deleteExtraSpace(temp);
 		if(key.length()==0)return;
 		
-	//	for(int i=0;i<onlineuserlist.length;i++)
-	//		System.out.println(onlineuserlist[i])
-		if(Testwindow.textpanel.bing.isSelected()){
+		//open sendpicture window
+		if(MainWindow.textpanel.bing.isSelected()){
 			BingTranslate B = new BingTranslate();
 			Translation t = B.Translation(key);
 			new SendPicture(t);
 		}
-		if(Testwindow.textpanel.youdao.isSelected()){
+		if(MainWindow.textpanel.youdao.isSelected()){
 			YoudaoTranslate Y = new YoudaoTranslate();
 			Translation t = Y.Translate(key);
 			new SendPicture(t);
-		//	textpanel.Out.setText(text);
 		}
-		if(Testwindow.textpanel.jinshan.isSelected()){
+		if(MainWindow.textpanel.jinshan.isSelected()){
 			JinshanTranslate J = new JinshanTranslate();
 			Translation t = J.Translate(key);
 			new SendPicture(t);
-		//	textpanel.Out.setText(text);
 		}	
 	}
 	
 	public void handleLogout(){
+		try{
+			//send
+			MainWindow.toServer.writeObject(7);
+		}
+		catch(IOException ex){
+			System.err.println(ex);
+		}
 		
-		//logout.......
-//		lock.lock();
-			try{
-				//send
-				//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
-
-				Testwindow.toServer.writeObject(7);
-				//Testwindow.dataToServer.flush();
-			}
-			catch(IOException ex){
-				System.err.println(ex);
-			}
-		//	finally{
-		//		lock.unlock();
-		//	}
-		
-		Testwindow.user.setUsername(null);
-		Testwindow.loginpanel.Right.remove(Testwindow.loginpanel.message);
-		Testwindow.loginpanel.Right.remove(Testwindow.loginpanel.Logout);
-		Testwindow.loginpanel.Right.revalidate();
-		Testwindow.loginpanel.Right.repaint();
-		Testwindow.textpanel.Above.remove(Testwindow.textpanel.like);
-		Testwindow.textpanel.Above.remove(Testwindow.textpanel.share);
-		Testwindow.textpanel.Above.revalidate();
-		Testwindow.textpanel.Above.repaint();
+		//init info and refresh mainwindow
+		MainWindow.user.setUsername(null);
+		MainWindow.info.init();
+		MainWindow.loginpanel.Right.remove(MainWindow.loginpanel.message);
+		MainWindow.loginpanel.Right.remove(MainWindow.loginpanel.Logout);
+		MainWindow.loginpanel.Right.revalidate();
+		MainWindow.loginpanel.Right.repaint();
+		MainWindow.textpanel.Above.remove(MainWindow.textpanel.like);
+		MainWindow.textpanel.Above.remove(MainWindow.textpanel.share);
+		MainWindow.textpanel.Above.revalidate();
+		MainWindow.textpanel.Above.repaint();
 	}
 	
+	//color button in loginpanel
 	public void handleColor(){
+		//get color
 		String color="";
 		switch(type){
 		case 10:color="green";break;
@@ -354,12 +314,25 @@ public class ButtonListener implements ActionListener{
 		case 14:color="pink";break;
 		case 15:color="black";break;
 		}
-		
-		Testwindow.loginpanel.setColor(color);
-		Testwindow.searchpanel.setColor(color);
-		Testwindow.choosepanel.setColor(color);
-		Testwindow.textpanel.setColor(color);
+		//setcolor
+		MainWindow.loginpanel.setColor(color);
+		MainWindow.searchpanel.setColor(color);
+		MainWindow.choosepanel.setColor(color);
+		MainWindow.textpanel.setColor(color);
 	}
 	
-	
+	//删除单词多余的空格
+	public static String deleteExtraSpace(String word){
+		if(word==null||word.length()==0)return "";
+			
+		String[] subWords=word.split("\\s+");
+		if(subWords.length==0)return "";
+			
+		word=subWords[0];
+		for(int i=1;i<subWords.length;i++){
+			word=word+" "+subWords[i];
+		}
+			
+		return word;
+	}
 }

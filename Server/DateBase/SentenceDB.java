@@ -1,7 +1,6 @@
-package Server;
+package Server.DateBase;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -16,7 +15,7 @@ public class SentenceDB {
 	private Lock lock=new ReentrantLock();
 
 	
-    SentenceDB(Connection con){
+    public SentenceDB(Connection con){
     	connection=con;
     }
     

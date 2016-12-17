@@ -4,10 +4,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.*;
 
+import src.Interface.tool.drawComponent;
+
 
 public class SearchPanel {
 	JPanel MyPanel = new JPanel();
-	drawComponent draw=new drawComponent();
 	
 	JPanel Left=new JPanel();
 	public JButton Prev=new JButton();//find prevoius word
@@ -18,10 +19,6 @@ public class SearchPanel {
 	JLabel En=new JLabel();//english,no edit
 	JLabel Line2=new JLabel();//parting line , no edit
 	public JTextField input=new JTextField(30);//input word
-	//public JComboBox<String> input=new JComboBox<String>();
-	//public AutoComboBox input=new AutoComboBox();
-	DefaultComboBoxModel<String>   model   =   new   DefaultComboBoxModel<String>(); 
-	//public JButton pulldown=new JButton();///open or close related word list
 	
 	JPanel Right=new JPanel();
 	JLabel Line3=new JLabel();//parting line , no edit
@@ -43,6 +40,7 @@ public class SearchPanel {
 		MyPanel.add(Right);
 	}
 	
+	//left layout
 	public void drawLeft(String color){
 		Left.removeAll();
 		Left.setBackground(Color.WHITE);
@@ -53,9 +51,9 @@ public class SearchPanel {
 		String partline="image/"+color+"/line.png";
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.CENTER ,10, 5);  
         Left.setLayout(flowLayout);  
-        draw.drawButton(prevfile1, prevfile2, 20, 20, Prev);
-        draw.drawButton(nextfile1, nextfile2, 20, 20, Next);
-        draw.drawLabel(partline, 40, 40, Line1);
+        drawComponent.drawButton(prevfile1, prevfile2, 20, 20, Prev);
+        drawComponent.drawButton(nextfile1, nextfile2, 20, 20, Next);
+        drawComponent.drawLabel(partline, 40, 40, Line1);
         Left.add(Prev);  
         Left.add(Next);
         Left.add(Line1);
@@ -63,6 +61,7 @@ public class SearchPanel {
         Left.repaint();
 	}
 	
+	//center layout
 	public void drawCenter(String color){
 		Center.removeAll();
        	input.setEditable(true);
@@ -73,20 +72,17 @@ public class SearchPanel {
 		String partline="image/"+color+"/line.png";
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.CENTER ,5, 5);  
         Center.setLayout(flowLayout);
-        draw.drawLabel(Enfile, 30, 30, En);
-        draw.drawLabel(partline, 30, 30, Line2);
-      //  draw.drawButton(downfile1, downfile2, 15, 15, pulldown);
-     //   input.setBorder(BorderFactory.createEtchedBorder());
+        drawComponent.drawLabel(Enfile, 30, 30, En);
+        drawComponent.drawLabel(partline, 30, 30, Line2);
+    
         Center.add(En);
         Center.add(Line2);
         Center.add(input);
-      //  Center.add(Input);
-      //  Center.add(input);
-     //   Center.add(pulldown);
         Center.revalidate();
         Center.repaint();
 	}
 	
+	//right layout
 	public void drawRight(String color){
 		Right.removeAll();
 		Right.setBackground(Color.WHITE);
@@ -95,14 +91,15 @@ public class SearchPanel {
 		String searchfile2="image/grey/search.png";
 		FlowLayout flowLayout = new FlowLayout(FlowLayout.CENTER ,5, 5);  
 		Right.setLayout(flowLayout);
-		draw.drawButton(searchfile1, searchfile2, 30, 30, Search);
-		draw.drawLabel(partline, 40, 40, Line3);
+		drawComponent.drawButton(searchfile1, searchfile2, 30, 30, Search);
+		drawComponent.drawLabel(partline, 40, 40, Line3);
 		Right.add(Line3);
 		Right.add(Search);
 		Right.revalidate();
 		Right.repaint();
 	}
 	
+	//set button color and set background color
 	public void setColor(String color){
 		drawLeft(color);
 		drawCenter(color);

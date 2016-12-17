@@ -6,14 +6,10 @@ import javax.swing.*;
 
 public class ChoosePanel {
 	JPanel MyPanel = new JPanel();
-	drawComponent draw=new drawComponent();
 	
 	public JCheckBox bing=new JCheckBox("Bing");
-	//JLabel baidulabel=new JLabel();
 	public JCheckBox youdao=new JCheckBox("Youdao");
-	//JLabel youdaolabel=new JLabel();
 	public JCheckBox jinshan=new JCheckBox("iCIBA");
-	//JLabel jinshanlabel=new JLabel();
 	
 	public JPanel getPanel(){
 		return MyPanel;
@@ -29,6 +25,8 @@ public class ChoosePanel {
 	    MyPanel.add(youdao);
 	    MyPanel.add(jinshan); 
 	}
+	
+	//set background color
 	public void setColor(String color){
 		Color bg=null;
 		switch(color){

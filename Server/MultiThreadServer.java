@@ -6,12 +6,17 @@ import java.net.*;
 import java.sql.*;
 import java.util.*;
 import java.util.Date;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.*;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+
+import Server.DateBase.LikeDB;
+import Server.DateBase.MessageDB;
+import Server.DateBase.SentenceDB;
+import Server.DateBase.UserDB;
+import src.information.Card;
+import src.information.Message;
 
 
 public class MultiThreadServer extends JFrame{
@@ -26,7 +31,7 @@ public class MultiThreadServer extends JFrame{
 	private static BasicDataSource pool=null;
 	
 	static String driverName="com.mysql.jdbc.Driver";
-	static String dbURL="jdbc:mysql://127.0.0.1:3306/userInfo";
+	static String dbURL="jdbc:mysql://172.28.148.205:3306/userInfo";
 	static String userName="testuser";		
 	static String userPwd="testtoday";
 	

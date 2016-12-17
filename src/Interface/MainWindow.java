@@ -1,11 +1,6 @@
 package src.Interface;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,75 +10,61 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.JTextComponent;
 
-import Server.Card;
-import Server.Message;
 import src.Interface.listener.ButtonListener;
 import src.Interface.listener.CheckBoxListener;
-import src.Interface.listener.ComboBoxListener;
-import src.Interface.listener.Info;
 import src.Interface.panel.ChoosePanel;
 import src.Interface.panel.LoginPanel;
 import src.Interface.panel.SearchPanel;
 import src.Interface.panel.TextPanel;
-import src.Interface.panel.drawComponent;
-import src.Translate.BaiduTranslate;
+import src.Interface.tool.drawComponent;
 import src.Translate.History;
-import src.userLogin.UserState;
+import src.information.Info;
+import src.information.Message;
+import src.information.UserState;
 
 
-public class Testwindow extends JFrame{
+public class MainWindow extends JFrame{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	//socket
 	public static Socket socket=null;
-	//public static DataInputStream dataFromServer=null;
-	//public static DataOutputStream dataToServer=null;
 	public static ObjectInputStream fromServer=null;
 	public static ObjectOutputStream toServer=null;
 
-	
+	//info
 	public static UserState user=new UserState();
-	
 	public static Info info = new Info();
 	public static History history= new History();
 	
+	//panel
 	public static LoginPanel loginpanel = new LoginPanel();
 	public static SearchPanel searchpanel = new SearchPanel();
 	public static ChoosePanel choosepanel = new ChoosePanel();
 	public static TextPanel textpanel = new TextPanel();
-	
-	public static Vector<Message> messages=new Vector<Message>();
-	
-    //create a new lock
-  	//private Lock lock=new ReentrantLock();
    
-    
-	public static void main(String[] args){
-		Testwindow tw=new Testwindow();
+    //main
+/*	public static void main(String[] args){
+		MainWindow tw=new MainWindow();
 		tw.setLocation(200,100);
 		tw.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		tw.setSize(700, 500);
 		tw.setVisible(true);
-	}
+	}*/
 	
-	Testwindow(){
+	public MainWindow(){
 		connect();
-		
-		//lock.lock();
-		//DataOutputStream toServer;
 		
 		try {
 			
 			toServer.writeObject((int)4);//everyday sentences
-		
-			
 			String sentence=(String)fromServer.readObject();
-			//System.out.println("4");
-
 			
-			System.out.println(sentence);
+		//	System.out.println(sentence);
 			textpanel.sen.setText(sentence);
 			
 		} catch (IOException e) {
@@ -94,7 +75,7 @@ public class Testwindow extends JFrame{
 			e.printStackTrace();
 		}
 		
-		
+		//layout
 		JPanel panel1=loginpanel.getPanel();
         JPanel panel2=searchpanel.getPanel();
         JPanel panel3=choosepanel.getPanel();
@@ -111,7 +92,7 @@ public class Testwindow extends JFrame{
         add(Pan1,BorderLayout.NORTH);
 
         
-        //buttonlistener
+        //ActionListener
         searchpanel.Search.addActionListener(new ButtonListener(1));
         searchpanel.Prev.addActionListener(new ButtonListener(2));
         searchpanel.Next.addActionListener(new ButtonListener(3));
@@ -122,7 +103,7 @@ public class Testwindow extends JFrame{
         textpanel.like.addActionListener(new ButtonListener(4));
 
         
-        //change color
+        //change color listener
         loginpanel.colorgreen.addActionListener(new ButtonListener(10));
         loginpanel.coloryellow.addActionListener(new ButtonListener(11));
         loginpanel.colorblue.addActionListener(new ButtonListener(12));
@@ -131,37 +112,27 @@ public class Testwindow extends JFrame{
         loginpanel.colorblack.addActionListener(new ButtonListener(15));
        
 
-        //checkboxlistener
+        //ItemListener
         choosepanel.bing.addItemListener(new CheckBoxListener(1));
         choosepanel.youdao.addItemListener(new CheckBoxListener(1));
         choosepanel.jinshan.addItemListener(new CheckBoxListener(1));
         textpanel.bing.addItemListener(new CheckBoxListener(4));
         textpanel.youdao.addItemListener(new CheckBoxListener(4));
         textpanel.jinshan.addItemListener(new CheckBoxListener(4));
-     //   textpanel.like.addItemListener(new CheckBoxListener(7));
-        
-  //      searchpanel.input.getComponent(0).addMouseListener(new ComboBoxListener(searchpanel,textpanel) );
-  //      textpanel.takeword.addItemListener(new CheckBoxListener(8,));
-		
-        //Thread receiveTask=new Thread(new ReceiveTask());
-		//receiveTask.start();
-		
+  
+        //message
 		Thread fetchMessageTask=new Thread(new FetchMessageTask());
 		fetchMessageTask.start();
 	}
 	
-	
+	//connect Server
 	public static void connect(){
 		try{
-			socket = new Socket("172.28.148.205",8080);
-			//dataToServer=new DataOutputStream(socket.getOutputStream());
-			//dataFromServer=new DataInputStream(socket.getInputStream());
+			socket = new Socket("172.28.190.115",8080);
 			
-			//objectFromServer=new ObjectInputStream(socket.getInputStream());
 			toServer=new ObjectOutputStream(socket.getOutputStream());
 			fromServer=new ObjectInputStream(socket.getInputStream());
-			
-			
+
 		}
 		catch (IOException ex){
 			System.err.println(ex);
@@ -169,6 +140,7 @@ public class Testwindow extends JFrame{
 		}
 	}
 	
+	//fetch message each 10 seconds
 	class FetchMessageTask implements Runnable{
 		private Lock lock=new ReentrantLock();
 		
@@ -177,33 +149,29 @@ public class Testwindow extends JFrame{
 			// TODO Auto-generated method stub
 			while(true){
 				try{
-						if(user.Logged()){
+					if(user.Logged()){
 						lock.lock();
-						//DataOutputStream toServer=new DataOutputStream(socket.getOutputStream());
-					//ObjectOutputStream toServer=new ObjectOutputStream(socket.getOutputStream());
+						//send
 						toServer.writeObject((int)0);
 						
+						//receive
 						Vector<Message>temp=(Vector<Message>)fromServer.readObject();
 						
 						lock.unlock();
-						System.out.println(temp.size());
+					//	System.out.println(temp.size());
 						
 						if(temp.size()>0){
+							//show message
 							String messagefile1="image/message/3.png";
 							String messagefile2="image/message/4.png";
-							drawComponent draw=new drawComponent();
-							draw.drawButton(messagefile1, messagefile2, 20, 20, loginpanel.message);
+							drawComponent.drawButton(messagefile1, messagefile2, 20, 20, loginpanel.message);
 							loginpanel.Right.revalidate();
 							loginpanel.Right.repaint();
 						}
-						for(int i=0;i<temp.size();i++){
-							messages.add(temp.get(i));
-						}
+						info.setmessage(temp);
 						
-						System.out.println("messages: "+messages.size());
-						//lock.unlock();
-						}
-						Thread.sleep(10000);
+					}
+					Thread.sleep(10000);
 				}
 				catch (Exception ex){
 					lock.unlock();

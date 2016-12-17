@@ -1,10 +1,7 @@
-package src.userLogin;
-
-import java.util.*;
+package src.information;
 
 public class UserState {
 	private String username=null;
-	private Vector<String> friends;
 	
 	public void setUsername(String username){
 		this.username=username;

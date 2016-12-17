@@ -1,13 +1,11 @@
 package src.Translate;
 
-import java.util.Vector;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 //²Î¿¼£ºhttps://github.com/ilikecyf86/OnlineDictionary/blob/master/src/OnlineSearch.java ///Thank you
-
+//ÍøÒ³ÅÀ³æ
 public class BingTranslate {
 	Translation t=new Translation();
 	

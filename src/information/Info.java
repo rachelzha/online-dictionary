@@ -1,10 +1,9 @@
-package src.Interface.listener;
+package src.information;
 
 import java.util.Vector;
 
-import Server.Message;
-
 public class Info {
+	//set and get information include likes, whetherlike ,userlist,onlineuserlist , messages for share between interface
 	public Info(){};
 	
 	private int binglikes;
@@ -17,6 +16,7 @@ public class Info {
 	private Vector<String>onlineuserlist=new Vector<String>();
 	private Vector<Message>messages=new Vector<Message>();
 	
+	//get
 	public int getbinglikes(){return binglikes;}
 	public int getyoudaolikes(){return youdaolikes;}
 	public int getjinshanlikes(){return jinshanlikes;}
@@ -27,6 +27,7 @@ public class Info {
 	public Vector<String> getonlineuserlist(){return onlineuserlist;}
 	public Vector<Message> getmessage(){return messages;}
 	
+	//set
 	public void setbinglikes(int value){ binglikes=value;}
 	public void setyoudaolikes(int value){ youdaolikes=value;}
 	public void setjinshanlikes(int value){ jinshanlikes=value;}
@@ -36,4 +37,11 @@ public class Info {
 	public void setuserlist(Vector<String>list){userlist=list;}
 	public void setonlineuserlist(Vector<String>list){onlineuserlist=list;}
 	public void setmessage(Vector<Message>list){messages=list;}
+	
+	//init
+	public void init(){
+		userlist=null;
+		onlineuserlist=null;
+		messages=null;
+	}
 }

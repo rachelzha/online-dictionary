@@ -1,8 +1,8 @@
 package src.Interface.share;
 
-import Server.Card;
-import src.Interface.Testwindow;
+import src.Interface.MainWindow;
 import src.Translate.Translation;
+import src.information.Card;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -38,7 +38,6 @@ public class SendPicture extends JFrame{
 	
 	JTextField users=new JTextField(20);
 	JButton send=new JButton("send");
-	//JButton save=new JButton("save");
 	
 	JLabel label=new JLabel();
     JFileChooser chooser=new JFileChooser();
@@ -71,14 +70,16 @@ public class SendPicture extends JFrame{
 
 	
 	public SendPicture(Translation t){
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
         setVisible(true);
        
-        for(int i=0;i<Testwindow.info.getuserlist().size();i++){
-        	list[i]=Testwindow.info.getuserlist().get(i);
+        list = new String[MainWindow.info.getuserlist().size()];
+        onlinelist = new String[MainWindow.info.getonlineuserlist().size()];
+        for(int i=0;i<MainWindow.info.getuserlist().size();i++){
+        	list[i]=MainWindow.info.getuserlist().get(i);
         }
-        for(int i=0;i<Testwindow.info.getonlineuserlist().size();i++){
-        	onlinelist[i]=Testwindow.info.getonlineuserlist().get(i);
+        for(int i=0;i<MainWindow.info.getonlineuserlist().size();i++){
+        	onlinelist[i]=MainWindow.info.getonlineuserlist().get(i);
         }
         
 		
@@ -102,12 +103,13 @@ public class SendPicture extends JFrame{
 		userlist.setFixedCellWidth(100);
 		userlist.setFixedCellHeight(20);
 		userlist.setVisibleRowCount(20);
+
 		GridLayout grid = new GridLayout(2,1,5,5);
 		JPanel down = new JPanel();
 		down.setLayout(grid);
 		down.add(online);
 		down.add(sendall);
-		Left.add(userlist);
+		Left.add(new JScrollPane(userlist));
 		Left.add(down);
 	
         
@@ -166,7 +168,8 @@ public class SendPicture extends JFrame{
         	
         });
         
-        userlist.addListSelectionListener(new ListSelectionListener(){
+        //
+        userlist.addListSelectionListener(new ListSelectionListener(){//点击相应选项
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -191,6 +194,7 @@ public class SendPicture extends JFrame{
 			}
 		});
         
+        //群发
         sendall.addItemListener(new ItemListener(){
 
 			@Override
@@ -202,14 +206,14 @@ public class SendPicture extends JFrame{
 				}
 				if(!online.isSelected()){
 					usernames=list[0];
-					for(int i=1;i<Testwindow.info.getuserlist().size();i++){
+					for(int i=1;i<MainWindow.info.getuserlist().size();i++){
 						usernames+=";";
 						usernames+=list[i];
 					}
 				}
 				else{
 					usernames=onlinelist[0];
-					for(int i=1;i<Testwindow.info.getonlineuserlist().size();i++){
+					for(int i=1;i<MainWindow.info.getonlineuserlist().size();i++){
 						usernames+=";";
 						usernames+=onlinelist[i];
 					}
@@ -220,6 +224,7 @@ public class SendPicture extends JFrame{
         	
         });
         
+        //show online users
         online.addItemListener(new ItemListener(){
 
 			@Override
@@ -270,10 +275,10 @@ public class SendPicture extends JFrame{
 		try {
 			//send
 			lock.lock();
-			Testwindow.toServer.writeObject((int)9);
-			Testwindow.toServer.writeObject(usernames);
+			MainWindow.toServer.writeObject((int)9);
+			MainWindow.toServer.writeObject(usernames);
 
-			Testwindow.toServer.writeObject(card);
+			MainWindow.toServer.writeObject(card);
 
 			lock.unlock();
 			

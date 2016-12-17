@@ -1,4 +1,4 @@
-package Server;
+package Server.DateBase;
 
 import java.sql.*;
 import java.util.Vector;
@@ -8,7 +8,7 @@ public class UserDB{
     private PreparedStatement pstmt;
     private Statement stmt;
 	
-    UserDB(Connection con){
+    public UserDB(Connection con){
     	connection=con;
     }
     

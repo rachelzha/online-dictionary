@@ -71,6 +71,7 @@ public class History {
 		 }
 	}
 	
+	//位置前移
 	public void prevpointer(){
 		if(size==0)
 			pointer=0;
@@ -80,7 +81,7 @@ public class History {
 				pointer=size-1;
 		}
 	}
-	
+	//位置后移
 	public void nextpointer(){
 		if(size==0)
 			pointer=0;

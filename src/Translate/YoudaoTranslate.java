@@ -73,7 +73,7 @@ public class YoudaoTranslate {
             	message = "无词典结果，仅在获取词典结果生效";
             }
             else if(errorcode.equals("0")){
-            	String query = obj.getString("query");
+            //	String query = obj.getString("query");
             	JSONArray translation = obj.has("translation") ? obj.getJSONArray("translation") : null;
             	JSONObject basic = obj.has("basic") ? obj.getJSONObject("basic") : null;
             	JSONArray web = obj.has("web") ? obj.getJSONArray("web") : null;
@@ -107,6 +107,7 @@ public class YoudaoTranslate {
                     	t.trans.add(def);
                     }
                 }
+                //本地翻译
                 if(explains!=null){
                     for(int i=0;i<explains.length();i++){
                     	Definition def=new Definition();
@@ -129,7 +130,7 @@ public class YoudaoTranslate {
                     	t.trans.add(def);
                     }
                 }
-                
+                //网络翻译
                 if (web!=null) {  
                 	JSONArray webString = new JSONArray("[" + web+ "]");  
                     Definition def=new Definition();

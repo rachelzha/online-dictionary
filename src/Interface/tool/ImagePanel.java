@@ -1,17 +1,16 @@
-package src.Interface.panel;
+package src.Interface.tool;
 
 import java.awt.Graphics;
-
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
-class ImagePanel extends JPanel {
+public class ImagePanel extends JPanel {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
-private String num;
+	String num;
 	
 	public ImagePanel(){
 		super();
@@ -20,7 +19,6 @@ private String num;
 			n=(int) (Math.random()*12);
 		}
 		num=String.valueOf(n);
-		//System.out.println(num);
 	}
 	
 	public void paint(Graphics g) {
@@ -29,4 +27,5 @@ private String num;
 		ImageIcon icon = new ImageIcon(file);
 		g.drawImage(icon.getImage(), 0, 0, 200, 150, this);
 	}
+	
 }

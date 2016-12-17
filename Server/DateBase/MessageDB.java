@@ -1,4 +1,4 @@
-package Server;
+package Server.DateBase;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -6,12 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
+import src.information.Card;
+import src.information.Message;
+
 public class MessageDB {
 	private Connection connection=null;
 	private PreparedStatement pstmt;
 
 	
-    MessageDB(Connection con){
+    public MessageDB(Connection con){
     	connection=con;
     }
 	

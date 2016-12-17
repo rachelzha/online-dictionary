@@ -3,35 +3,25 @@ import java.awt.GridLayout;
 
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import src.Interface.Testwindow;
-import src.Interface.panel.ChoosePanel;
-import src.Interface.panel.SearchPanel;
-import src.Interface.panel.TextPanel;
-import src.Translate.BaiduTranslate;
+import src.Interface.MainWindow;
 import src.Translate.BingTranslate;
 import src.Translate.JinshanTranslate;
 import src.Translate.Translation;
 import src.Translate.YoudaoTranslate;
-import src.userLogin.UserState;
+
 
 
 public class CheckBoxListener implements ItemListener{
 	
 	private int type;
-	private int likestate;
 	private Lock lock=new ReentrantLock();
 
-	
 	public CheckBoxListener(int type){
 		this.type=type;
-		this.likestate=0;
 	}
 	
 	@Override
@@ -40,42 +30,35 @@ public class CheckBoxListener implements ItemListener{
 		switch(type){
 		case 1:handleChoose();break;//choosepanel.baidu,youdao,jinshan
 		case 4:handlebookmark();break;//bookmark.baidu
-		//case 7:handleLike();break;//textpanel.like
-		case 8:handleTakeword();break;//textpanel.takeword
 		}
 	}
 	
+	//choosepanel
 	public void handleChoose(){
 		resetBookMark();
 	}
 	
+	//bookmark in textpanel
 	public void handlebookmark(){
-
-		//String key = searchpanel.input.getSelectedItem().toString();
-	//	likestate=1;
 		
-		String temp=Testwindow.searchpanel.input.getText();
-		
+		String temp=MainWindow.searchpanel.input.getText();
 		String key=ButtonListener.deleteExtraSpace(temp);
 		if(key.length()==0)return;
 		
 		try{
 			//send
 			lock.lock();
-			Testwindow.toServer.writeObject(3);
-			Testwindow.toServer.writeObject(key);
-			//Testwindow.dataToServer.flush();
+			MainWindow.toServer.writeObject(3);
+			MainWindow.toServer.writeObject(key);
+			//receive likes
+			MainWindow.info.setbinglikes((int)MainWindow.fromServer.readObject());
+			MainWindow.info.setyoudaolikes((int)MainWindow.fromServer.readObject());
+			MainWindow.info.setjinshanlikes((int)MainWindow.fromServer.readObject());
 			
-			//ObjectInputStream fromServer=new ObjectInputStream(Testwindow.socket.getInputStream());
-			Testwindow.info.setbinglikes((int)Testwindow.fromServer.readObject());
-			Testwindow.info.setyoudaolikes((int)Testwindow.fromServer.readObject());
-			Testwindow.info.setjinshanlikes((int)Testwindow.fromServer.readObject());
-			
-			if(Testwindow.user.Logged()){
-				Testwindow.info.setjudgebing((int)Testwindow.fromServer.readObject());
-				Testwindow.info.setjudgeyoudao((int)Testwindow.fromServer.readObject());
-				Testwindow.info.setjudgejinshan((int)Testwindow.fromServer.readObject());
-				//System.out.println(judgebing+":"+judgeyoudao+":"+judgejinshan);
+			if(MainWindow.user.Logged()){
+				MainWindow.info.setjudgebing((int)MainWindow.fromServer.readObject());
+				MainWindow.info.setjudgeyoudao((int)MainWindow.fromServer.readObject());
+				MainWindow.info.setjudgejinshan((int)MainWindow.fromServer.readObject());
 			}
 			lock.unlock();
 		}
@@ -84,105 +67,104 @@ public class CheckBoxListener implements ItemListener{
 			System.err.println(ex);
 		}
 
-		if(Testwindow.textpanel.bing.isSelected()){
-			//System.out.println(info.getjudgebing());///////
-			if(Testwindow.info.getjudgebing()==1)
-				Testwindow.textpanel.like.setSelected(true);
-			else if(Testwindow.info.getjudgebing()==-1)
-				Testwindow.textpanel.like.setSelected(false);
+		//show translation
+		if(MainWindow.textpanel.bing.isSelected()){
+			if(MainWindow.info.getjudgebing()==1)
+				MainWindow.textpanel.like.setSelected(true);
+			else if(MainWindow.info.getjudgebing()==-1)
+				MainWindow.textpanel.like.setSelected(false);
 			BingTranslate B = new BingTranslate();
 			Translation trans = B.Translation(key);
-			trans.print(Testwindow.textpanel.Out);
+			trans.print(MainWindow.textpanel.Out);
 		}
-		if(Testwindow.textpanel.youdao.isSelected()){
-			if(Testwindow.info.getjudgeyoudao()==1)
-				Testwindow.textpanel.like.setSelected(true);
-			else if(Testwindow.info.getjudgeyoudao()==-1)
-				Testwindow.textpanel.like.setSelected(false);
+		if(MainWindow.textpanel.youdao.isSelected()){
+			if(MainWindow.info.getjudgeyoudao()==1)
+				MainWindow.textpanel.like.setSelected(true);
+			else if(MainWindow.info.getjudgeyoudao()==-1)
+				MainWindow.textpanel.like.setSelected(false);
 			YoudaoTranslate Y = new YoudaoTranslate();
 			Translation trans = Y.Translate(key);
-			trans.print(Testwindow.textpanel.Out);
+			trans.print(MainWindow.textpanel.Out);
 		}
-		if(Testwindow.textpanel.jinshan.isSelected()){
-			if(Testwindow.info.getjudgejinshan()==1)
-				Testwindow.textpanel.like.setSelected(true);
-			else if(Testwindow.info.getjudgejinshan()==-1)
-				Testwindow.textpanel.like.setSelected(false);
+		if(MainWindow.textpanel.jinshan.isSelected()){
+			if(MainWindow.info.getjudgejinshan()==1)
+				MainWindow.textpanel.like.setSelected(true);
+			else if(MainWindow.info.getjudgejinshan()==-1)
+				MainWindow.textpanel.like.setSelected(false);
 			JinshanTranslate J = new JinshanTranslate();
 			Translation trans = J.Translate(key);
-			trans.print(Testwindow.textpanel.Out);
+			trans.print(MainWindow.textpanel.Out);
 		}	
-		Testwindow.textpanel.Above.revalidate();
-		Testwindow.textpanel.Above.repaint();
-		
-	//	likestate=0;
-	}
-	
+		//refresh mainwindow
+		MainWindow.textpanel.Above.revalidate();
+		MainWindow.textpanel.Above.repaint();
 
-	public void handleTakeword(){
-		
 	}
 	
-	public static void resetBookMark(){
+	//reset bookmark by likes
+ 	public static void resetBookMark(){
+		//get likes
+		int a = MainWindow.info.getbinglikes();
+		int b = MainWindow.info.getyoudaolikes();
+		int c = MainWindow.info.getjinshanlikes();
 		
-		int a = Testwindow.info.getbinglikes();
-		int b = Testwindow.info.getyoudaolikes();
-		int c = Testwindow.info.getjinshanlikes();
-		Testwindow.textpanel.Left.removeAll();
+		//repaint bookmarks by likes and choosepanel
+		MainWindow.textpanel.Left.removeAll();
 		if(a>=b&&b>=c){
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.bing);  
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.youdao);  
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.jinshan);
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.bing);  
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.youdao);  
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.jinshan);
 		}
 		else if(a>=c&&c>=b){
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.bing);  
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.jinshan);  
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.youdao);
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.bing);  
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.jinshan);  
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.youdao);
 		}
 		else if(b>=a&&a>=c){
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.youdao);  
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.bing);  
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.jinshan);
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.youdao);  
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.bing);  
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.jinshan);
 		}
 		else if(b>=c&&c>=a){
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.youdao);  
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.jinshan);  
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.bing);
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.youdao);  
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.jinshan);  
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.bing);
 		}
 		else if(c>=a&&a>=b){
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.jinshan);  
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.bing);  
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.youdao);
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.jinshan);  
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.bing);  
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.youdao);
 		}
 		else{//c>=b>=a
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.jinshan);  
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.youdao);  
-			Testwindow.textpanel.Left.add(Testwindow.textpanel.bing);
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.jinshan);  
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.youdao);  
+			MainWindow.textpanel.Left.add(MainWindow.textpanel.bing);
 		}
 
 		int count = 3;
-		if(!Testwindow.choosepanel.bing.isSelected()){
-			Testwindow.textpanel.Left.remove(Testwindow.textpanel.bing);
+		if(!MainWindow.choosepanel.bing.isSelected()){
+			MainWindow.textpanel.Left.remove(MainWindow.textpanel.bing);
 			count--;
 		}
-		if(!Testwindow.choosepanel.youdao.isSelected()){
-			Testwindow.textpanel.Left.remove(Testwindow.textpanel.youdao);
+		if(!MainWindow.choosepanel.youdao.isSelected()){
+			MainWindow.textpanel.Left.remove(MainWindow.textpanel.youdao);
 			count--;
 		}
-		if(!Testwindow.choosepanel.jinshan.isSelected()){
-			Testwindow.textpanel.Left.remove(Testwindow.textpanel.jinshan);
+		if(!MainWindow.choosepanel.jinshan.isSelected()){
+			MainWindow.textpanel.Left.remove(MainWindow.textpanel.jinshan);
 			count--;
 		}
 		
-		if(Testwindow.choosepanel.youdao.isSelected())
-			Testwindow.textpanel.youdao.setSelected(true);
-		else if(Testwindow.choosepanel.jinshan.isSelected())
-			Testwindow.textpanel.jinshan.setSelected(true);
-		else if(Testwindow.choosepanel.bing.isSelected())
-			Testwindow.textpanel.bing.setSelected(true);
+		//set default translation
+		if(MainWindow.choosepanel.youdao.isSelected())
+			MainWindow.textpanel.youdao.setSelected(true);
+		else if(MainWindow.choosepanel.jinshan.isSelected())
+			MainWindow.textpanel.jinshan.setSelected(true);
+		else if(MainWindow.choosepanel.bing.isSelected())
+			MainWindow.textpanel.bing.setSelected(true);
 		
-		Testwindow.textpanel.Left.setLayout(new GridLayout(count,1,5,10));
-		Testwindow.textpanel.Left.revalidate();
-		Testwindow.textpanel.Left.repaint();
+		MainWindow.textpanel.Left.setLayout(new GridLayout(count,1,5,10));
+		MainWindow.textpanel.Left.revalidate();
+		MainWindow.textpanel.Left.repaint();
 	}
 }

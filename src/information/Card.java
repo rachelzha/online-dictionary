@@ -1,4 +1,4 @@
-package Server;
+package src.information;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -19,6 +19,7 @@ public class Card implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	public transient BufferedImage image=null;
 	
 	public Card(){

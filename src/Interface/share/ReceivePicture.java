@@ -1,19 +1,12 @@
 package src.Interface.share;
 
-import Server.Card;
-import Server.Message;
-import src.Interface.Testwindow;
+import src.Interface.MainWindow;
+import src.information.Card;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.*;
-import java.io.*;
 import java.net.Socket;
-import java.util.Vector;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -32,7 +25,6 @@ public class ReceivePicture extends JFrame{
 	
 	
 	private JLabel label=new JLabel();
-    private JFileChooser chooser=new JFileChooser();
     private JFileChooser chooserToSave = new JFileChooser();
     
    // JPanel panel1=new JPanel();
@@ -51,11 +43,13 @@ public class ReceivePicture extends JFrame{
 
 	
 	public ReceivePicture(){
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
         setVisible(true);
        
-        for(int i=0;i<Testwindow.messages.size();i++){
-        	meList[i]=Testwindow.messages.get(i).getinfo();
+        //get messages
+        meList = new String[MainWindow.info.getmessage().size()];
+        for(int i=0;i<MainWindow.info.getmessage().size();i++){
+        	meList[i]=MainWindow.info.getmessage().get(i).getinfo();
         }
 		
         setTitle("Message Box~");
@@ -68,7 +62,7 @@ public class ReceivePicture extends JFrame{
 		messagelist.setFixedCellWidth(100);
 		messagelist.setFixedCellHeight(20);
 		messagelist.setVisibleRowCount(20);
-		panel2.add(messagelist,BorderLayout.CENTER);
+		panel2.add(new JScrollPane(messagelist),BorderLayout.CENTER);
         panel2.add(save,BorderLayout.SOUTH);
         
         add(panel2,BorderLayout.WEST);
@@ -94,7 +88,7 @@ public class ReceivePicture extends JFrame{
 			}
         });
         
-        messagelist.addListSelectionListener(new ListSelectionListener(){    //相应点击联想框
+        messagelist.addListSelectionListener(new ListSelectionListener(){    //相应点击list
 
 			@Override
 			public void valueChanged(ListSelectionEvent e) {
@@ -102,14 +96,12 @@ public class ReceivePicture extends JFrame{
 				if(messagelist.getSelectedValue()==null) return;
 				int num=messagelist.getSelectedIndex();
 				
-				card=Testwindow.messages.get(num).getCard();
+				card=MainWindow.info.getmessage().get(num).getCard();
                 
                     icon=new ImageIcon(card.image);
-                    //icon=new ImageIcon(icon.getImage().getScaledInstance(getWidth(), getHeight()-25, Image.SCALE_DEFAULT));
-		                
+                       
                     label.setIcon(icon);
                     
-                    //panel1.add(icon);
                     jsp.add(label);
                     jsp.setViewportView(label);
         

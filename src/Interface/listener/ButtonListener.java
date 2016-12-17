@@ -111,7 +111,7 @@ public class ButtonListener implements ActionListener{
 			//send
 			//ObjectOutputStream toServer=new ObjectOutputStream(Testwindow.socket.getOutputStream());
 			lock.lock();
-			Testwindow.toServer.writeObject(3);
+			Testwindow.toServer.writeObject((int)3);
 			Testwindow.toServer.writeObject(key);
 			//Testwindow.dataToServer.flush();
 			

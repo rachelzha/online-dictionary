@@ -172,17 +172,7 @@ public class MultiThreadServer extends JFrame{
 						dbConn.close();
 						
 						jta.append("send!\t"+messages.size()+"\n");
-						//output
-						//datatoClient.writeObject(0);
-						//dataToClient.flush();
 						
-						//objectToClient.writeObject(messages);
-						//objectToClient.flush();
-						//ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
-						/*toClient.writeObject(messages.size());
-						for(int i=0;i<messages.size();i++){
-							toClient.writeObject(messages.get(i));
-						}*/
 						toClient.writeObject(messages);
 						
 						break;
@@ -262,10 +252,6 @@ public class MultiThreadServer extends JFrame{
 						int jinshanLikes=vec.get(2);
 						
 						//output
-						//ObjectOutputStream toClient=new ObjectOutputStream(socket.getOutputStream());
-						//datatoClient.writeObject(baiduLikes);
-						//datatoClient.writeObject(youdaoLikes);
-						//datatoClient.writeObject(jinshanLikes);
 						toClient.writeObject(baiduLikes);
 						toClient.writeObject(youdaoLikes);
 						toClient.writeObject(jinshanLikes);
@@ -376,10 +362,10 @@ public class MultiThreadServer extends JFrame{
 				//ex.printStackTrace();
 				if(username!=null)clients.remove(username);
 				jta.append("用户断开连接\n");
-				ex.printStackTrace();
+				//ex.printStackTrace();
 				try {
-					
 					socket.close();
+					System.out.println("socket closed");
 					socket=null;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block

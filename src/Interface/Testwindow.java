@@ -186,6 +186,7 @@ public class Testwindow extends JFrame{
 						Vector<Message>temp=(Vector<Message>)fromServer.readObject();
 						
 						lock.unlock();
+						System.out.println(temp.size());
 						
 						if(temp.size()>0){
 							String messagefile1="image/message/3.png";

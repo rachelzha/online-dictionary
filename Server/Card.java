@@ -92,7 +92,7 @@ public class Card implements Serializable{
     	int textWidth=width-50;
     	
         //definition
-        mFont = new Font("宋体",Font.PLAIN,20);
+        mFont = new Font("黑体",Font.PLAIN,15);
         g.setFont(mFont);
         int defX=50;
         int defY=90;
@@ -137,12 +137,12 @@ public class Card implements Serializable{
         //sentence
         int senX=defX;
         int senY=defY+30;
+        if(height<=senY)return;
         offset=senX;
         if(t.sen.size()>0){
-        	for(int j=0;j<t.sen.size();j++){
-        		if(height<=senY)return;
+        	//for(int j=0;j<t.sen.size();j++){
         		
-	        	String text=t.sen.get(j);
+	        	String text=t.sen.get(0);
 	      	   	for(int i=0;i<text.length();i++){
 	      		   char c=text.charAt(i);
 	      		   int charWidth=fm.charWidth(c);
@@ -156,9 +156,9 @@ public class Card implements Serializable{
 	      		   offset+=charWidth;
 	      	   }
 	      	   //另起一行
-	      	   offset=senX;
-	      	   senY+=fontHeight;
-        	}
+	      	   //offset=senX;
+	      	   //senY+=fontHeight;
+        	//}
         }
     }
     

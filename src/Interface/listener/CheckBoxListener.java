@@ -54,9 +54,10 @@ public class CheckBoxListener implements ItemListener{
 		//String key = searchpanel.input.getSelectedItem().toString();
 	//	likestate=1;
 		
-		String key=Testwindow.searchpanel.input.getText();
-		if(key==null||key.length()==0)
-			return;
+		String temp=Testwindow.searchpanel.input.getText();
+		
+		String key=ButtonListener.deleteExtraSpace(temp);
+		if(key.length()==0)return;
 		
 		try{
 			//send
@@ -99,7 +100,7 @@ public class CheckBoxListener implements ItemListener{
 			else if(Testwindow.info.getjudgeyoudao()==-1)
 				Testwindow.textpanel.like.setSelected(false);
 			YoudaoTranslate Y = new YoudaoTranslate();
-			Translation trans = Y.Translation(key);
+			Translation trans = Y.Translate(key);
 			trans.print(Testwindow.textpanel.Out);
 		}
 		if(Testwindow.textpanel.jinshan.isSelected()){

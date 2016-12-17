@@ -51,7 +51,7 @@ public class YoudaoTranslate {
 		return null;
 	}
 	
-	public String JsonToString(String jstring) {  
+	public String JsonToString(String jstring) {
         try {  
         	String message="";
             JSONObject obj = new JSONObject(jstring);  
@@ -167,7 +167,7 @@ public class YoudaoTranslate {
         return null;  
     }   
 	
-	public Translation Translation(String query){
+	public Translation Translate(String query){
 		JsonToString(sendGet(query));
 		return t;
 	}

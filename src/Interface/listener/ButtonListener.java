@@ -83,6 +83,31 @@ public class ButtonListener implements ActionListener{
 
 	}
 	
+	//删除单词多余的空格
+	public static String deleteExtraSpace(String word){
+		if(word==null||word.length()==0)return "";
+		
+		String[] subWords=word.split("\\s+");
+		if(subWords.length==0)return "";
+	/*
+		for(int i=0;i<subWords.length;i++){
+			subWords[i]=subWords[i].trim();
+			while (subWords[i].endsWith(" ")) {
+				subWords[i] = subWords[i].substring(0, subWords[i].length() - 1).trim();
+			}
+			while(subWords[i].startsWith(" ")){
+				subWords[i]=subWords[i].substring(1,subWords[i].length()-1).trim();
+			}
+		}*/
+		
+		word=subWords[0];
+		for(int i=1;i<subWords.length;i++){
+			word=word+" "+subWords[i];
+		}
+		
+		return word;
+	}
+	
 	public void handleSearch(){
 		String key=null;
 		if(type==2){
@@ -97,12 +122,12 @@ public class ButtonListener implements ActionListener{
 			key = H.elementAt(Testwindow.history.getpointer());
 			Testwindow.searchpanel.input.setText(key);
 		}
-	//	if(type==1)
-			key=Testwindow.searchpanel.input.getText();
+
+		String temp=Testwindow.searchpanel.input.getText();
 		//	String key = searchpanel.input.getSelectedItem().toString();
-		
-		if(key==null||key.length()==0)
-			return;
+		/////////
+		key=deleteExtraSpace(temp);
+		if(key.length()==0)return;
 		
 		Testwindow.textpanel.tranword.setText(key);
 		
@@ -162,7 +187,7 @@ public class ButtonListener implements ActionListener{
 			}
 
 			YoudaoTranslate Y = new YoudaoTranslate();
-			Translation trans = Y.Translation(key);
+			Translation trans = Y.Translate(key);
 			trans.print(Testwindow.textpanel.Out);
 		}
 		if(Testwindow.textpanel.jinshan.isSelected()){//////////////////
@@ -265,7 +290,10 @@ public class ButtonListener implements ActionListener{
 		//	}
 
 			
-		String key = Testwindow.searchpanel.input.getText();
+		String temp = Testwindow.searchpanel.input.getText();
+		String key=deleteExtraSpace(temp);
+		if(key.length()==0)return;
+		
 	//	for(int i=0;i<onlineuserlist.length;i++)
 	//		System.out.println(onlineuserlist[i])
 		if(Testwindow.textpanel.bing.isSelected()){
@@ -275,7 +303,7 @@ public class ButtonListener implements ActionListener{
 		}
 		if(Testwindow.textpanel.youdao.isSelected()){
 			YoudaoTranslate Y = new YoudaoTranslate();
-			Translation t = Y.Translation(key);
+			Translation t = Y.Translate(key);
 			new SendPicture(t);
 		//	textpanel.Out.setText(text);
 		}
